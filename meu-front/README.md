@@ -1,16 +1,149 @@
-# React + Vite
+# 🚀 Studio Gaspar
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Sistema Full Stack desenvolvido para gerenciamento de alunos de academia, utilizando **Java + Spring Boot** no backend e **React + Vite** no frontend.
 
-Currently, two official plugins are available:
+O projeto foi criado com o objetivo de praticar o desenvolvimento de APIs REST e integração entre frontend e backend utilizando tecnologias modernas do ecossistema Java.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+# 📌 Tecnologias Utilizadas
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Backend
 
-## Expanding the ESLint configuration
+* ☕ Java 21
+* 🌱 Spring Boot
+* 🔗 Spring Data JPA
+* 🔒 Spring Security (quando aplicado)
+* 🗄️ MySQL
+* 📦 Maven
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Frontend
+
+* ⚛️ React
+* ⚡ Vite
+* 📜 JavaScript
+* 🌐 Axios
+* 🎨 HTML5
+* 🎨 CSS3
+
+---
+
+# 📂 Estrutura do Projeto
+
+```text
+Studio-Gaspar/
+│
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── services/
+│   ├── App.jsx
+│   └── main.jsx
+│
+├── public/
+│
+├── package.json
+├── vite.config.js
+└── README.md
+```
+
+---
+
+# ✨ Funcionalidades
+
+* ✅ Cadastro de alunos
+* ✅ Listagem de alunos
+* ✅ Atualização de cadastro
+* ✅ Exclusão de alunos
+* ✅ Comunicação com API REST
+* ✅ Interface moderna desenvolvida em React
+
+---
+
+# 🛠️ Requisitos
+
+Antes de executar o projeto é necessário possuir instalado:
+
+* Node.js
+* npm
+* Java JDK 21
+* Maven
+* MySQL
+
+---
+
+# ▶️ Executando o Frontend
+
+Clone o projeto:
+
+```bash
+git clone https://github.com/danielaires/Studio-gaspar.git
+```
+
+Entre na pasta:
+
+```bash
+cd Studio-gaspar
+```
+
+Instale as dependências:
+
+```bash
+npm install
+```
+
+Execute a aplicação:
+
+```bash
+npm run dev
+```
+
+O sistema estará disponível em:
+
+```
+http://localhost:5173
+```
+
+---
+
+# 🔗 Backend
+
+O frontend consome uma API REST desenvolvida em **Spring Boot**.
+
+Por padrão, a aplicação espera que o backend esteja sendo executado em:
+
+```
+http://localhost:8080
+```
+
+Certifique-se de iniciar o backend antes de utilizar todas as funcionalidades do sistema.
+
+---
+
+# 💾 Banco de Dados
+
+Banco utilizado:
+
+* MySQL
+
+O backend utiliza o Spring Data JPA para persistência dos dados.
+
+---
+
+# 📸 Interface
+
+O sistema possui uma interface responsiva desenvolvida em React, proporcionando uma experiência simples e intuitiva para o gerenciamento de alunos.
+
+---
+
+# 👨‍💻 Desenvolvedor
+
+**Daniel Aires**
+
+Desenvolvedor Java | Spring Boot | React
+
+---
+
+# 📄 Licença
+
+Projeto desenvolvido sobre demanda para um cliente, com o objetivo de gerenciar alunos e integrar um backend em Spring Boot a uma interface moderna em React.
