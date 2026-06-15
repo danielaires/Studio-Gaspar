@@ -1,20 +1,22 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { listarAlunos, excluirAluno } from "../services/api.js"; // Importando do seu arquivo api.js
 
 function Alunos() {
   const [alunos, setAlunos] = useState([]);
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:8080/alunos')
+    listarAlunos()
       .then((resposta) => {
-        if (!resposta.ok) {
-          throw new Error('Erro ao buscar alunos');
+        console.log("DADOS DO SPRING BOOT:", resposta.data); 
+        
+        // Verifica se o Spring Boot retornou uma página (Page<Aluno>) ou uma lista direta (List<Aluno>)
+        if (resposta.data && resposta.data.content) {
+          setAlunos(resposta.data.content);
+        } else {
+          setAlunos(resposta.data || []); 
         }
-        return resposta.json();
-      })
-      .then((dados) => {
-        setAlunos(dados); 
         setCarregando(false);
       })
       .catch((erro) => {
@@ -33,25 +35,22 @@ function Alunos() {
     return dataString;
   };
 
-  // NOVA FUNÇÃO: Excluir Aluno
+  // Função de Excluir usando o seu arquivo api.js
   const deletarAluno = (id, nome) => {
     const confirmacao = window.confirm(`Tem certeza que deseja excluir o aluno(a) ${nome}?`);
     
     if (confirmacao) {
-      fetch(`http://localhost:8080/alunos/${id}`, {
-        method: 'DELETE',
-      })
-      .then((resposta) => {
-        if (resposta.ok) {
-          // Se o Java retornou OK, atualizamos a tela filtrando o aluno deletado
-          setAlunos(alunos.filter(aluno => aluno.id !== id));
-          alert("Aluno excluído com sucesso!");
-        } else {
-          // Se o Java der erro (ex: aluno tem avaliações ou mensalidades amarradas a ele)
+      excluirAluno(id)
+        .then((resposta) => {
+          if (resposta.status === 200 || resposta.status === 204) {
+            setAlunos(alunos.filter(aluno => aluno.id !== id));
+            alert("Aluno excluído com sucesso!");
+          }
+        })
+        .catch((erro) => {
+          console.error("Erro ao excluir:", erro);
           alert("Erro ao excluir! Verifique se este aluno possui avaliações ou mensalidades vinculadas no banco.");
-        }
-      })
-      .catch((erro) => console.error("Erro ao excluir:", erro));
+        });
     }
   };
 
@@ -111,7 +110,6 @@ function Alunos() {
                     )}
                   </td>
                   <td>
-                    {/* NOVOS BOTÕES: Avaliações, Editar e Excluir */}
                     <div className="d-flex justify-content-center gap-2">
                       <Link 
                         to={`/alunos/${aluno.id}/avaliacoes`} 

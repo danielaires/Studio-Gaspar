@@ -4,12 +4,14 @@ import com.br.aires.studio_gaspar.entity.Aluno;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import com.br.aires.studio_gaspar.service.AlunoService;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/alunos")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class AlunoController {
 
     private final AlunoService service;
