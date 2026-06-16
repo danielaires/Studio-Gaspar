@@ -103,6 +103,17 @@ function CadastroAluno() {
                     <label className="form-label fw-bold">Data Início</label>
                     <input type="date" className="form-control" name="dataInicio" onChange={alterarCampo} required />
                 </div>
+                <div className="mb-4">
+                    <label className="form-label d-block fw-bold">Objetivo</label>
+                    <div className="d-flex flex-wrap gap-2">
+                        {["Hipertrofia", "Emagrecimento", "Ganho de Massa Muscular", "Fortalecimento", "Força"].map(obj => (
+                            <>
+                                <input type="radio" className="btn-check" name="objetivo" id={obj} value={obj} checked={aluno.objetivo === obj} onChange={alterarCampo} />
+                                <label className="btn btn-outline-secondary" htmlFor={obj}>{obj}</label>
+                            </>
+                        ))}
+                    </div>
+                </div>
                 
                 <div className="d-flex justify-content-end mt-4">
                     <button type="submit" className="btn btn-success px-5 py-2">Salvar</button>

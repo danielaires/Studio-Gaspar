@@ -81,7 +81,7 @@ function CadastroMensalidade() {
         <div className="container mt-5 mb-5">
 
             <h2 className="mb-4">
-                💰 Cadastro de Mensalidade
+                Cadastro de Mensalidade
             </h2>
 
             <form onSubmit={salvar}>
@@ -226,4 +226,3 @@ function CadastroMensalidade() {
 }
 
 export default CadastroMensalidade;
-
