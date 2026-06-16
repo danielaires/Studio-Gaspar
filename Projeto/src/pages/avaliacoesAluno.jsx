@@ -3,25 +3,29 @@ import { useParams, Link } from "react-router-dom";
 import { listarAvaliacoesDoAluno } from "../services/api.js"; 
 
 function AvaliacoesAluno() {
-  const { id } = useParams(); 
+  const { id } = useParams(); // ID do Aluno vindo da URL
   const [avaliacoes, setAvaliacoes] = useState([]);
   const [carregando, setCarregando] = useState(true);
 
-  // Função auxiliar para formatar a data: AAAA-MM-DD -> DD/MM/AAAA
+  // Formatação profissional de data
   const formatarData = (dataStr) => {
     if (!dataStr) return '-';
-    const [ano, mes, dia] = dataStr.split('-');
-    return `${dia}/${mes}/${ano}`;
+    const data = new Date(dataStr);
+    return data.toLocaleDateString('pt-BR');
   };
 
   useEffect(() => {
+    if (!id) {
+      setCarregando(false);
+      return;
+    }
+
+    // Chamada ao serviço de API
     listarAvaliacoesDoAluno(id)
       .then((resposta) => {
-        if (resposta.data && resposta.data.content) {
-          setAvaliacoes(resposta.data.content);
-        } else {
-          setAvaliacoes(resposta.data || []);
-        }
+        // Ajuste conforme sua estrutura de retorno (se usa axios, é .data)
+        const dados = resposta.data || resposta;
+        setAvaliacoes(Array.isArray(dados) ? dados : []);
         setCarregando(false);
       })
       .catch((erro) => {
@@ -34,13 +38,11 @@ function AvaliacoesAluno() {
     <div className="container mt-4 mb-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>Avaliações do Aluno</h2>
-        <Link to="/" className="btn btn-secondary fw-bold">
-          Voltar para Alunos
-        </Link>
+        <Link to="/" className="btn btn-secondary fw-bold">Voltar</Link>
       </div>
 
       {carregando ? (
-        <p>Carregando avaliações...</p>
+        <div className="text-center"><p>Carregando avaliações...</p></div>
       ) : avaliacoes.length === 0 ? (
         <div className="alert alert-info shadow-sm">
           Nenhuma avaliação encontrada para este aluno no banco de dados.
@@ -51,7 +53,7 @@ function AvaliacoesAluno() {
             <thead className="table-dark">
               <tr>
                 <th>ID</th>
-                <th>Data da Avaliação</th>
+                <th>Data</th>
                 <th>Peso (kg)</th>
                 <th>Altura (m)</th>
                 <th className="text-center">Ações</th>
@@ -61,18 +63,13 @@ function AvaliacoesAluno() {
               {avaliacoes.map((aval) => (
                 <tr key={aval.id} className="align-middle">
                   <td className="fw-bold">{aval.id}</td>
-                  
-                  {/* CHAMADA DA FUNÇÃO DE FORMATAÇÃO AQUI */}
                   <td>{formatarData(aval.dataAvaliacao)}</td>
-                  
-                  <td>{aval.peso || '-'}</td>
-                  <td>{aval.altura || '-'}</td>
-                  <td>
-                    <div className="d-flex justify-content-center gap-2">
-                      <Link to={`/avaliacoes/${aval.id}`} className="btn btn-sm btn-info text-white fw-bold">
-                        Detalhes
-                      </Link>
-                    </div>
+                  <td>{aval.peso?.toFixed(2) || '-'}</td>
+                  <td>{aval.altura?.toFixed(2) || '-'}</td>
+                  <td className="text-center">
+                    <Link to={`/avaliacoes/${aval.id}`} className="btn btn-sm btn-info text-white fw-bold">
+                      Detalhes
+                    </Link>
                   </td>
                 </tr>
               ))}

@@ -45,7 +45,7 @@ public class AvaliacaoFisica {
     @Column(length = 1000)
     private String observacao;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // Permite escrever (salvar), mas ignora na leitura
     @ManyToOne
     @JoinColumn(name = "aluno_id")
     private Aluno aluno;

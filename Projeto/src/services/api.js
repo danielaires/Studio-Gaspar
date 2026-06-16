@@ -32,9 +32,12 @@ export function listarAvaliacoesDoAluno(alunoId) {
     return api.get(`/avaliacoes/aluno/${alunoId}`);
 }
 
-// --- NOVA FUNÇÃO ADICIONADA AQUI ---
 export function buscarAvaliacaoPorId(id) {
     return api.get(`/avaliacoes/${id}`);
+}
+
+export function salvarAvaliacao(avaliacao) {
+    return api.post("/avaliacoes", avaliacao);
 }
 
 export default api;

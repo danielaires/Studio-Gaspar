@@ -14,13 +14,16 @@ public class HorarioService {
     private final HorarioRepository repository;
 
     public List<Horario> listar(){
-
         return repository.findAll();
     }
 
     public Horario salvar(Horario horario){
-
         return repository.save(horario);
     }
 
+    // Método adicionado para atender a requisição do Controller
+    public Horario buscarPorId(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Horário não encontrado com o ID: " + id));
+    }
 }
