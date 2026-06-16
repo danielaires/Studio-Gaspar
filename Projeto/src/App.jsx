@@ -1,28 +1,45 @@
-// 1. Importações do React Router
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+// Importações do React Router
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-// 2. Importações das suas páginas
-import Alunos from './pages/Alunos';
-import CadastroAluno from './pages/CadastroAluno';
-import CadastroAvaliacao from './pages/CadastroAvaliacao';
-import EditarAluno from './pages/EditarAluno';
-import AvaliacoesAluno from './pages/AvaliacoesAluno';
-
-// --- NOVA IMPORTAÇÃO ADICIONADA AQUI ---
-import DetalhesAvaliacao from './pages/DetalhesAvaliacao'; 
+// Importações das páginas
+import Alunos from "./pages/Alunos";
+import CadastroAluno from "./pages/CadastroAluno";
+import CadastroAvaliacao from "./pages/CadastroAvaliacao";
+import CadastroMensalidade from "./pages/CadastroMensalidade";
+import EditarAluno from "./pages/EditarAluno";
+import AvaliacoesAluno from "./pages/AvaliacoesAluno";
+import DetalhesAvaliacao from "./pages/DetalhesAvaliacao";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Home */}
         <Route path="/" element={<Alunos />} />
+
+        {/* Alunos */}
         <Route path="/cadastro-aluno" element={<CadastroAluno />} />
-        <Route path="/cadastro-avaliacao" element={<CadastroAvaliacao />} />
         <Route path="/editar-aluno/:id" element={<EditarAluno />} />
-        <Route path="/alunos/:id/avaliacoes" element={<AvaliacoesAluno />} /> 
-        
-        {/* --- NOVA ROTA DE DETALHES ADICIONADA AQUI --- */}
-        <Route path="/avaliacoes/:id" element={<DetalhesAvaliacao />} /> 
+
+        {/* Avaliações */}
+        <Route
+          path="/cadastro-avaliacao"
+          element={<CadastroAvaliacao />}
+        />
+        <Route
+          path="/alunos/:id/avaliacoes"
+          element={<AvaliacoesAluno />}
+        />
+        <Route
+          path="/avaliacoes/:id"
+          element={<DetalhesAvaliacao />}
+        />
+
+        {/* Mensalidades */}
+        <Route
+          path="/cadastro-mensalidade"
+          element={<CadastroMensalidade />}
+        />
       </Routes>
     </BrowserRouter>
   );

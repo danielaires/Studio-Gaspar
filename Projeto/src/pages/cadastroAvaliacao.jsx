@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { salvarAvaliacao } from "../services/avaliacaoService"; 
+import { salvarAvaliacao } from "../services/avaliacaoService";
 
 function CadastroAvaliacao() {
     const navigate = useNavigate();
     const [alunos, setAlunos] = useState([]);
-    
+
     // Estado inicial com todos os campos da entidade
     const [avaliacao, setAvaliacao] = useState({
         alunoId: "",
@@ -36,18 +36,18 @@ function CadastroAvaliacao() {
             return;
         }
 
-        const payload = { 
-            ...avaliacao, 
-            aluno: { id: Number(avaliacao.alunoId) } 
+        const payload = {
+            ...avaliacao,
+            aluno: { id: Number(avaliacao.alunoId) }
         };
         delete payload.alunoId;
 
         console.log("Enviando Payload:", payload); // Debug para conferir o ID no console (F12)
 
         salvarAvaliacao(payload)
-            .then(() => { 
-                alert("Avaliação salva com sucesso!"); 
-                navigate("/"); 
+            .then(() => {
+                alert("Avaliação salva com sucesso!");
+                navigate("/");
             })
             .catch(error => {
                 console.error("Erro no envio:", error);
@@ -102,7 +102,18 @@ function CadastroAvaliacao() {
                             <div className="col-md-3"><label>Panturrilha Dir.</label><input type="number" className="form-control" name="panturrilhaDireita" value={avaliacao.panturrilhaDireita} onChange={alterarCampo} /></div>
                             <div className="col-md-3"><label>Subescapular</label><input type="number" className="form-control" name="subescapular" value={avaliacao.subescapular} onChange={alterarCampo} /></div>
                             <div className="col-md-3"><label>Suprailíaca</label><input type="number" className="form-control" name="suprailiaca" value={avaliacao.suprailiaca} onChange={alterarCampo} /></div>
+                            <div className="col-md-4">
+                                <label>Dobra Abdômen</label>
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    name="dobraAbdomen"
+                                    value={avaliacao.dobraAbdomen}
+                                    onChange={alterarCampo}
+                                />
+                            </div>
                         </div>
+
                     </div>
                 </div>
 

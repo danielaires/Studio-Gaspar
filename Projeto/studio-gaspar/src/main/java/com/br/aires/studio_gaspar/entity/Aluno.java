@@ -36,7 +36,6 @@ public class Aluno {
 
     private Boolean ativo = true;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "horario_id")
     private Horario horario;
