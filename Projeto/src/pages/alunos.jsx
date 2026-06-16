@@ -61,10 +61,13 @@ function Alunos() {
 
   return (
     <div className="container mt-4 mb-5">
+
       <div className="d-flex justify-content-between align-items-center mb-4">
+
         <h2>Listagem de Alunos</h2>
 
         <div className="d-flex gap-2">
+
           <Link
             to="/cadastro-avaliacao"
             className="btn btn-warning fw-bold"
@@ -85,7 +88,9 @@ function Alunos() {
           >
             Novo Aluno
           </Link>
+
         </div>
+
       </div>
 
       {carregando ? (
@@ -93,8 +98,11 @@ function Alunos() {
       ) : alunos.length === 0 ? (
         <p>Nenhum aluno encontrado no banco de dados.</p>
       ) : (
+
         <div className="table-responsive shadow-sm rounded">
+
           <table className="table table-striped table-hover mb-0">
+
             <thead className="table-dark">
               <tr>
                 <th>ID</th>
@@ -111,33 +119,55 @@ function Alunos() {
             </thead>
 
             <tbody>
+
               {alunos.map((aluno) => (
+
                 <tr key={aluno.id} className="align-middle">
+
                   <td className="fw-bold">{aluno.id}</td>
+
                   <td>{aluno.nome}</td>
+
                   <td>{formatarData(aluno.dataNascimento)}</td>
+
                   <td>{aluno.sexo || "-"}</td>
+
                   <td>{aluno.profissao || "-"}</td>
+
                   <td>{aluno.telefone || "-"}</td>
+
                   <td>{formatarData(aluno.dataInicio)}</td>
+
                   <td>{aluno.objetivo || "-"}</td>
 
                   <td>
                     {aluno.ativo ? (
-                      <span className="badge bg-success">Sim</span>
+                      <span className="badge bg-success">
+                        Sim
+                      </span>
                     ) : (
-                      <span className="badge bg-danger">Não</span>
+                      <span className="badge bg-danger">
+                        Não
+                      </span>
                     )}
                   </td>
 
                   <td>
-                    <div className="d-flex justify-content-center gap-2">
+
+                    <div className="d-flex justify-content-center gap-2 flex-wrap">
+
                       <Link
                         to={`/alunos/${aluno.id}/avaliacoes`}
                         className="btn btn-sm btn-info text-white"
-                        title="Ver Avaliações"
                       >
                         Avaliações
+                      </Link>
+
+                      <Link
+                        to={`/alunos/${aluno.id}/mensalidades`}
+                        className="btn btn-sm btn-success"
+                      >
+                        Mensalidades
                       </Link>
 
                       <Link
@@ -148,20 +178,30 @@ function Alunos() {
                       </Link>
 
                       <button
-                        onClick={() => deletarAluno(aluno.id, aluno.nome)}
+                        onClick={() =>
+                          deletarAluno(aluno.id, aluno.nome)
+                        }
                         className="btn btn-sm btn-danger"
                       >
                         Excluir
                       </button>
+
                     </div>
+
                   </td>
+
                 </tr>
+
               ))}
+
             </tbody>
 
           </table>
+
         </div>
+
       )}
+
     </div>
   );
 }

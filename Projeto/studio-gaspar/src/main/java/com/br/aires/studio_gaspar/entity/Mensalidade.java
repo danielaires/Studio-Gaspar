@@ -1,5 +1,6 @@
 package com.br.aires.studio_gaspar.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,8 +11,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "mensalidade")
@@ -29,6 +30,7 @@ public class Mensalidade {
 
     private String status;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "aluno_id")
     private Aluno aluno;

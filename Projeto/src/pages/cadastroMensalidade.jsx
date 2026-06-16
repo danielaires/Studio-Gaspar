@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { salvarMensalidade } from "../services/mensalidadeService";
+import { salvarMensalidade } from "../services/mensalidadesService";
 
 function CadastroMensalidade() {
     const navigate = useNavigate();

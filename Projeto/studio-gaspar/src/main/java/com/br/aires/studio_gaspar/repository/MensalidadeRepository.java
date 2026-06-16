@@ -14,4 +14,6 @@ public interface MensalidadeRepository extends JpaRepository<Mensalidade,Long> {
 
     List<Mensalidade> findByVencimento(LocalDate data);
 
+    List<Mensalidade> findByAlunoId(Long id);
+
 }

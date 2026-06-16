@@ -24,5 +24,10 @@ public class MensalidadeController {
     public Mensalidade salvar(@RequestBody Mensalidade mensalidade) {
         return service.salvar(mensalidade);
     }
-    
+
+    @GetMapping("/aluno/{id}")
+    public List<Mensalidade> listarPorAluno(@PathVariable Long id){
+        return service.listarPorAluno(id);
+    }
+
 }
