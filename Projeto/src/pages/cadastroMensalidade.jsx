@@ -35,7 +35,6 @@ function CadastroMensalidade() {
             [name]: value
         };
 
-        // Preenche automaticamente a data de pagamento quando marcar como pago
         if (name === "status") {
             if (value === "PAGO") {
                 novaMensalidade.pagamento = hoje;

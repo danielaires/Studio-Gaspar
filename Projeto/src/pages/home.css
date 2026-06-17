@@ -135,4 +135,73 @@
   .tabela-impressao td:nth-child(7) {
     width: 12%;
   }
+
+  .tabela-completo {
+    font-size: 7px;
+  }
+
+  .tabela-completo th,
+  .tabela-completo td {
+    padding: 3px 4px !important;
+  }
+
+  .tabela-completo th:nth-child(1),
+  .tabela-completo td:nth-child(1) {
+    width: 4%;
+  }
+
+  .tabela-completo th:nth-child(2),
+  .tabela-completo td:nth-child(2) {
+    width: 10%;
+  }
+
+  .tabela-completo th:nth-child(3),
+  .tabela-completo td:nth-child(3) {
+    width: 10%;
+  }
+
+  .tabela-completo th:nth-child(4),
+  .tabela-completo td:nth-child(4) {
+    width: 9%;
+  }
+
+  .tabela-completo th:nth-child(5),
+  .tabela-completo td:nth-child(5) {
+    width: 8%;
+  }
+
+  .tabela-completo th:nth-child(6),
+  .tabela-completo td:nth-child(6) {
+    width: 10%;
+  }
+
+  .tabela-completo th:nth-child(7),
+  .tabela-completo td:nth-child(7) {
+    width: 8%;
+  }
+
+  .tabela-completo th:nth-child(8),
+  .tabela-completo td:nth-child(8) {
+    width: 6%;
+  }
+
+  .tabela-completo th:nth-child(9),
+  .tabela-completo td:nth-child(9) {
+    width: 8%;
+  }
+
+  .tabela-completo th:nth-child(10),
+  .tabela-completo td:nth-child(10) {
+    width: 8%;
+  }
+
+  .tabela-completo th:nth-child(11),
+  .tabela-completo td:nth-child(11) {
+    width: 8%;
+  }
+
+  .tabela-completo th:nth-child(12),
+  .tabela-completo td:nth-child(12) {
+    width: 11%;
+  }
 }

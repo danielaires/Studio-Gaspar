@@ -11,3 +11,7 @@ export function listarMensalidades() {
 export function listarMensalidadesDoAluno(id) {
     return api.get(`/mensalidades/aluno/${id}`);
 }
+
+export function marcarComoPago(id) {
+    return api.put(`/mensalidades/${id}/pagar`);
+}

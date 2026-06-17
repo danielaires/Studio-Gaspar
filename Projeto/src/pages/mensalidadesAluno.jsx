@@ -16,7 +16,6 @@ function MensalidadesAluno() {
         const partes = data.split("-");
 
         return `${partes[2]}/${partes[1]}/${partes[0]}`;
-
     };
 
     const formatarValor = (valor) => {
@@ -27,16 +26,31 @@ function MensalidadesAluno() {
             style: "currency",
             currency: "BRL"
         });
+    };
 
+    const normalizarStatus = (status) => {
+
+        return (status || "").toString().trim().toUpperCase();
+    };
+
+    const estaPaga = (mensalidade) => {
+
+        return normalizarStatus(mensalidade.status) === "PAGO";
     };
 
     const estaVencida = (mensalidade) => {
 
-        if (mensalidade.status === "ATRASADO" || mensalidade.status === "VENCIDO") {
+        const status = normalizarStatus(mensalidade.status);
+
+        if (estaPaga(mensalidade)) {
+            return false;
+        }
+
+        if (status === "ATRASADO" || status === "VENCIDO") {
             return true;
         }
 
-        if (mensalidade.status !== "PENDENTE" || !mensalidade.vencimento) {
+        if (status === "PENDENTE" || !mensalidade.vencimento) {
             return false;
         }
 
@@ -44,14 +58,15 @@ function MensalidadesAluno() {
         hoje.setHours(0, 0, 0, 0);
 
         const vencimento = new Date(`${mensalidade.vencimento}T00:00:00`);
+
         return vencimento < hoje;
     };
 
     const renderizarStatus = (mensalidade) => {
 
-        const status = mensalidade.status;
+        const status = normalizarStatus(mensalidade.status);
 
-        if (status === "PAGO") {
+        if (estaPaga(mensalidade)) {
             return (
                 <span className="badge bg-success">
                     Pago
@@ -100,14 +115,12 @@ function MensalidadesAluno() {
                 setMensalidades(Array.isArray(dados) ? dados : []);
 
                 setCarregando(false);
-
             })
             .catch((erro) => {
 
                 console.log(erro);
 
                 setCarregando(false);
-
             });
 
     }, [id]);
@@ -136,9 +149,7 @@ function MensalidadesAluno() {
             ) : mensalidades.length === 0 ? (
 
                 <div className="alert alert-info">
-
                     Nenhuma mensalidade encontrada.
-
                 </div>
 
             ) : (
@@ -150,13 +161,12 @@ function MensalidadesAluno() {
                         <thead className="table-dark">
 
                             <tr>
-
                                 <th>ID</th>
                                 <th>Vencimento</th>
                                 <th>Pagamento</th>
                                 <th>Valor</th>
                                 <th>Status</th>
-
+                                <th>Ações</th>
                             </tr>
 
                         </thead>
@@ -185,6 +195,16 @@ function MensalidadesAluno() {
                                         {renderizarStatus(m)}
                                     </td>
 
+                                    <td>
+                                        {!estaPaga(m) && (
+                                            <button
+                                                className="btn btn-success btn-sm"
+                                            >
+                                                 Pago
+                                            </button>
+                                        )}
+                                    </td>
+
                                 </tr>
 
                             ))}
@@ -200,7 +220,6 @@ function MensalidadesAluno() {
         </div>
 
     );
-
 }
 
 export default MensalidadesAluno;

@@ -26,8 +26,13 @@ public class MensalidadeController {
     }
 
     @GetMapping("/aluno/{id}")
-    public List<Mensalidade> listarPorAluno(@PathVariable Long id){
+    public List<Mensalidade> listarPorAluno(@PathVariable Long id) {
         return service.listarPorAluno(id);
+    }
+
+    @PutMapping("/{id}/pagar")
+    public Mensalidade marcarComoPago(@PathVariable Long id) {
+        return service.marcarComoPago(id);
     }
 
 }

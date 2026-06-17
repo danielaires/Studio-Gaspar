@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { listarAlunos } from "../services/api";
-import { listarMensalidades } from "../services/mensalidadesService";
+import {
+  listarMensalidades,
+  listarMensalidadesDoAluno,
+} from "../services/mensalidadesService";
 import {
   listarAlunosAtivos,
   listarAlunosInativos,
-  listarMensalidadesPagas,
-  listarMensalidadesVencidas,
 } from "../services/relatorioService";
 import "./home.css";
 
@@ -23,12 +24,26 @@ function Home() {
   const hoje = new Date();
   hoje.setHours(0, 0, 0, 0);
 
+  const normalizarStatus = (status) => {
+    return (status || "").toString().trim().toUpperCase();
+  };
+
+  const estaPaga = (mensalidade) => {
+    return normalizarStatus(mensalidade.status) === "PAGO";
+  };
+
   const estaVencida = (mensalidade) => {
-    if (mensalidade.status === "ATRASADO" || mensalidade.status === "VENCIDO") {
+    const status = normalizarStatus(mensalidade.status);
+
+    if (estaPaga(mensalidade)) {
+      return false;
+    }
+
+    if (status === "ATRASADO" || status === "VENCIDO") {
       return true;
     }
 
-    if (mensalidade.status !== "PENDENTE" || !mensalidade.vencimento) {
+    if (status === "PENDENTE" || !mensalidade.vencimento) {
       return false;
     }
 
@@ -40,35 +55,59 @@ function Home() {
     async function carregarDashboard() {
       try {
         const alunos = await listarAlunos();
+        let dadosAlunos = [];
 
         if (alunos.data && alunos.data.content) {
-          setTodosAlunos(alunos.data.content);
-          setAlunosAtivos(alunos.data.content.filter((aluno) => aluno.ativo));
-          setAlunosInativos(alunos.data.content.filter((aluno) => !aluno.ativo));
+          dadosAlunos = alunos.data.content;
         } else {
-          setTodosAlunos(alunos.data || []);
-          setAlunosAtivos((alunos.data || []).filter((aluno) => aluno.ativo));
-          setAlunosInativos((alunos.data || []).filter((aluno) => !aluno.ativo));
+          dadosAlunos = alunos.data || [];
         }
 
+        setTodosAlunos(dadosAlunos);
+        setAlunosAtivos(dadosAlunos.filter((aluno) => aluno.ativo));
+        setAlunosInativos(dadosAlunos.filter((aluno) => !aluno.ativo));
+
         try {
+          const mensalidadesPorAluno = await Promise.all(
+            dadosAlunos.map(async (aluno) => {
+              try {
+                const resposta = await listarMensalidadesDoAluno(aluno.id);
+                const mensalidadesAluno = resposta.data || [];
+
+                return mensalidadesAluno.map((mensalidade) => ({
+                  ...mensalidade,
+                  aluno,
+                }));
+              } catch (erro) {
+                console.error(`Erro ao carregar mensalidades do aluno ${aluno.id}:`, erro);
+                return [];
+              }
+            })
+          );
+
+          const dadosMensalidades = mensalidadesPorAluno.flat();
+
+          setTodasMensalidades(dadosMensalidades);
+          setMensalidadesPagas(
+            dadosMensalidades.filter(estaPaga)
+          );
+          setMensalidadesVencidas(dadosMensalidades.filter(estaVencida));
+        } catch (erro) {
+          console.error("Erro ao carregar mensalidades por aluno:", erro);
+
           const mensalidades = await listarMensalidades();
           const dadosMensalidades = mensalidades.data || [];
 
           setTodasMensalidades(dadosMensalidades);
           setMensalidadesPagas(
-            dadosMensalidades.filter((mensalidade) => mensalidade.status === "PAGO")
+            dadosMensalidades.filter(estaPaga)
           );
           setMensalidadesVencidas(dadosMensalidades.filter(estaVencida));
-        } catch (erro) {
-          console.error("Erro ao carregar mensalidades no dashboard:", erro);
         }
 
-        const [ativos, inativos, pagos, vencidos] = await Promise.allSettled([
+        const [ativos, inativos] = await Promise.allSettled([
           listarAlunosAtivos(),
           listarAlunosInativos(),
-          listarMensalidadesPagas(),
-          listarMensalidadesVencidas(),
         ]);
 
         if (ativos.status === "fulfilled") {
@@ -79,13 +118,6 @@ function Home() {
           setAlunosInativos(inativos.value.data || []);
         }
 
-        if (pagos.status === "fulfilled") {
-          setMensalidadesPagas(pagos.value.data || []);
-        }
-
-        if (vencidos.status === "fulfilled" && (vencidos.value.data || []).length > 0) {
-          setMensalidadesVencidas(vencidos.value.data || []);
-        }
       } catch (erro) {
         console.error("Erro ao carregar alunos no dashboard:", erro);
       } finally {
@@ -122,12 +154,37 @@ function Home() {
     }, 0);
   };
 
+  const buscarMensalidadesDoAluno = (aluno) => {
+    if (Array.isArray(aluno.mensalidades) && aluno.mensalidades.length > 0) {
+      return aluno.mensalidades;
+    }
+
+    return todasMensalidades.filter((mensalidade) => {
+      return mensalidade.aluno?.id === aluno.id;
+    });
+  };
+
+  const linhasRelatorioCompleto = useMemo(() => {
+    return todosAlunos.flatMap((aluno) => {
+      const mensalidadesDoAluno = buscarMensalidadesDoAluno(aluno);
+
+      if (mensalidadesDoAluno.length === 0) {
+        return [{ aluno, mensalidade: null }];
+      }
+
+      return mensalidadesDoAluno.map((mensalidade) => ({
+        aluno,
+        mensalidade,
+      }));
+    });
+  }, [todosAlunos, todasMensalidades]);
+
   const relatorioAtual = useMemo(() => {
     const opcoes = {
       todos: {
         titulo: "Todos os Alunos",
-        tipo: "alunos",
-        dados: todosAlunos,
+        tipo: "completo",
+        dados: linhasRelatorioCompleto,
       },
       ativos: {
         titulo: "Alunos Ativos",
@@ -140,7 +197,7 @@ function Home() {
         dados: alunosInativos,
       },
       mensalidades: {
-        titulo: "Todas as Mensalidades",
+        titulo: "Relatorio Completo de Mensalidades",
         tipo: "mensalidades",
         dados: todasMensalidades,
       },
@@ -162,6 +219,7 @@ function Home() {
     alunosAtivos,
     alunosInativos,
     todasMensalidades,
+    linhasRelatorioCompleto,
     mensalidadesPagas,
     mensalidadesVencidas,
     tipoRelatorio,
@@ -300,7 +358,7 @@ function Home() {
               className={`btn fw-bold ${tipoRelatorio === "mensalidades" ? "btn-dark" : "btn-outline-dark"}`}
               onClick={() => setTipoRelatorio("mensalidades")}
             >
-              Todas Mensalidades
+              Relatorio Completo Mensalidades
             </button>
 
             <button
@@ -323,9 +381,24 @@ function Home() {
           <h4 className="titulo-impressao">{relatorioAtual.titulo}</h4>
 
           <div className="table-responsive shadow-sm rounded relatorio-tabela">
-            <table className="table table-striped table-hover mb-0 tabela-impressao">
+              <table className={`table table-striped table-hover mb-0 tabela-impressao tabela-${relatorioAtual.tipo}`}>
               <thead className="table-dark">
-                {relatorioAtual.tipo === "alunos" ? (
+                {relatorioAtual.tipo === "completo" ? (
+                  <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>Profissão</th>
+                    <th>Data Iní­cio</th>
+                    <th>Objetivo</th>
+                    <th>Status Aluno</th>
+                    <th>ID Mens.</th>
+                    <th>Vencimento</th>
+                    <th>Pagamento</th>
+                    <th>Valor</th>
+                    <th>Status Mens.</th>
+                  </tr>
+                ) : relatorioAtual.tipo === "alunos" ? (
                   <tr>
                     <th>ID</th>
                     <th>Nome</th>
@@ -350,10 +423,69 @@ function Home() {
               <tbody>
                 {relatorioAtual.dados.length === 0 ? (
                   <tr>
-                    <td colSpan="7" className="text-center py-4">
+                    <td
+                      colSpan={
+                        relatorioAtual.tipo === "completo"
+                          ? 12
+                          : relatorioAtual.tipo === "alunos"
+                            ? 7
+                            : 6
+                      }
+                      className="text-center py-4"
+                    >
                       Nenhum registro encontrado em {relatorioAtual.titulo}.
                     </td>
                   </tr>
+                ) : relatorioAtual.tipo === "completo" ? (
+                  relatorioAtual.dados.map((linha) => (
+                    <tr
+                      key={`${linha.aluno.id}-${linha.mensalidade?.id || "sem-mensalidade"}`}
+                      className="align-middle"
+                    >
+                      <td className="fw-bold">{linha.aluno.id}</td>
+                      <td>{linha.aluno.nome}</td>
+                      <td>{linha.aluno.telefone || "-"}</td>
+                      <td>{linha.aluno.profissao || "-"}</td>
+                      <td>{formatarData(linha.aluno.dataInicio)}</td>
+                      <td>{linha.aluno.objetivo || "-"}</td>
+                      <td>
+                        {linha.aluno.ativo ? (
+                          <span className="badge bg-success">Ativo</span>
+                        ) : (
+                          <span className="badge bg-danger">Inativo</span>
+                        )}
+                      </td>
+                      <td>{linha.mensalidade?.id || "Sem mensalidade"}</td>
+                      <td>
+                        {linha.mensalidade
+                          ? formatarData(linha.mensalidade.vencimento)
+                          : "Sem vencimento"}
+                      </td>
+                      <td>
+                        {linha.mensalidade
+                          ? formatarData(linha.mensalidade.pagamento)
+                          : "Sem pagamento"}
+                      </td>
+                      <td>
+                        {linha.mensalidade
+                          ? formatarValor(linha.mensalidade.valor)
+                          : formatarValor(0)}
+                      </td>
+                      <td>
+                        {!linha.mensalidade ? (
+                          <span className="badge bg-secondary">Sem mensalidade</span>
+                        ) : estaPaga(linha.mensalidade) ? (
+                          <span className="badge bg-success">Pago</span>
+                        ) : estaVencida(linha.mensalidade) ? (
+                          <span className="badge bg-danger">Vencido</span>
+                        ) : (
+                          <span className="badge bg-warning text-dark">
+                            {linha.mensalidade.status || "Pendente"}
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  ))
                 ) : relatorioAtual.tipo === "alunos" ? (
                   relatorioAtual.dados.map((aluno) => (
                     <tr key={aluno.id} className="align-middle">
@@ -381,12 +513,14 @@ function Home() {
                       <td>{formatarData(mensalidade.pagamento)}</td>
                       <td>{formatarValor(mensalidade.valor)}</td>
                       <td>
-                        {mensalidade.status === "PAGO" ? (
+                        {estaPaga(mensalidade) ? (
                           <span className="badge bg-success">Pago</span>
                         ) : estaVencida(mensalidade) ? (
                           <span className="badge bg-danger">Vencido</span>
                         ) : (
-                          <span className="badge bg-warning text-dark">Pendente</span>
+                          <span className="badge bg-warning text-dark">
+                            {mensalidade.status || "Pendente"}
+                          </span>
                         )}
                       </td>
                     </tr>
