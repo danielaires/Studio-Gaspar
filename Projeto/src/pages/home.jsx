@@ -1,21 +1,40 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { listarAlunos } from "../services/api";
+import { listarMensalidades } from "../services/mensalidadesService";
 import {
   listarAlunosAtivos,
   listarAlunosInativos,
   listarMensalidadesPagas,
   listarMensalidadesVencidas,
 } from "../services/relatorioService";
+import "./home.css";
 
 function Home() {
   const [todosAlunos, setTodosAlunos] = useState([]);
   const [alunosAtivos, setAlunosAtivos] = useState([]);
   const [alunosInativos, setAlunosInativos] = useState([]);
+  const [todasMensalidades, setTodasMensalidades] = useState([]);
   const [mensalidadesPagas, setMensalidadesPagas] = useState([]);
   const [mensalidadesVencidas, setMensalidadesVencidas] = useState([]);
   const [tipoRelatorio, setTipoRelatorio] = useState("todos");
   const [carregando, setCarregando] = useState(true);
+
+  const hoje = new Date();
+  hoje.setHours(0, 0, 0, 0);
+
+  const estaVencida = (mensalidade) => {
+    if (mensalidade.status === "ATRASADO" || mensalidade.status === "VENCIDO") {
+      return true;
+    }
+
+    if (mensalidade.status !== "PENDENTE" || !mensalidade.vencimento) {
+      return false;
+    }
+
+    const vencimento = new Date(`${mensalidade.vencimento}T00:00:00`);
+    return vencimento < hoje;
+  };
 
   useEffect(() => {
     async function carregarDashboard() {
@@ -30,6 +49,19 @@ function Home() {
           setTodosAlunos(alunos.data || []);
           setAlunosAtivos((alunos.data || []).filter((aluno) => aluno.ativo));
           setAlunosInativos((alunos.data || []).filter((aluno) => !aluno.ativo));
+        }
+
+        try {
+          const mensalidades = await listarMensalidades();
+          const dadosMensalidades = mensalidades.data || [];
+
+          setTodasMensalidades(dadosMensalidades);
+          setMensalidadesPagas(
+            dadosMensalidades.filter((mensalidade) => mensalidade.status === "PAGO")
+          );
+          setMensalidadesVencidas(dadosMensalidades.filter(estaVencida));
+        } catch (erro) {
+          console.error("Erro ao carregar mensalidades no dashboard:", erro);
         }
 
         const [ativos, inativos, pagos, vencidos] = await Promise.allSettled([
@@ -51,7 +83,7 @@ function Home() {
           setMensalidadesPagas(pagos.value.data || []);
         }
 
-        if (vencidos.status === "fulfilled") {
+        if (vencidos.status === "fulfilled" && (vencidos.value.data || []).length > 0) {
           setMensalidadesVencidas(vencidos.value.data || []);
         }
       } catch (erro) {
@@ -107,6 +139,11 @@ function Home() {
         tipo: "alunos",
         dados: alunosInativos,
       },
+      mensalidades: {
+        titulo: "Todas as Mensalidades",
+        tipo: "mensalidades",
+        dados: todasMensalidades,
+      },
       pagos: {
         titulo: "Mensalidades Pagas",
         tipo: "mensalidades",
@@ -124,6 +161,7 @@ function Home() {
     todosAlunos,
     alunosAtivos,
     alunosInativos,
+    todasMensalidades,
     mensalidadesPagas,
     mensalidadesVencidas,
     tipoRelatorio,
@@ -138,7 +176,7 @@ function Home() {
 
   return (
     <div className="container mt-4 mb-5">
-      <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+      <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3 dashboard-topo">
         <h2 className="mb-0">Dashboard</h2>
 
         <div className="d-flex gap-2 flex-wrap">
@@ -164,7 +202,7 @@ function Home() {
         <p>Carregando dashboard...</p>
       ) : (
         <>
-          <div className="row g-3 mb-4">
+          <div className="row g-3 mb-4 dashboard-resumo">
             <div className="col-12 col-md-6 col-xl-3">
               <div className="card border-0 shadow-sm h-100 border-top border-primary border-4">
                 <div className="card-body">
@@ -206,7 +244,7 @@ function Home() {
             </div>
           </div>
 
-          <div className="row g-3 mb-4">
+          <div className="row g-3 mb-4 dashboard-financeiro">
             <div className="col-12 col-lg-6">
               <div className="card border-0 shadow-sm h-100">
                 <div className="card-body">
@@ -228,7 +266,7 @@ function Home() {
             </div>
           </div>
 
-          <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
+          <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3 relatorio-cabecalho">
             <h2 className="mb-0">Relatórios</h2>
 
             <button onClick={imprimirRelatorio} className="btn btn-dark fw-bold">
@@ -236,7 +274,7 @@ function Home() {
             </button>
           </div>
 
-          <div className="d-flex gap-2 flex-wrap mb-4">
+          <div className="d-flex gap-2 flex-wrap mb-4 relatorio-filtros">
             <button
               className={`btn fw-bold ${tipoRelatorio === "todos" ? "btn-dark" : "btn-outline-dark"}`}
               onClick={() => setTipoRelatorio("todos")}
@@ -259,6 +297,13 @@ function Home() {
             </button>
 
             <button
+              className={`btn fw-bold ${tipoRelatorio === "mensalidades" ? "btn-dark" : "btn-outline-dark"}`}
+              onClick={() => setTipoRelatorio("mensalidades")}
+            >
+              Todas Mensalidades
+            </button>
+
+            <button
               className={`btn fw-bold ${tipoRelatorio === "pagos" ? "btn-success" : "btn-outline-success"}`}
               onClick={() => setTipoRelatorio("pagos")}
             >
@@ -273,8 +318,12 @@ function Home() {
             </button>
           </div>
 
-          <div className="table-responsive shadow-sm rounded">
-            <table className="table table-striped table-hover mb-0">
+          <div className="area-impressao">
+          <h3 className="titulo-relatorio-impressao">Relatório</h3>
+          <h4 className="titulo-impressao">{relatorioAtual.titulo}</h4>
+
+          <div className="table-responsive shadow-sm rounded relatorio-tabela">
+            <table className="table table-striped table-hover mb-0 tabela-impressao">
               <thead className="table-dark">
                 {relatorioAtual.tipo === "alunos" ? (
                   <tr>
@@ -334,8 +383,10 @@ function Home() {
                       <td>
                         {mensalidade.status === "PAGO" ? (
                           <span className="badge bg-success">Pago</span>
-                        ) : (
+                        ) : estaVencida(mensalidade) ? (
                           <span className="badge bg-danger">Vencido</span>
+                        ) : (
+                          <span className="badge bg-warning text-dark">Pendente</span>
                         )}
                       </td>
                     </tr>
@@ -343,6 +394,7 @@ function Home() {
                 )}
               </tbody>
             </table>
+          </div>
           </div>
         </>
       )}

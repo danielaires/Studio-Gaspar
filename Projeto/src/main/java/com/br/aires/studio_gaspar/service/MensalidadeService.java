@@ -23,4 +23,9 @@ public class MensalidadeService {
         return repository.save(mensalidade);
     }
 
+    public List<Mensalidade> listarPorAluno(Long alunoId){
+
+        return repository.findByAlunoId(alunoId);
+    }
+
 }

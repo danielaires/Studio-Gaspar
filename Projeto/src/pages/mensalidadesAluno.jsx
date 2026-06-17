@@ -30,6 +30,66 @@ function MensalidadesAluno() {
 
     };
 
+    const estaVencida = (mensalidade) => {
+
+        if (mensalidade.status === "ATRASADO" || mensalidade.status === "VENCIDO") {
+            return true;
+        }
+
+        if (mensalidade.status !== "PENDENTE" || !mensalidade.vencimento) {
+            return false;
+        }
+
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+
+        const vencimento = new Date(`${mensalidade.vencimento}T00:00:00`);
+        return vencimento < hoje;
+    };
+
+    const renderizarStatus = (mensalidade) => {
+
+        const status = mensalidade.status;
+
+        if (status === "PAGO") {
+            return (
+                <span className="badge bg-success">
+                    Pago
+                </span>
+            );
+        }
+
+        if (estaVencida(mensalidade)) {
+            return (
+                <span className="badge bg-danger">
+                    Vencido
+                </span>
+            );
+        }
+
+        if (status === "PENDENTE") {
+            return (
+                <span className="badge bg-warning text-dark">
+                    Pendente
+                </span>
+            );
+        }
+
+        if (status === "ATRASADO" || status === "VENCIDO") {
+            return (
+                <span className="badge bg-danger">
+                    Vencido
+                </span>
+            );
+        }
+
+        return (
+            <span className="badge bg-secondary">
+                {status || "-"}
+            </span>
+        );
+    };
+
     useEffect(() => {
 
         listarMensalidadesDoAluno(id)
@@ -122,25 +182,7 @@ function MensalidadesAluno() {
                                     </td>
 
                                     <td>
-
-                                        {m.status === "PAGO" && (
-                                            <span className="badge bg-success">
-                                                Pago
-                                            </span>
-                                        )}
-
-                                        {m.status === "PENDENTE" && (
-                                            <span className="badge bg-warning text-dark">
-                                                Pendente
-                                            </span>
-                                        )}
-
-                                        {m.status === "ATRASADO" && (
-                                            <span className="badge bg-danger">
-                                                Atrasado
-                                            </span>
-                                        )}
-
+                                        {renderizarStatus(m)}
                                     </td>
 
                                 </tr>

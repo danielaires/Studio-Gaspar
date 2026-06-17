@@ -12,6 +12,10 @@ public interface MensalidadeRepository extends JpaRepository<Mensalidade,Long> {
 
     List<Mensalidade> findByStatus(String status);
 
+    List<Mensalidade> findByStatusIn(List<String> status);
+
+    List<Mensalidade> findByAlunoId(Long alunoId);
+
     List<Mensalidade> findByVencimento(LocalDate data);
 
 }

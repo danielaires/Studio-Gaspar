@@ -34,7 +34,7 @@ public class RelatorioController {
     @GetMapping("/vencidos")
     public List<Mensalidade> vencidos(){
 
-        return mensalidadeRepository.findByStatus("VENCIDO");
+        return mensalidadeRepository.findByStatusIn(List.of("ATRASADO", "VENCIDO"));
     }
 
     @GetMapping("/pagos")

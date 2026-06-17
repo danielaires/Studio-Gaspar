@@ -1,0 +1,138 @@
+.titulo-relatorio-impressao,
+.titulo-impressao {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 8mm;
+  }
+
+  html,
+  body,
+  #root {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    color: #000 !important;
+    background: #fff !important;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  .area-impressao,
+  .area-impressao * {
+    visibility: visible !important;
+  }
+
+  .area-impressao {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+  }
+
+  .titulo-relatorio-impressao {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    color: #000;
+  }
+
+  .titulo-impressao {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    color: #000;
+  }
+
+  .relatorio-tabela {
+    overflow: visible !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  .tabela-impressao {
+    width: 100% !important;
+    table-layout: fixed;
+    border-collapse: collapse !important;
+    font-size: 9px;
+  }
+
+  .tabela-impressao th,
+  .tabela-impressao td {
+    padding: 4px 5px !important;
+    border: 1px solid #999 !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere;
+    vertical-align: middle;
+    color: #000 !important;
+  }
+
+  .tabela-impressao thead th {
+    background: #212529 !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+  }
+
+  .tabela-impressao .badge {
+    border: 1px solid #333;
+    color: #000 !important;
+    background: #fff !important;
+    font-size: 8px;
+  }
+
+  .tabela-impressao th:nth-child(1),
+  .tabela-impressao td:nth-child(1) {
+    width: 5%;
+  }
+
+  .tabela-impressao th:nth-child(2),
+  .tabela-impressao td:nth-child(2) {
+    width: 17%;
+  }
+
+  .tabela-impressao th:nth-child(3),
+  .tabela-impressao td:nth-child(3) {
+    width: 15%;
+  }
+
+  .tabela-impressao th:nth-child(4),
+  .tabela-impressao td:nth-child(4) {
+    width: 14%;
+  }
+
+  .tabela-impressao th:nth-child(5),
+  .tabela-impressao td:nth-child(5) {
+    width: 13%;
+  }
+
+  .tabela-impressao th:nth-child(6),
+  .tabela-impressao td:nth-child(6) {
+    width: 24%;
+  }
+
+  .tabela-impressao th:nth-child(7),
+  .tabela-impressao td:nth-child(7) {
+    width: 12%;
+  }
+}

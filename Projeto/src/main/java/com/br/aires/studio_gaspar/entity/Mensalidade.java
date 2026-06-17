@@ -1,5 +1,6 @@
 package com.br.aires.studio_gaspar.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,6 +32,7 @@ public class Mensalidade {
 
     @ManyToOne
     @JoinColumn(name = "aluno_id")
+    @JsonIgnoreProperties({"mensalidades", "avaliacoes"})
     private Aluno aluno;
 
 }

@@ -1,5 +1,6 @@
 package com.br.aires.studio_gaspar.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,9 +41,11 @@ public class Aluno {
     private Horario horario;
 
     @OneToMany(mappedBy = "aluno")
+    @JsonIgnoreProperties("aluno")
     private List<Mensalidade> mensalidades;
 
     @OneToMany(mappedBy = "aluno")
+    @JsonIgnoreProperties("aluno")
     private List<AvaliacaoFisica> avaliacoes;
 
 }
