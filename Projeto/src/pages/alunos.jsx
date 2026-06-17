@@ -69,6 +69,13 @@ function Alunos() {
         <div className="d-flex gap-2">
 
           <Link
+            to="/"
+            className="btn btn-dark fw-bold"
+          >
+            Dashboard
+          </Link>
+
+          <Link
             to="/cadastro-avaliacao"
             className="btn btn-warning fw-bold"
           >

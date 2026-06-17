@@ -10,6 +10,7 @@ import EditarAluno from "./pages/editarAluno";
 import AvaliacoesAluno from "./pages/AvaliacoesAluno";
 import DetalhesAvaliacao from "./pages/DetalhesAvaliacao";
 import MensalidadesAluno from "./pages/MensalidadesAluno"; // NOVO
+import Home from "./pages/home";
 
 function App() {
   return (
@@ -17,9 +18,10 @@ function App() {
       <Routes>
 
         {/* Home */}
-        <Route path="/" element={<Alunos />} />
+        <Route path="/" element={<Home />} />
 
         {/* Alunos */}
+        <Route path="/alunos" element={<Alunos />} />
         <Route path="/cadastro-aluno" element={<CadastroAluno />} />
         <Route path="/editar-aluno/:id" element={<EditarAluno />} />
 
