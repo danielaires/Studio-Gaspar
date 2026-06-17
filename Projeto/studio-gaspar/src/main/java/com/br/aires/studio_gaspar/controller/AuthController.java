@@ -22,13 +22,25 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
 
+        System.out.println("Email recebido: " + request.getEmail());
+        System.out.println("Senha recebida: " + request.getSenha());
+
         return usuarioRepository.findByEmail(request.getEmail())
-                .filter(usuario ->
-                        passwordEncoder.matches(
-                                request.getSenha(),
-                                usuario.getSenha()
-                        )
-                )
+                .filter(usuario -> {
+
+                    System.out.println("Email banco: " + usuario.getEmail());
+                    System.out.println("Hash banco: " + usuario.getSenha());
+                    
+                    boolean senhaValida =
+                            passwordEncoder.matches(
+                                    request.getSenha(),
+                                    usuario.getSenha()
+                            );
+
+                    System.out.println("Senha válida: " + senhaValida);
+
+                    return senhaValida;
+                })
                 .map(usuario -> ResponseEntity.ok(
                         new LoginResponse(
                                 jwtService.generateToken(

@@ -1,7 +1,5 @@
-// Importações do React Router
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-// Importações das páginas
 import Alunos from "./pages/Alunos";
 import CadastroAluno from "./pages/CadastroAluno";
 import CadastroAvaliacao from "./pages/CadastroAvaliacao";
@@ -9,48 +7,102 @@ import CadastroMensalidade from "./pages/CadastroMensalidade";
 import EditarAluno from "./pages/editarAluno";
 import AvaliacoesAluno from "./pages/AvaliacoesAluno";
 import DetalhesAvaliacao from "./pages/DetalhesAvaliacao";
-import MensalidadesAluno from "./pages/MensalidadesAluno"; // NOVO
+import MensalidadesAluno from "./pages/MensalidadesAluno";
 import Home from "./pages/home";
+import Login from "./pages/Login";
+import PrivateRoute from "./routes/PrivateRoute";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
 
+        {/* Login */}
+        <Route path="/login" element={<Login />} />
+
         {/* Home */}
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
 
         {/* Alunos */}
-        <Route path="/alunos" element={<Alunos />} />
-        <Route path="/cadastro-aluno" element={<CadastroAluno />} />
-        <Route path="/editar-aluno/:id" element={<EditarAluno />} />
+        <Route
+          path="/alunos"
+          element={
+            <PrivateRoute>
+              <Alunos />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/cadastro-aluno"
+          element={
+            <PrivateRoute>
+              <CadastroAluno />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/editar-aluno/:id"
+          element={
+            <PrivateRoute>
+              <EditarAluno />
+            </PrivateRoute>
+          }
+        />
 
         {/* Avaliações */}
         <Route
           path="/cadastro-avaliacao"
-          element={<CadastroAvaliacao />}
+          element={
+            <PrivateRoute>
+              <CadastroAvaliacao />
+            </PrivateRoute>
+          }
         />
 
         <Route
           path="/alunos/:id/avaliacoes"
-          element={<AvaliacoesAluno />}
+          element={
+            <PrivateRoute>
+              <AvaliacoesAluno />
+            </PrivateRoute>
+          }
         />
 
         <Route
           path="/avaliacoes/:id"
-          element={<DetalhesAvaliacao />}
+          element={
+            <PrivateRoute>
+              <DetalhesAvaliacao />
+            </PrivateRoute>
+          }
         />
 
         {/* Mensalidades */}
         <Route
           path="/cadastro-mensalidade"
-          element={<CadastroMensalidade />}
+          element={
+            <PrivateRoute>
+              <CadastroMensalidade />
+            </PrivateRoute>
+          }
         />
 
-        {/* NOVA ROTA */}
         <Route
           path="/alunos/:id/mensalidades"
-          element={<MensalidadesAluno />}
+          element={
+            <PrivateRoute>
+              <MensalidadesAluno />
+            </PrivateRoute>
+          }
         />
 
       </Routes>

@@ -2,27 +2,20 @@ package com.br.aires.studio_gaspar.util;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-public class GerarSenha {
+public class TesteHash {
 
     public static void main(String[] args) {
 
         BCryptPasswordEncoder encoder =
                 new BCryptPasswordEncoder();
 
-        String senha = "123456";
+        String hashBanco =
+                "COLE_O_HASH_GERADO_AGORA";
 
-        String hash = encoder.encode(senha);
-
-        System.out.println("HASH:");
-        System.out.println(hash);
-
-        System.out.println();
-
-        System.out.println("VALIDACAO:");
         System.out.println(
                 encoder.matches(
                         "123456",
-                        hash
+                        hashBanco
                 )
         );
     }

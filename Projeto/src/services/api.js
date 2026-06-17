@@ -4,7 +4,32 @@ const api = axios.create({
     baseURL: "http://localhost:8080"
 });
 
-// --- FUNÇÕES DE ALUNOS ---
+// Adiciona o JWT automaticamente em todas as requisições
+api.interceptors.request.use((config) => {
+
+    const token = localStorage.getItem("token");
+
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+});
+
+export function login(email, senha) {
+    return api.post("/auth/login", {
+        email,
+        senha
+    });
+}
+
+export function logout() {
+    localStorage.removeItem("token");
+}
+
+export function usuarioLogado() {
+    return !!localStorage.getItem("token");
+}
 
 export function listarAlunos() {
     return api.get("/alunos");
@@ -26,7 +51,6 @@ export function excluirAluno(id) {
     return api.delete(`/alunos/${id}`);
 }
 
-// --- FUNÇÕES DE AVALIAÇÕES ---
 
 export function listarAvaliacoesDoAluno(alunoId) {
     return api.get(`/avaliacoes/aluno/${alunoId}`);
@@ -38,6 +62,25 @@ export function buscarAvaliacaoPorId(id) {
 
 export function salvarAvaliacao(avaliacao) {
     return api.post("/avaliacoes", avaliacao);
+}
+
+
+export function listarMensalidades() {
+    return api.get("/mensalidades");
+}
+
+export function buscarMensalidade(id) {
+    return api.get(`/mensalidades/${id}`);
+}
+
+
+export function listarHorarios() {
+    return api.get("/horarios");
+}
+
+
+export function listarInadimplentes() {
+    return api.get("/relatorios/inadimplentes");
 }
 
 export default api;

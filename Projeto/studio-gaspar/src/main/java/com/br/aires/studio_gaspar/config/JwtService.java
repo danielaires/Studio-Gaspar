@@ -21,20 +21,30 @@ public class JwtService {
                 .setExpiration(
                         new Date(System.currentTimeMillis() + 86400000)
                 )
-                .signWith(
-                        SignatureAlgorithm.HS256,
-                        SECRET
-                )
+                .signWith(SignatureAlgorithm.HS256, SECRET)
                 .compact();
     }
 
     public String extractEmail(String token) {
 
-        Claims claims = Jwts.parser()
+        return Jwts.parser()
                 .setSigningKey(SECRET)
                 .parseClaimsJws(token)
-                .getBody();
+                .getBody()
+                .getSubject();
+    }
 
-        return claims.getSubject();
+    public boolean isTokenValid(String token) {
+
+        try {
+            Jwts.parser()
+                    .setSigningKey(SECRET)
+                    .parseClaimsJws(token);
+
+            return true;
+
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
