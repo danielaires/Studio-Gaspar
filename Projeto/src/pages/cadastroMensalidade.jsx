@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { salvarMensalidade } from "../services/mensalidadesService";
 import api from "../services/api";
+import Navbar from "../components/Navbar";
 
 function CadastroMensalidade() {
 
@@ -111,135 +112,148 @@ function CadastroMensalidade() {
 
     return (
 
-        <div className="container mt-5 mb-5">
+        <>
+            <Navbar />
 
-            <h2 className="mb-4">
-                Cadastro de Mensalidade
-            </h2>
+            <div className="container mt-4 mb-5">
 
-            <form onSubmit={salvar}>
+                <div className="mb-4">
 
-                <div className="card shadow-sm">
+                    <h2 className="fw-bold mb-1">
+                        Cadastro de Mensalidade
+                    </h2>
 
-                    <div className="card-header bg-primary text-white fw-bold">
-                        Dados da Mensalidade
-                    </div>
+                    <p className="text-muted">
+                        Controle financeiro e mensalidades dos alunos.
+                    </p>
 
-                    <div className="card-body">
+                </div>
 
-                        <div className="row g-3">
+                <form onSubmit={salvar}>
 
-                            <div className="col-md-6">
+                    <div className="card shadow border-0">
 
-                                <label className="form-label fw-bold">
-                                    Aluno
-                                </label>
+                        <div className="card-header bg-dark text-white fw-bold">
+                            Dados da Mensalidade
+                        </div>
 
-                                <select
-                                    className="form-select"
-                                    name="alunoId"
-                                    value={mensalidade.alunoId}
-                                    onChange={alterarCampo}
-                                    required
-                                >
+                        <div className="card-body">
 
-                                    <option value="">
-                                        Selecione um aluno...
-                                    </option>
+                            <div className="row g-3">
 
-                                    {alunos.map((aluno) => (
+                                <div className="col-md-6">
 
-                                        <option
-                                            key={aluno.id}
-                                            value={aluno.id}
-                                        >
-                                            {aluno.nome}
+                                    <label className="form-label fw-bold">
+                                        Aluno
+                                    </label>
+
+                                    <select
+                                        className="form-select"
+                                        name="alunoId"
+                                        value={mensalidade.alunoId}
+                                        onChange={alterarCampo}
+                                        required
+                                    >
+
+                                        <option value="">
+                                            Selecione um aluno...
                                         </option>
 
-                                    ))}
+                                        {alunos.map((aluno) => (
 
-                                </select>
+                                            <option
+                                                key={aluno.id}
+                                                value={aluno.id}
+                                            >
+                                                {aluno.nome}
+                                            </option>
 
-                            </div>
+                                        ))}
 
-                            <div className="col-md-6">
+                                    </select>
 
-                                <label className="form-label fw-bold">
-                                    Valor (R$)
-                                </label>
+                                </div>
 
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    min="0"
-                                    className="form-control"
-                                    name="valor"
-                                    value={mensalidade.valor}
-                                    onChange={alterarCampo}
-                                    required
-                                />
+                                <div className="col-md-6">
 
-                            </div>
+                                    <label className="form-label fw-bold">
+                                        Valor (R$)
+                                    </label>
 
-                            <div className="col-md-4">
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        min="0"
+                                        className="form-control"
+                                        name="valor"
+                                        value={mensalidade.valor}
+                                        onChange={alterarCampo}
+                                        required
+                                    />
 
-                                <label className="form-label fw-bold">
-                                    Vencimento
-                                </label>
+                                </div>
 
-                                <input
-                                    type="date"
-                                    className="form-control"
-                                    name="vencimento"
-                                    value={mensalidade.vencimento}
-                                    onChange={alterarCampo}
-                                    required
-                                />
+                                <div className="col-md-4">
 
-                            </div>
+                                    <label className="form-label fw-bold">
+                                        Vencimento
+                                    </label>
 
-                            <div className="col-md-4">
+                                    <input
+                                        type="date"
+                                        className="form-control"
+                                        name="vencimento"
+                                        value={mensalidade.vencimento}
+                                        onChange={alterarCampo}
+                                        required
+                                    />
 
-                                <label className="form-label fw-bold">
-                                    Data do Pagamento
-                                </label>
+                                </div>
 
-                                <input
-                                    type="date"
-                                    className="form-control"
-                                    name="pagamento"
-                                    value={mensalidade.pagamento}
-                                    onChange={alterarCampo}
-                                />
+                                <div className="col-md-4">
 
-                            </div>
+                                    <label className="form-label fw-bold">
+                                        Data do Pagamento
+                                    </label>
 
-                            <div className="col-md-4">
+                                    <input
+                                        type="date"
+                                        className="form-control"
+                                        name="pagamento"
+                                        value={mensalidade.pagamento}
+                                        onChange={alterarCampo}
+                                    />
 
-                                <label className="form-label fw-bold">
-                                    Status
-                                </label>
+                                </div>
 
-                                <select
-                                    className="form-select"
-                                    name="status"
-                                    value={mensalidade.status}
-                                    onChange={alterarCampo}
-                                >
+                                <div className="col-md-4">
 
-                                    <option value="PENDENTE">
-                                        🟡 Pendente
-                                    </option>
+                                    <label className="form-label fw-bold">
+                                        Status
+                                    </label>
 
-                                    <option value="PAGO">
-                                        🟢 Pago
-                                    </option>
+                                    <select
+                                        className="form-select"
+                                        name="status"
+                                        value={mensalidade.status}
+                                        onChange={alterarCampo}
+                                    >
 
-                                    <option value="ATRASADO">
-                                        🔴 Atrasado
-                                    </option>
+                                        <option value="PENDENTE">
+                                            Pendente
+                                        </option>
 
-                                </select>
+                                        <option value="PAGO">
+                                            Pago
+                                        </option>
+
+                                        <option value="ATRASADO">
+                                            Atrasado
+                                        </option>
+
+                                    </select>
+
+                                </div>
 
                             </div>
 
@@ -247,30 +261,30 @@ function CadastroMensalidade() {
 
                     </div>
 
-                </div>
+                    <div className="mt-4 d-flex justify-content-end gap-3">
 
-                <div className="mt-4 d-flex justify-content-end gap-2">
+                        <button
+                            type="button"
+                            className="btn btn-outline-secondary px-4"
+                            onClick={() => navigate("/")}
+                        >
+                            Cancelar
+                        </button>
 
-                    <button
-                        type="button"
-                        className="btn btn-secondary px-4"
-                        onClick={() => navigate("/")}
-                    >
-                        Cancelar
-                    </button>
+                        <button
+                            type="submit"
+                            className="btn btn-success px-5"
+                        >
+                            Salvar
+                        </button>
 
-                    <button
-                        type="submit"
-                        className="btn btn-success px-5"
-                    >
-                        Salvar
-                    </button>
+                    </div>
 
-                </div>
+                </form>
 
-            </form>
+            </div>
 
-        </div>
+        </>
     );
 }
 

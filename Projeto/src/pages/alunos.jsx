@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { listarAlunos, excluirAluno } from "../services/api.js";
+import Navbar from "../components/Navbar";
 
 function Alunos() {
   const [alunos, setAlunos] = useState([]);
@@ -59,45 +60,20 @@ function Alunos() {
     }
   };
 
-  return (
+return (
+  <>
+    <Navbar />
+
     <div className="container mt-4 mb-5">
 
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      <div className="mb-4">
+        <h2 className="fw-bold mb-1">
+          Alunos
+        </h2>
 
-        <h2>Listagem de Alunos</h2>
-
-        <div className="d-flex gap-2">
-
-          <Link
-            to="/"
-            className="btn btn-dark fw-bold"
-          >
-            Dashboard
-          </Link>
-
-          <Link
-            to="/cadastro-avaliacao"
-            className="btn btn-warning fw-bold"
-          >
-            Nova Avaliação
-          </Link>
-
-          <Link
-            to="/cadastro-mensalidade"
-            className="btn btn-success fw-bold"
-          >
-            Nova Mensalidade
-          </Link>
-
-          <Link
-            to="/cadastro-aluno"
-            className="btn btn-primary fw-bold"
-          >
-            Novo Aluno
-          </Link>
-
-        </div>
-
+        <p className="text-muted">
+          Gerenciamento de alunos cadastrados.
+        </p>
       </div>
 
       {carregando ? (
@@ -105,112 +81,160 @@ function Alunos() {
       ) : alunos.length === 0 ? (
         <p>Nenhum aluno encontrado no banco de dados.</p>
       ) : (
+        <>
+          <div className="row mb-4">
 
-        <div className="table-responsive shadow-sm rounded">
+            <div className="col-md-4">
+              <div className="card shadow-sm border-primary">
+                <div className="card-body">
+                  <h6>Alunos Ativos</h6>
+                  <h2>
+                    {alunos.filter(a => a.ativo).length}
+                  </h2>
+                </div>
+              </div>
+            </div>
 
-          <table className="table table-striped table-hover mb-0">
+            <div className="col-md-4">
+              <div className="card shadow-sm border-danger">
+                <div className="card-body">
+                  <h6>Alunos Inativos</h6>
+                  <h2>
+                    {alunos.filter(a => !a.ativo).length}
+                  </h2>
+                </div>
+              </div>
+            </div>
 
-            <thead className="table-dark">
-              <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Data Nascimento</th>
-                <th>Sexo</th>
-                <th>Profissão</th>
-                <th>Telefone</th>
-                <th>Data Início</th>
-                <th>Objetivo</th>
-                <th>Ativo</th>
-                <th className="text-center">Ações</th>
-              </tr>
-            </thead>
+            <div className="col-md-4">
+              <div className="card shadow-sm border-success">
+                <div className="card-body">
+                  <h6>Total de Alunos</h6>
+                  <h2>{alunos.length}</h2>
+                </div>
+              </div>
+            </div>
 
-            <tbody>
+          </div>
 
-              {alunos.map((aluno) => (
+          <div className="card shadow">
 
-                <tr key={aluno.id} className="align-middle">
+            <div className="card-header bg-dark text-white fw-bold">
+              Lista de Alunos
+            </div>
 
-                  <td className="fw-bold">{aluno.id}</td>
+            <div className="card-body p-0">
 
-                  <td>{aluno.nome}</td>
+              <div className="table-responsive">
 
-                  <td>{formatarData(aluno.dataNascimento)}</td>
+                <table className="table table-striped table-hover mb-0">
 
-                  <td>{aluno.sexo || "-"}</td>
+                  <thead className="table-dark">
+                    <tr>
+                      <th>ID</th>
+                      <th>Nome</th>
+                      <th>Data Nascimento</th>
+                      <th>Sexo</th>
+                      <th>Profissão</th>
+                      <th>Telefone</th>
+                      <th>Data Início</th>
+                      <th>Objetivo</th>
+                      <th>Ativo</th>
+                      <th className="text-center">Ações</th>
+                    </tr>
+                  </thead>
 
-                  <td>{aluno.profissao || "-"}</td>
+                  <tbody>
 
-                  <td>{aluno.telefone || "-"}</td>
+                    {alunos.map((aluno) => (
 
-                  <td>{formatarData(aluno.dataInicio)}</td>
+                      <tr key={aluno.id} className="align-middle">
 
-                  <td>{aluno.objetivo || "-"}</td>
+                        <td className="fw-bold">{aluno.id}</td>
 
-                  <td>
-                    {aluno.ativo ? (
-                      <span className="badge bg-success">
-                        Sim
-                      </span>
-                    ) : (
-                      <span className="badge bg-danger">
-                        Não
-                      </span>
-                    )}
-                  </td>
+                        <td>{aluno.nome}</td>
 
-                  <td>
+                        <td>{formatarData(aluno.dataNascimento)}</td>
 
-                    <div className="d-flex justify-content-center gap-2 flex-wrap">
+                        <td>{aluno.sexo || "-"}</td>
 
-                      <Link
-                        to={`/alunos/${aluno.id}/avaliacoes`}
-                        className="btn btn-sm btn-info text-white"
-                      >
-                        Avaliações
-                      </Link>
+                        <td>{aluno.profissao || "-"}</td>
 
-                      <Link
-                        to={`/alunos/${aluno.id}/mensalidades`}
-                        className="btn btn-sm btn-success"
-                      >
-                        Mensalidades
-                      </Link>
+                        <td>{aluno.telefone || "-"}</td>
 
-                      <Link
-                        to={`/editar-aluno/${aluno.id}`}
-                        className="btn btn-sm btn-primary"
-                      >
-                        Editar
-                      </Link>
+                        <td>{formatarData(aluno.dataInicio)}</td>
 
-                      <button
-                        onClick={() =>
-                          deletarAluno(aluno.id, aluno.nome)
-                        }
-                        className="btn btn-sm btn-danger"
-                      >
-                        Excluir
-                      </button>
+                        <td>{aluno.objetivo || "-"}</td>
 
-                    </div>
+                        <td>
+                          {aluno.ativo ? (
+                            <span className="badge bg-success">
+                              Sim
+                            </span>
+                          ) : (
+                            <span className="badge bg-danger">
+                              Não
+                            </span>
+                          )}
+                        </td>
 
-                  </td>
+                        <td>
 
-                </tr>
+                          <div className="d-flex justify-content-center gap-2 flex-wrap">
 
-              ))}
+                            <Link
+                              to={`/alunos/${aluno.id}/avaliacoes`}
+                              className="btn btn-sm btn-info text-white"
+                            >
+                              Avaliações
+                            </Link>
 
-            </tbody>
+                            <Link
+                              to={`/alunos/${aluno.id}/mensalidades`}
+                              className="btn btn-sm btn-success"
+                            >
+                              Mensalidades
+                            </Link>
 
-          </table>
+                            <Link
+                              to={`/editar-aluno/${aluno.id}`}
+                              className="btn btn-sm btn-primary"
+                            >
+                              Editar
+                            </Link>
 
-        </div>
+                            <button
+                              onClick={() =>
+                                deletarAluno(aluno.id, aluno.nome)
+                              }
+                              className="btn btn-sm btn-danger"
+                            >
+                              Excluir
+                            </button>
 
+                          </div>
+
+                        </td>
+
+                      </tr>
+
+                    ))}
+
+                  </tbody>
+
+                </table>
+
+              </div>
+
+            </div>
+
+          </div>
+        </>
       )}
 
     </div>
-  );
+  </>
+);
 }
 
 export default Alunos;

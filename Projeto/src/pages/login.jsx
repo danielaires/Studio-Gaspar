@@ -4,100 +4,133 @@ import { login } from "../services/api";
 
 function Login() {
 
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const realizarLogin = async (e) => {
-    e.preventDefault();
+    const realizarLogin = async (e) => {
 
-    try {
+        e.preventDefault();
 
-      const response = await login(
-        email,
-        senha
-      );
+        try {
 
-      console.log(
-        "LOGIN RESPONSE:",
-        response.data
-      );
+            const response = await login(
+                email,
+                senha
+            );
 
-      localStorage.setItem(
-        "token",
-        response.data.token
-      );
+            localStorage.setItem(
+                "token",
+                response.data.token
+            );
 
-      console.log(
-        "TOKEN SALVO:",
-        localStorage.getItem("token")
-      );
+            navigate("/");
 
-      navigate("/");
+        } catch (error) {
 
-    } catch (error) {
+            console.error(error);
 
-      console.error(
-        "ERRO LOGIN:",
-        error
-      );
+            alert(
+                "Email ou senha inválidos."
+            );
 
-      alert("Email ou senha inválidos");
+        }
 
-    }
-  };
+    };
 
-  return (
-    <div className="container mt-5">
+    return (
 
-      <div className="card p-4 shadow">
+        <div
+            className="vh-100 d-flex align-items-center justify-content-center"
+            style={{
+                background:
+                    "linear-gradient(135deg, #f8f9fa, #e9ecef)"
+            }}
+        >
 
-        <h2 className="mb-4">
-          Studio Gaspar
-        </h2>
+            <div
+                className="card shadow-lg border-0"
+                style={{
+                    width: "450px",
+                    borderRadius: "15px"
+                }}
+            >
 
-        <form onSubmit={realizarLogin}>
+                <div className="card-body p-5">
 
-          <div className="mb-3">
-            <label>Email</label>
+                    <div className="text-center mb-4">
 
-            <input
-              type="email"
-              className="form-control"
-              value={email}
-              onChange={(e) =>
-                setEmail(e.target.value)
-              }
-            />
-          </div>
+                        <h1 className="fw-bold">
+                            🏋️ Studio Gaspar
+                        </h1>
 
-          <div className="mb-3">
-            <label>Senha</label>
+                        <p className="text-muted mb-0">
+                            Sistema de Gestão
+                        </p>
 
-            <input
-              type="password"
-              className="form-control"
-              value={senha}
-              onChange={(e) =>
-                setSenha(e.target.value)
-              }
-            />
-          </div>
+                    </div>
 
-          <button
-            className="btn btn-primary w-100"
-            type="submit"
-          >
-            Entrar
-          </button>
+                    <form onSubmit={realizarLogin}>
 
-        </form>
+                        <div className="mb-3">
 
-      </div>
+                            <label className="form-label fw-bold">
+                                Email
+                            </label>
 
-    </div>
-  );
+                            <input
+                                type="email"
+                                className="form-control form-control-lg"
+                                placeholder="Digite seu email"
+                                value={email}
+                                onChange={(e) =>
+                                    setEmail(
+                                        e.target.value
+                                    )
+                                }
+                                required
+                            />
+
+                        </div>
+
+                        <div className="mb-4">
+
+                            <label className="form-label fw-bold">
+                                Senha
+                            </label>
+
+                            <input
+                                type="password"
+                                className="form-control form-control-lg"
+                                placeholder="Digite sua senha"
+                                value={senha}
+                                onChange={(e) =>
+                                    setSenha(
+                                        e.target.value
+                                    )
+                                }
+                                required
+                            />
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="btn btn-primary btn-lg w-100 fw-bold"
+                        >
+                            Entrar
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    );
 }
 
 export default Login;
