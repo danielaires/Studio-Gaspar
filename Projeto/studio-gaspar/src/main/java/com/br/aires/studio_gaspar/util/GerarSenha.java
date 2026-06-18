@@ -21,7 +21,7 @@ public class GerarSenha {
         System.out.println("VALIDACAO:");
         System.out.println(
                 encoder.matches(
-                        "123456",
+                        senha,
                         hash
                 )
         );
