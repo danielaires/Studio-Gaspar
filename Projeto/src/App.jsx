@@ -12,6 +12,8 @@ import Home from "./pages/home";
 import Login from "./pages/Login";
 import PrivateRoute from "./routes/PrivateRoute";
 import EditarMensalidade from "./pages/EditarMensalidade";
+import CadastroUsuario from "./pages/CadastroUsuario";
+import Usuarios from "./pages/Usuarios";
 
 function App() {
   return (
@@ -113,7 +115,22 @@ function App() {
             </PrivateRoute>
           }
         />
-
+        <Route
+          path="/cadastro-usuario"
+          element={
+            <PrivateRoute>
+              <CadastroUsuario />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/usuarios"
+          element={
+            <PrivateRoute>
+              <Usuarios />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

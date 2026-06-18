@@ -60,9 +60,9 @@ function Navbar() {
                         <li className="nav-item">
                             <Link
                                 className="nav-link"
-                                to="/cadastro-aluno"
+                               to="/usuarios"
                             >
-                                Novo Aluno
+                                Usuários
                             </Link>
                         </li>
 
@@ -81,6 +81,14 @@ function Navbar() {
                                 to="/cadastro-mensalidade"
                             >
                                 Mensalidades
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link
+                                className="nav-link"
+                                to="/cadastro-usuario"
+                            >
+                                Usuários
                             </Link>
                         </li>
 
