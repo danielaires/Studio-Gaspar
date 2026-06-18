@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { listarMensalidadesDoAluno } from "../services/mensalidadesService";
+import {
+    listarMensalidadesDoAluno,
+    marcarComoPago,
+    excluirMensalidade as excluirMensalidadeService
+} from "../services/mensalidadesService";
 
 function MensalidadesAluno() {
 
@@ -30,7 +34,10 @@ function MensalidadesAluno() {
 
     const normalizarStatus = (status) => {
 
-        return (status || "").toString().trim().toUpperCase();
+        return (status || "")
+            .toString()
+            .trim()
+            .toUpperCase();
     };
 
     const estaPaga = (mensalidade) => {
@@ -57,14 +64,16 @@ function MensalidadesAluno() {
         const hoje = new Date();
         hoje.setHours(0, 0, 0, 0);
 
-        const vencimento = new Date(`${mensalidade.vencimento}T00:00:00`);
+        const vencimento =
+            new Date(`${mensalidade.vencimento}T00:00:00`);
 
         return vencimento < hoje;
     };
 
     const renderizarStatus = (mensalidade) => {
 
-        const status = normalizarStatus(mensalidade.status);
+        const status =
+            normalizarStatus(mensalidade.status);
 
         if (estaPaga(mensalidade)) {
             return (
@@ -90,14 +99,6 @@ function MensalidadesAluno() {
             );
         }
 
-        if (status === "ATRASADO" || status === "VENCIDO") {
-            return (
-                <span className="badge bg-danger">
-                    Vencido
-                </span>
-            );
-        }
-
         return (
             <span className="badge bg-secondary">
                 {status || "-"}
@@ -105,23 +106,98 @@ function MensalidadesAluno() {
         );
     };
 
+    const carregarMensalidades = async () => {
+
+        try {
+
+            const resposta =
+                await listarMensalidadesDoAluno(id);
+
+            const dados =
+                resposta.data || resposta;
+
+            setMensalidades(
+                Array.isArray(dados) ? dados : []
+            );
+
+        } catch (erro) {
+
+            console.error(erro);
+
+        } finally {
+
+            setCarregando(false);
+
+        }
+    };
+
+    const pagarMensalidade = async (mensalidadeId) => {
+
+        const confirmar = window.confirm(
+            "Deseja marcar esta mensalidade como paga?"
+        );
+
+        if (!confirmar) return;
+
+        try {
+
+            await marcarComoPago(mensalidadeId);
+
+            await carregarMensalidades();
+
+            alert("Mensalidade atualizada com sucesso!");
+
+        } catch (erro) {
+
+            console.error(erro);
+
+            alert("Erro ao atualizar mensalidade.");
+
+        }
+    };
+
+    const excluirMensalidade = async (mensalidadeId) => {
+
+        const confirmar = window.confirm(
+            "Deseja excluir esta mensalidade?"
+        );
+
+        if (!confirmar) return;
+
+        try {
+
+            await excluirMensalidadeService(
+                mensalidadeId
+            );
+
+            await carregarMensalidades();
+
+            alert(
+                "Mensalidade excluída com sucesso!"
+            );
+
+        } catch (erro) {
+
+            console.error(erro);
+
+            alert(
+                "Erro ao excluir mensalidade."
+            );
+
+        }
+    };
+
+    const editarMensalidade = (mensalidadeId) => {
+
+        alert(
+            `Editar mensalidade ${mensalidadeId}`
+        );
+
+    };
+
     useEffect(() => {
 
-        listarMensalidadesDoAluno(id)
-            .then((resposta) => {
-
-                const dados = resposta.data || resposta;
-
-                setMensalidades(Array.isArray(dados) ? dados : []);
-
-                setCarregando(false);
-            })
-            .catch((erro) => {
-
-                console.log(erro);
-
-                setCarregando(false);
-            });
+        carregarMensalidades();
 
     }, [id]);
 
@@ -166,7 +242,9 @@ function MensalidadesAluno() {
                                 <th>Pagamento</th>
                                 <th>Valor</th>
                                 <th>Status</th>
-                                <th>Ações</th>
+                                <th className="text-center">
+                                    Ações
+                                </th>
                             </tr>
 
                         </thead>
@@ -195,14 +273,43 @@ function MensalidadesAluno() {
                                         {renderizarStatus(m)}
                                     </td>
 
-                                    <td>
-                                        {!estaPaga(m) && (
-                                            <button
-                                                className="btn btn-success btn-sm"
+                                    <td className="text-center">
+
+                                        <div className="d-flex justify-content-center gap-2">
+
+                                            {!estaPaga(m) ? (
+
+                                                <button
+                                                    className="btn btn-success btn-sm fw-bold"
+                                                    onClick={() => pagarMensalidade(m.id)}
+                                                >
+                                                    Pago
+                                                </button>
+
+                                            ) : (
+
+                                                <span className="text-success fw-bold">
+                                                    ✓ Pago
+                                                </span>
+
+                                            )}
+
+                                            <Link
+                                                to={`/mensalidades/editar/${m.id}`}
+                                                className="btn btn-warning btn-sm fw-bold"
                                             >
-                                                 Pago
+                                                Editar
+                                            </Link>
+
+                                            <button
+                                                className="btn btn-danger btn-sm fw-bold"
+                                                onClick={() => excluir(m.id)}
+                                            >
+                                                Excluir
                                             </button>
-                                        )}
+
+                                        </div>
+
                                     </td>
 
                                 </tr>
@@ -218,7 +325,6 @@ function MensalidadesAluno() {
             )}
 
         </div>
-
     );
 }
 

@@ -78,4 +78,45 @@ public class MensalidadeService {
             }
         }
     }
+    public Mensalidade buscarPorId(Long id) {
+
+        return repository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Mensalidade não encontrada"
+                        ));
+    }
+    public Mensalidade atualizar(
+            Long id,
+            Mensalidade dados) {
+
+        Mensalidade mensalidade =
+                repository.findById(id)
+                        .orElseThrow();
+
+        mensalidade.setValor(
+                dados.getValor()
+        );
+
+        mensalidade.setVencimento(
+                dados.getVencimento()
+        );
+
+        mensalidade.setPagamento(
+                dados.getPagamento()
+        );
+
+        mensalidade.setStatus(
+                dados.getStatus()
+        );
+
+        return repository.save(
+                mensalidade
+        );
+    }
+    public void excluir(Long id) {
+
+        repository.deleteById(id);
+
+    }
 }

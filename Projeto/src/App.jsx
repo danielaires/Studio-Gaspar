@@ -11,6 +11,7 @@ import MensalidadesAluno from "./pages/MensalidadesAluno";
 import Home from "./pages/home";
 import Login from "./pages/Login";
 import PrivateRoute from "./routes/PrivateRoute";
+import EditarMensalidade from "./pages/EditarMensalidade";
 
 function App() {
   return (
@@ -101,6 +102,14 @@ function App() {
           element={
             <PrivateRoute>
               <MensalidadesAluno />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/mensalidades/editar/:id"
+          element={
+            <PrivateRoute>
+              <EditarMensalidade />
             </PrivateRoute>
           }
         />

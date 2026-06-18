@@ -34,5 +34,23 @@ public class MensalidadeController {
     public Mensalidade marcarComoPago(@PathVariable Long id) {
         return service.marcarComoPago(id);
     }
+    @DeleteMapping("/{id}")
+    public void excluir(@PathVariable Long id) {
+
+        service.excluir(id);
+    }
+    @GetMapping("/{id}")
+    public Mensalidade buscarPorId(
+            @PathVariable Long id) {
+
+        return service.buscarPorId(id);
+    }
+    @PutMapping("/{id}")
+    public Mensalidade atualizar(
+            @PathVariable Long id,
+            @RequestBody Mensalidade mensalidade) {
+
+        return service.atualizar(id, mensalidade);
+    }
 
 }

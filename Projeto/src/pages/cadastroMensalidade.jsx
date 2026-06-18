@@ -1,11 +1,15 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { salvarMensalidade } from "../services/mensalidadesService";
+import api from "../services/api";
 
 function CadastroMensalidade() {
+
     const navigate = useNavigate();
-    const hoje = new Date().toISOString().split("T")[0];
+
+    const hoje = new Date()
+        .toISOString()
+        .split("T")[0];
 
     const [alunos, setAlunos] = useState([]);
 
@@ -18,12 +22,22 @@ function CadastroMensalidade() {
     });
 
     useEffect(() => {
-        fetch("http://localhost:8080/alunos")
-            .then(res => res.json())
-            .then(dados => {
-                setAlunos(Array.isArray(dados) ? dados : (dados.content || []));
+
+        api.get("/alunos")
+            .then((response) => {
+
+                setAlunos(response.data);
+
             })
-            .catch(err => console.error(err));
+            .catch((error) => {
+
+                console.error(
+                    "ERRO AO CARREGAR ALUNOS:",
+                    error
+                );
+
+            });
+
     }, []);
 
     function alterarCampo(e) {
@@ -36,10 +50,15 @@ function CadastroMensalidade() {
         };
 
         if (name === "status") {
+
             if (value === "PAGO") {
+
                 novaMensalidade.pagamento = hoje;
+
             } else {
+
                 novaMensalidade.pagamento = "";
+
             }
         }
 
@@ -51,15 +70,19 @@ function CadastroMensalidade() {
         e.preventDefault();
 
         if (!mensalidade.alunoId) {
+
             alert("Selecione um aluno.");
+
             return;
         }
 
         const payload = {
+
             valor: Number(mensalidade.valor),
             vencimento: mensalidade.vencimento,
             pagamento: mensalidade.pagamento || null,
             status: mensalidade.status,
+
             aluno: {
                 id: Number(mensalidade.alunoId)
             }
@@ -67,16 +90,27 @@ function CadastroMensalidade() {
 
         salvarMensalidade(payload)
             .then(() => {
-                alert("Mensalidade cadastrada com sucesso!");
+
+                alert(
+                    "Mensalidade cadastrada com sucesso!"
+                );
+
                 navigate("/");
+
             })
             .catch((err) => {
+
                 console.error(err);
-                alert("Erro ao salvar mensalidade.");
+
+                alert(
+                    "Erro ao salvar mensalidade."
+                );
+
             });
     }
 
     return (
+
         <div className="container mt-5 mb-5">
 
             <h2 className="mb-4">
@@ -96,6 +130,7 @@ function CadastroMensalidade() {
                         <div className="row g-3">
 
                             <div className="col-md-6">
+
                                 <label className="form-label fw-bold">
                                     Aluno
                                 </label>
@@ -107,22 +142,28 @@ function CadastroMensalidade() {
                                     onChange={alterarCampo}
                                     required
                                 >
+
                                     <option value="">
                                         Selecione um aluno...
                                     </option>
 
                                     {alunos.map((aluno) => (
+
                                         <option
                                             key={aluno.id}
                                             value={aluno.id}
                                         >
                                             {aluno.nome}
                                         </option>
+
                                     ))}
+
                                 </select>
+
                             </div>
 
                             <div className="col-md-6">
+
                                 <label className="form-label fw-bold">
                                     Valor (R$)
                                 </label>
@@ -137,9 +178,11 @@ function CadastroMensalidade() {
                                     onChange={alterarCampo}
                                     required
                                 />
+
                             </div>
 
                             <div className="col-md-4">
+
                                 <label className="form-label fw-bold">
                                     Vencimento
                                 </label>
@@ -152,9 +195,11 @@ function CadastroMensalidade() {
                                     onChange={alterarCampo}
                                     required
                                 />
+
                             </div>
 
                             <div className="col-md-4">
+
                                 <label className="form-label fw-bold">
                                     Data do Pagamento
                                 </label>
@@ -166,9 +211,11 @@ function CadastroMensalidade() {
                                     value={mensalidade.pagamento}
                                     onChange={alterarCampo}
                                 />
+
                             </div>
 
                             <div className="col-md-4">
+
                                 <label className="form-label fw-bold">
                                     Status
                                 </label>
@@ -179,6 +226,7 @@ function CadastroMensalidade() {
                                     value={mensalidade.status}
                                     onChange={alterarCampo}
                                 >
+
                                     <option value="PENDENTE">
                                         🟡 Pendente
                                     </option>
@@ -190,7 +238,9 @@ function CadastroMensalidade() {
                                     <option value="ATRASADO">
                                         🔴 Atrasado
                                     </option>
+
                                 </select>
+
                             </div>
 
                         </div>

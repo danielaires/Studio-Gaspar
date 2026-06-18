@@ -15,3 +15,20 @@ export function listarMensalidadesDoAluno(id) {
 export function marcarComoPago(id) {
     return api.put(`/mensalidades/${id}/pagar`);
 }
+
+export function excluirMensalidade(id) {
+    return api.delete(`/mensalidades/${id}`);
+}
+
+export function buscarMensalidade(id) {
+    return api.get(`/mensalidades/${id}`);
+}
+export function atualizarMensalidade(
+    id,
+    mensalidade
+) {
+    return api.put(
+        `/mensalidades/${id}`,
+        mensalidade
+    );
+}

@@ -4,10 +4,12 @@ const api = axios.create({
     baseURL: "http://localhost:8080"
 });
 
-// Adiciona o JWT automaticamente em todas as requisições
 api.interceptors.request.use((config) => {
 
     const token = localStorage.getItem("token");
+
+    console.log("TOKEN ENVIADO:", token);
+    console.log("URL:", config.url);
 
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -51,7 +53,6 @@ export function excluirAluno(id) {
     return api.delete(`/alunos/${id}`);
 }
 
-
 export function listarAvaliacoesDoAluno(alunoId) {
     return api.get(`/avaliacoes/aluno/${alunoId}`);
 }
@@ -64,7 +65,6 @@ export function salvarAvaliacao(avaliacao) {
     return api.post("/avaliacoes", avaliacao);
 }
 
-
 export function listarMensalidades() {
     return api.get("/mensalidades");
 }
@@ -73,11 +73,9 @@ export function buscarMensalidade(id) {
     return api.get(`/mensalidades/${id}`);
 }
 
-
 export function listarHorarios() {
     return api.get("/horarios");
 }
-
 
 export function listarInadimplentes() {
     return api.get("/relatorios/inadimplentes");
