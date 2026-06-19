@@ -6,7 +6,6 @@ function Navbar() {
     function sair() {
 
         logout();
-
         window.location.href = "/login";
     }
 
@@ -48,22 +47,49 @@ function Navbar() {
                             </Link>
                         </li>
 
-                        <li className="nav-item">
-                            <Link
-                                className="nav-link"
-                                to="/alunos"
+                        <li className="nav-item dropdown">
+
+                            <a
+                                className="nav-link dropdown-toggle"
+                                href="#"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
                             >
                                 Alunos
-                            </Link>
-                        </li>
+                            </a>
 
-                        <li className="nav-item">
-                            <Link
-                                className="nav-link"
-                               to="/usuarios"
-                            >
-                                Usuários
-                            </Link>
+                            <ul className="dropdown-menu">
+
+                                <li>
+                                    <Link
+                                        className="dropdown-item"
+                                        to="/alunos"
+                                    >
+                                        Listar Alunos
+                                    </Link>
+                                </li>
+
+                                <li>
+                                    <Link
+                                        className="dropdown-item"
+                                        to="/cadastro-aluno"
+                                    >
+                                        Cadastrar Aluno
+                                    </Link>
+                                </li>
+
+                                <li>
+                                    <Link
+                                        className="dropdown-item"
+                                        to="/horarios"
+                                    >
+                                        Horários
+                                    </Link>
+                                </li>
+
+                            </ul>
+
                         </li>
 
                         <li className="nav-item">
@@ -83,23 +109,55 @@ function Navbar() {
                                 Mensalidades
                             </Link>
                         </li>
-                        <li className="nav-item">
-                            <Link
-                                className="nav-link"
-                                to="/cadastro-usuario"
-                            >
-                                Usuários
-                            </Link>
-                        </li>
 
                     </ul>
 
-                    <button
-                        className="btn btn-outline-light btn-sm"
-                        onClick={sair}
-                    >
-                        Sair
-                    </button>
+                    <div className="dropdown">
+
+                        <button
+                            className="btn btn-outline-light dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                        >
+                            👤 Admin
+                        </button>
+
+                        <ul className="dropdown-menu dropdown-menu-end">
+
+                            <li>
+                                <Link
+                                    className="dropdown-item"
+                                    to="/usuarios"
+                                >
+                                    Lista de Usuários
+                                </Link>
+                            </li>
+
+                            <li>
+                                <Link
+                                    className="dropdown-item"
+                                    to="/cadastro-usuario"
+                                >
+                                    Cadastrar Usuário
+                                </Link>
+                            </li>
+
+                            <li>
+                                <hr className="dropdown-divider" />
+                            </li>
+
+                            <li>
+                                <button
+                                    className="dropdown-item text-danger"
+                                    onClick={sair}
+                                >
+                                    Sair
+                                </button>
+                            </li>
+
+                        </ul>
+
+                    </div>
 
                 </div>
 

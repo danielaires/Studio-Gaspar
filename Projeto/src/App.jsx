@@ -14,14 +14,21 @@ import PrivateRoute from "./routes/PrivateRoute";
 import EditarMensalidade from "./pages/EditarMensalidade";
 import CadastroUsuario from "./pages/CadastroUsuario";
 import Usuarios from "./pages/Usuarios";
+import Horarios from "./pages/horarios";
 
 function App() {
+
   return (
+
     <BrowserRouter>
+
       <Routes>
 
         {/* Login */}
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={<Login />}
+        />
 
         {/* Home */}
         <Route
@@ -57,6 +64,16 @@ function App() {
           element={
             <PrivateRoute>
               <EditarAluno />
+            </PrivateRoute>
+          }
+        />
+
+        {/* Horários */}
+        <Route
+          path="/horarios"
+          element={
+            <PrivateRoute>
+              <Horarios />
             </PrivateRoute>
           }
         />
@@ -107,6 +124,7 @@ function App() {
             </PrivateRoute>
           }
         />
+
         <Route
           path="/mensalidades/editar/:id"
           element={
@@ -115,14 +133,8 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route
-          path="/cadastro-usuario"
-          element={
-            <PrivateRoute>
-              <CadastroUsuario />
-            </PrivateRoute>
-          }
-        />
+
+        {/* Usuários */}
         <Route
           path="/usuarios"
           element={
@@ -131,8 +143,20 @@ function App() {
             </PrivateRoute>
           }
         />
+
+        <Route
+          path="/cadastro-usuario"
+          element={
+            <PrivateRoute>
+              <CadastroUsuario />
+            </PrivateRoute>
+          }
+        />
+
       </Routes>
+
     </BrowserRouter>
+
   );
 }
 
