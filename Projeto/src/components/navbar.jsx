@@ -9,6 +9,14 @@ function Navbar() {
         window.location.href = "/login";
     }
 
+    const nomeUsuario = (
+        localStorage.getItem("nomeUsuario") || "Usuário"
+    );
+
+    const nomeFormatado =
+        nomeUsuario.charAt(0).toUpperCase() +
+        nomeUsuario.slice(1).toLowerCase();
+
     return (
 
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
@@ -115,11 +123,11 @@ function Navbar() {
                     <div className="dropdown">
 
                         <button
-                            className="btn btn-outline-light dropdown-toggle"
+                           className="nav-link dropdown-toggle text-white fw-semibold"
                             type="button"
                             data-bs-toggle="dropdown"
                         >
-                            👤 Admin
+                            👤 {nomeFormatado}
                         </button>
 
                         <ul className="dropdown-menu dropdown-menu-end">

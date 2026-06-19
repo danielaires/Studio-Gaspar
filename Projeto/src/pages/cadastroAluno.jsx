@@ -19,9 +19,17 @@ function CadastroAluno() {
         dataInicio: "",
         objetivo: "",
         horarioId: "",
+        horarioTreino: "",
         foto: "",
         ativo: true
     });
+    <select
+        className="form-select"
+        name="horarioId"
+        value={aluno.horarioId}
+        onChange={alterarCampo}
+        required
+    ></select>
 
     useEffect(() => {
 
@@ -190,7 +198,7 @@ function CadastroAluno() {
                                 <div className="col-md-6">
 
                                     <label className="form-label fw-bold">
-                                        Horário de Treino
+                                        Período
                                     </label>
 
                                     <select
@@ -202,7 +210,7 @@ function CadastroAluno() {
                                     >
 
                                         <option value="">
-                                            Selecione um horário...
+                                            Selecione um período...
                                         </option>
 
                                         {horarios.map((h) => (
@@ -215,6 +223,78 @@ function CadastroAluno() {
                                             </option>
 
                                         ))}
+
+                                    </select>
+
+                                </div>
+                                <div className="mt-3">
+
+                                    <label className="form-label fw-bold">
+                                        Hora do Treino
+                                    </label>
+
+                                    <select
+                                        className="form-select"
+                                        name="horarioTreino"
+                                        value={aluno.horarioTreino}
+                                        onChange={alterarCampo}
+                                    >
+
+                                        <option value="">
+                                            Selecione a hora...
+                                        </option>
+
+                                        <option value="06:00 às 07:00">
+                                            06:00 às 07:00
+                                        </option>
+
+                                        <option value="07:00 às 08:00">
+                                            07:00 às 08:00
+                                        </option>
+
+                                        <option value="08:00 às 09:00">
+                                            08:00 às 09:00
+                                        </option>
+
+                                        <option value="09:00 às 10:00">
+                                            09:00 às 10:00
+                                        </option>
+
+                                        <option value="10:00 às 11:00">
+                                            10:00 às 11:00
+                                        </option>
+
+                                        <option value="14:00 às 15:00">
+                                            14:00 às 15:00
+                                        </option>
+
+                                        <option value="15:00 às 16:00">
+                                            15:00 às 16:00
+                                        </option>
+
+                                        <option value="16:00 às 17:00">
+                                            16:00 às 17:00
+                                        </option>
+
+                                        <option value="17:00 às 18:00">
+                                            17:00 às 18:00
+                                        </option>
+
+                                        <option value="18:00 às 19:00">
+                                            18:00 às 19:00
+                                        </option>
+
+                                        <option value="19:00 às 20:00">
+                                            19:00 às 20:00
+                                        </option>
+
+                                        <option value="20:00 às 21:00">
+                                            20:00 às 21:00
+                                        </option>
+
+                                        <option value="21:00 às 22:00">
+                                            21:00 às 22:00
+                                        </option>
 
                                     </select>
 

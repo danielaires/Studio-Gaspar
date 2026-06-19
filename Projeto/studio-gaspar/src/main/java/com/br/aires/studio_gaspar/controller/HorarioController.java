@@ -1,5 +1,6 @@
 package com.br.aires.studio_gaspar.controller;
 
+import com.br.aires.studio_gaspar.dto.HorarioDTO;
 import com.br.aires.studio_gaspar.entity.Horario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,18 +18,19 @@ public class HorarioController {
     private final HorarioService service;
 
     @GetMapping
-    public List<Horario> listar(){
+    public List<Horario> listar() {
         return service.listar();
     }
 
-    @PostMapping
-    public Horario salvar(@RequestBody Horario horario){
-        return service.salvar(horario);
+    @GetMapping("/resumo")
+    public List<HorarioDTO> listarComTotalAlunos() {
+
+        return service.listarComTotalAlunos();
+
     }
 
-    // Opcional: Adicione este método caso precise buscar um horário pelo ID no futuro
-    @GetMapping("/{id}")
-    public Horario buscarPorId(@PathVariable Long id){
-        return service.buscarPorId(id);
+    @PostMapping
+    public Horario salvar(@RequestBody Horario horario) {
+        return service.salvar(horario);
     }
 }

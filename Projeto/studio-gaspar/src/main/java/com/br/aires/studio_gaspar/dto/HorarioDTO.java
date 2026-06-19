@@ -7,9 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class LoginResponse {
+public class HorarioDTO {
 
-    private String token;
-    private String nome;
+    private String descricao;
+    private Long totalAlunos;
 
 }

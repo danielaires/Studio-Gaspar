@@ -50,7 +50,10 @@ public class AuthController {
         System.out.println("TOKEN GERADO: " + token);
 
         return ResponseEntity.ok(
-                new LoginResponse(token)
+                new LoginResponse(
+                        token,
+                        usuario.getNome()
+                )
         );
     }
 }

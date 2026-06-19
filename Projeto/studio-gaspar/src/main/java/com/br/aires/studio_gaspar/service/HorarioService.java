@@ -1,5 +1,6 @@
 package com.br.aires.studio_gaspar.service;
 
+import com.br.aires.studio_gaspar.dto.HorarioDTO;
 import com.br.aires.studio_gaspar.entity.Horario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,17 +14,25 @@ public class HorarioService {
 
     private final HorarioRepository repository;
 
-    public List<Horario> listar(){
+    public List<Horario> listar() {
         return repository.findAll();
     }
 
-    public Horario salvar(Horario horario){
+    public List<HorarioDTO> listarComTotalAlunos() {
+
+        return repository.listarComTotalAlunos();
+
+    }
+
+    public Horario salvar(Horario horario) {
         return repository.save(horario);
     }
 
-    // Método adicionado para atender a requisição do Controller
     public Horario buscarPorId(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Horário não encontrado com o ID: " + id));
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Horário não encontrado com o ID: " + id
+                        ));
     }
 }

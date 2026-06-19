@@ -27,6 +27,19 @@ public class UsuarioController {
 
         return service.listar();
     }
+    @GetMapping("/{id}")
+    public Usuario buscarPorId(
+            @PathVariable Long id) {
+
+        return service.buscarPorId(id);
+    }
+    @PutMapping("/{id}")
+    public Usuario atualizar(
+            @PathVariable Long id,
+            @RequestBody Usuario usuario) {
+
+        return service.atualizar(id, usuario);
+    }
 
     @DeleteMapping("/{id}")
     public void excluir(

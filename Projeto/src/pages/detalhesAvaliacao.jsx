@@ -47,7 +47,7 @@ function DetalhesAvaliacao() {
   return (
     <div className="container mt-4 mb-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Ficha de Avaliação Física #{avaliacao.id}</h2>
+        <h2>Ficha de Avaliação Física</h2>
         <button
           onClick={() => navigate(-1)}
           className="btn btn-secondary fw-bold"

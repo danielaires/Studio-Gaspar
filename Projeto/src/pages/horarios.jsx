@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import { listarHorarios } from "../services/horarioService";
+import { listarResumoHorarios } from "../services/horarioService";
 
 function Horarios() {
 
@@ -14,7 +14,7 @@ function Horarios() {
 
         try {
 
-            const response = await listarHorarios();
+            const response = await listarResumoHorarios();
 
             setHorarios(response.data);
 
@@ -33,8 +33,10 @@ function Horarios() {
 
                 <div className="card shadow">
 
-                    <div className="card-header bg-dark text-white">
-                        <h4 className="mb-0"> Horários Cadastrados</h4>
+                    <div className="card-header bg-white">
+                        <h4 className="mb-0 fw-bold text-dark">
+                            Horários Cadastrados
+                        </h4>
                     </div>
 
                     <div className="card-body">
@@ -43,13 +45,11 @@ function Horarios() {
 
                             <table className="table table-striped table-hover">
 
-                                <thead>
+                                <thead className="table-light">
 
                                     <tr>
-
-                                        <th>Descrição</th>
-                                        <th>Hora Início</th>
-                                        <th>Hora Fim</th>
+                                        <th className="text-center">Horário</th>
+                                        <th className="text-center">Alunos</th>
                                     </tr>
 
                                 </thead>
@@ -58,10 +58,16 @@ function Horarios() {
 
                                     {horarios.map((horario) => (
 
-                                        <tr key={horario.id}>
-                                            <td>{horario.descricao}</td>
-                                            <td>{horario.horaInicio}</td>
-                                            <td>{horario.horaFim}</td>
+                                      <tr key={horario.descricao}>
+
+                                            <td className="text-center fw-semibold">
+                                                {horario.descricao}
+                                            </td>
+
+                                            <td className="text-center fw-bold">
+                                                {horario.totalAlunos}
+                                            </td>
+
                                         </tr>
 
                                     ))}

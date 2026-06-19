@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { listarHorarios } from "../services/horarioService";
+import api from "../services/api";
 
 function EditarAluno() {
     const navigate = useNavigate();
-    const { id } = useParams(); 
+    const { id } = useParams();
     const [horarios, setHorarios] = useState([]);
 
     const [aluno, setAluno] = useState({
@@ -25,25 +26,31 @@ function EditarAluno() {
         listarHorarios().then(res => setHorarios(res.data));
 
         // 2. Busca os dados do aluno para preencher o formulário
-        fetch(`http://localhost:8080/alunos/${id}`)
-            .then(res => res.json())
-            .then(dados => {
+        api.get(`/alunos/${id}`)
+            .then(res => {
+
+                const dados = res.data;
+
                 setAluno({
                     ...dados,
                     horarioId: dados.horario ? dados.horario.id : ""
                 });
+
             })
             .catch(erro => {
-                console.error(erro);
-                navigate("/");
+
+                console.error("ERRO AO BUSCAR ALUNO:", erro);
+
+                alert(erro.message);
+
             });
     }, [id, navigate]);
 
-    function alterarCampo(e){
+    function alterarCampo(e) {
         setAluno({ ...aluno, [e.target.name]: e.target.value });
     }
 
-    function salvar(e){
+    function salvar(e) {
         e.preventDefault();
 
         const alunoAtualizado = {
@@ -54,16 +61,12 @@ function EditarAluno() {
         };
         delete alunoAtualizado.horarioId;
 
-        fetch(`http://localhost:8080/alunos/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(alunoAtualizado)
-        })
-        .then(() => {
-            alert("Aluno atualizado com sucesso!");
-            navigate("/");
-        })
-        .catch(error => console.error("Erro:", error));
+        api.put(`/alunos/${id}`, alunoAtualizado)
+            .then(() => {
+                alert("Aluno atualizado com sucesso!");
+                navigate("/");
+            })
+            .catch(error => console.error("Erro:", error));
     }
 
     return (
@@ -72,7 +75,7 @@ function EditarAluno() {
                 <h2>Editar Aluno</h2>
                 <button onClick={() => navigate("/")} className="btn btn-outline-secondary">Voltar</button>
             </div>
-            
+
             <form onSubmit={salvar}>
                 <div className="mb-3">
                     <label className="form-label fw-bold">Nome</label>
@@ -134,7 +137,7 @@ function EditarAluno() {
 
                 <div className="mb-4">
                     <div className="form-check form-switch">
-                        <input className="form-check-input" type="checkbox" id="ativoSwitch" name="ativo" checked={aluno.ativo} onChange={(e) => setAluno({...aluno, ativo: e.target.checked})} />
+                        <input className="form-check-input" type="checkbox" id="ativoSwitch" name="ativo" checked={aluno.ativo} onChange={(e) => setAluno({ ...aluno, ativo: e.target.checked })} />
                         <label className="form-check-label fw-bold" htmlFor="ativoSwitch">Aluno Ativo</label>
                     </div>
                 </div>

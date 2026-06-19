@@ -237,14 +237,11 @@ function MensalidadesAluno() {
                         <thead className="table-dark">
 
                             <tr>
-                                <th>ID</th>
                                 <th>Vencimento</th>
                                 <th>Pagamento</th>
                                 <th>Valor</th>
                                 <th>Status</th>
-                                <th className="text-center">
-                                    Ações
-                                </th>
+                                <th>Ações</th>
                             </tr>
 
                         </thead>
@@ -254,8 +251,6 @@ function MensalidadesAluno() {
                             {mensalidades.map((m) => (
 
                                 <tr key={m.id}>
-
-                                    <td>{m.id}</td>
 
                                     <td>
                                         {formatarData(m.vencimento)}
@@ -303,7 +298,7 @@ function MensalidadesAluno() {
 
                                             <button
                                                 className="btn btn-danger btn-sm fw-bold"
-                                                onClick={() => excluir(m.id)}
+                                                onClick={() => excluirMensalidade(m.id)}
                                             >
                                                 Excluir
                                             </button>

@@ -11,3 +11,11 @@ export function listarUsuarios() {
 export function excluirUsuario(id) {
     return api.delete(`/usuarios/${id}`);
 }
+
+export function buscarUsuario(id) {
+    return api.get(`/usuarios/${id}`);
+}
+
+export function atualizarUsuario(id, usuario) {
+    return api.put(`/usuarios/${id}`, usuario);
+}

@@ -40,6 +40,9 @@ public class Aluno {
     @JoinColumn(name = "horario_id")
     private Horario horario;
 
+    @Column(name = "horario_treino")
+    private String horarioTreino;
+
     @JsonIgnore
     @OneToMany(mappedBy = "aluno")
     private List<Mensalidade> mensalidades;

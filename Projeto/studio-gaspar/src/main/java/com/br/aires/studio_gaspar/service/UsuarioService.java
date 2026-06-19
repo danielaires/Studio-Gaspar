@@ -30,6 +30,43 @@ public class UsuarioService {
         return repository.findAll();
 
     }
+    public Usuario buscarPorId(Long id) {
+
+        return repository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Usuário não encontrado"));
+
+    }
+    public Usuario atualizar(Long id, Usuario usuarioAtualizado) {
+
+        Usuario usuario = repository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Usuário não encontrado"));
+
+        usuario.setNome(
+                usuarioAtualizado.getNome()
+        );
+
+        usuario.setEmail(
+                usuarioAtualizado.getEmail()
+        );
+
+        usuario.setRole(
+                usuarioAtualizado.getRole()
+        );
+
+        if (usuarioAtualizado.getSenha() != null &&
+                !usuarioAtualizado.getSenha().isBlank()) {
+
+            usuario.setSenha(
+                    passwordEncoder.encode(
+                            usuarioAtualizado.getSenha()
+                    )
+            );
+        }
+
+        return repository.save(usuario);
+    }
 
     public void excluir(Long id) {
 

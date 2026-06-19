@@ -14,3 +14,6 @@ export function listarHorarios() {
 export function buscarHorario(id) {
     return api.get(`/horarios/${id}`);
 }
+export function listarResumoHorarios() {
+    return api.get("/horarios/resumo");
+}

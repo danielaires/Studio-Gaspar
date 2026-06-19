@@ -45,64 +45,155 @@ function Avaliacoes() {
 
     return (
         <div className="container mt-5 mb-5">
+
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <h2>Ficha de Avaliação Física #{avaliacao.id}</h2>
-                <button className="btn btn-secondary px-4" onClick={() => navigate(-1)}>Voltar</button>
+
+                <h2> Ficha de Avaliação Física</h2>
+
+                <button
+                    className="btn btn-secondary px-4"
+                    onClick={() => navigate(-1)}
+                >
+                    Voltar
+                </button>
+
             </div>
 
             {/* 1. DADOS BÁSICOS */}
             <div className="card mb-4 shadow-sm">
-                <div className="card-header bg-primary text-white fw-bold">Composição Básica</div>
+                <div className="card-header bg-primary text-white fw-bold">
+                    Composição Básica
+                </div>
+
                 <div className="card-body">
                     <div className="row">
-                        {/* Data formatada diretamente via split, reverse e join */}
+
                         <div className="col-md-12 mb-2">
-                            <strong>Data:</strong> {avaliacao.dataAvaliacao ? avaliacao.dataAvaliacao.split("-").reverse().join("/") : "-"}
+                            <strong>Data:</strong>{" "}
+                            {avaliacao.dataAvaliacao
+                                ? avaliacao.dataAvaliacao
+                                    .split("-")
+                                    .reverse()
+                                    .join("/")
+                                : "-"}
                         </div>
-                        <div className="col-md-6 mb-2"><strong>Peso:</strong> {avaliacao.peso} kg</div>
-                        <div className="col-md-6 mb-2"><strong>Altura:</strong> {avaliacao.altura} m</div>
+
+                        <div className="col-md-6 mb-2">
+                            <strong>Peso:</strong> {avaliacao.peso} kg
+                        </div>
+
+                        <div className="col-md-6 mb-2">
+                            <strong>Altura:</strong> {avaliacao.altura} m
+                        </div>
+
                     </div>
                 </div>
             </div>
 
             {/* 2. PERÍMETROS */}
             <div className="card mb-4 shadow-sm">
-                <div className="card-header bg-secondary text-white fw-bold">Perímetros (cm)</div>
-                <div className="card-body">
-                    <div className="row g-3">
-                        <div className="col-md-4"><strong>Peito:</strong> {avaliacao.peito || "-"}</div>
-                        <div className="col-md-4"><strong>Abdômen:</strong> {avaliacao.abdomen || "-"}</div>
-                        <div className="col-md-4"><strong>Glúteo:</strong> {avaliacao.gluteo || "-"}</div>
-                        <div className="col-md-4"><strong>Braço Esq.:</strong> {avaliacao.bracoEsquerdo || "-"}</div>
-                        <div className="col-md-4"><strong>Braço Dir.:</strong> {avaliacao.bracoDireito || "-"}</div>
-                        <div className="col-md-4"><strong>Coxa Esq.:</strong> {avaliacao.coxaEsquerda || "-"}</div>
-                        <div className="col-md-4"><strong>Coxa Dir.:</strong> {avaliacao.coxaDireita || "-"}</div>
-                        <div className="col-md-4"><strong>Panturrilha Esq.:</strong> {avaliacao.panturrilhaEsquerda || "-"}</div>
-                        <div className="col-md-4"><strong>Panturrilha Dir.:</strong> {avaliacao.panturrilhaDireita || "-"}</div>
-                    </div>
+
+                <div className="card-header bg-secondary text-white fw-bold">
+                    Perímetros (cm)
                 </div>
+
+                <div className="card-body">
+
+                    <div className="row g-3">
+
+                        <div className="col-md-4">
+                            <strong>Peito:</strong> {avaliacao.peito || "-"}
+                        </div>
+
+                        <div className="col-md-4">
+                            <strong>Abdômen:</strong> {avaliacao.abdomen || "-"}
+                        </div>
+
+                        <div className="col-md-4">
+                            <strong>Glúteo:</strong> {avaliacao.gluteo || "-"}
+                        </div>
+
+                        <div className="col-md-4">
+                            <strong>Braço Esq.:</strong> {avaliacao.bracoEsquerdo || "-"}
+                        </div>
+
+                        <div className="col-md-4">
+                            <strong>Braço Dir.:</strong> {avaliacao.bracoDireito || "-"}
+                        </div>
+
+                        <div className="col-md-4">
+                            <strong>Coxa Esq.:</strong> {avaliacao.coxaEsquerda || "-"}
+                        </div>
+
+                        <div className="col-md-4">
+                            <strong>Coxa Dir.:</strong> {avaliacao.coxaDireita || "-"}
+                        </div>
+
+                        <div className="col-md-4">
+                            <strong>Panturrilha Esq.:</strong> {avaliacao.panturrilhaEsquerda || "-"}
+                        </div>
+
+                        <div className="col-md-4">
+                            <strong>Panturrilha Dir.:</strong> {avaliacao.panturrilhaDireita || "-"}
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
 
             {/* 3. DOBRAS CUTÂNEAS */}
             <div className="card mb-4 shadow-sm">
-                <div className="card-header bg-success text-white fw-bold">Dobras Cutâneas (mm)</div>
-                <div className="card-body">
-                    <div className="row g-3">
-                        <div className="col-md-3"><strong>Tríceps:</strong> {avaliacao.triceps || "-"}</div>
-                        <div className="col-md-3"><strong>Subescapular:</strong> {avaliacao.subescapular || "-"}</div>
-                        <div className="col-md-3"><strong>Supra-ilíaca:</strong> {avaliacao.suprailiaca || "-"}</div>
-                        <div className="col-md-3"><strong>Dobra Abdômen:</strong> {avaliacao.dobraAbdomen || "-"}</div>
-                    </div>
+
+                <div className="card-header bg-success text-white fw-bold">
+                    Dobras Cutâneas (mm)
                 </div>
+
+                <div className="card-body">
+
+                    <div className="row g-3">
+
+                        <div className="col-md-3">
+                            <strong>Tríceps:</strong> {avaliacao.triceps || "-"}
+                        </div>
+
+                        <div className="col-md-3">
+                            <strong>Subescapular:</strong> {avaliacao.subescapular || "-"}
+                        </div>
+
+                        <div className="col-md-3">
+                            <strong>Supra-ilíaca:</strong> {avaliacao.suprailiaca || "-"}
+                        </div>
+
+                        <div className="col-md-3">
+                            <strong>Dobra Abdômen:</strong> {avaliacao.dobraAbdomen || "-"}
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
 
             {/* 4. OBSERVAÇÕES */}
             <div className="card mb-4 shadow-sm">
-                <div className="card-header bg-dark text-white fw-bold">Observações</div>
-                <div className="card-body">
-                    <p className="mb-0">{avaliacao.observacao || "Nenhuma observação cadastrada para esta avaliação."}</p>
+
+                <div className="card-header bg-dark text-white fw-bold">
+                    Observações
                 </div>
+
+                <div className="card-body">
+
+                    <p className="mb-0">
+                        {avaliacao.observacao ||
+                            "Nenhuma observação cadastrada para esta avaliação."}
+                    </p>
+
+                </div>
+
             </div>
+
         </div>
     );
 }

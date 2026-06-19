@@ -105,11 +105,9 @@ function Usuarios() {
 
                             <table className="table table-hover mb-0">
 
-                                <thead className="table-dark">
+                               <thead className="table-dark text-center">
 
                                     <tr>
-
-                                        <th>ID</th>
                                         <th>Nome</th>
                                         <th>Email</th>
                                         <th>Perfil</th>
@@ -125,11 +123,7 @@ function Usuarios() {
 
                                     {usuarios.map((usuario) => (
 
-                                        <tr key={usuario.id}>
-
-                                            <td>
-                                                {usuario.id}
-                                            </td>
+                                        <tr key={usuario.id} className="text-center align-middle">
 
                                             <td>
                                                 {usuario.nome}
@@ -151,17 +145,23 @@ function Usuarios() {
 
                                             <td className="text-center">
 
-                                                <button
-                                                    className="btn btn-danger btn-sm"
-                                                    onClick={() =>
-                                                        excluir(
-                                                            usuario.id,
-                                                            usuario.nome
-                                                        )
-                                                    }
-                                                >
-                                                    Excluir
-                                                </button>
+                                                <div className="d-flex justify-content-center gap-2">
+
+                                                    <Link
+                                                        to={`/usuarios/editar/${usuario.id}`}
+                                                        className="btn btn-warning btn-sm fw-bold"
+                                                    >
+                                                        Editar
+                                                    </Link>
+
+                                                    <button
+                                                        className="btn btn-danger btn-sm fw-bold"
+                                                       onClick={() => excluir(usuario.id, usuario.nome)}
+                                                    >
+                                                        Excluir
+                                                    </button>
+
+                                                </div>
 
                                             </td>
 

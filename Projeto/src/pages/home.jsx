@@ -372,14 +372,12 @@ function Home() {
                   <thead className="table-dark">
                     {relatorioAtual.tipo === "completo" ? (
                       <tr>
-                        <th>ID</th>
                         <th>Nome</th>
                         <th>Telefone</th>
                         <th>Profissão</th>
-                        <th>Data Iní­cio</th>
+                        <th>Data Início</th>
                         <th>Objetivo</th>
                         <th>Status Aluno</th>
-                        <th>ID Mens.</th>
                         <th>Vencimento</th>
                         <th>Pagamento</th>
                         <th>Valor</th>
@@ -387,7 +385,6 @@ function Home() {
                       </tr>
                     ) : relatorioAtual.tipo === "alunos" ? (
                       <tr>
-                        <th>ID</th>
                         <th>Nome</th>
                         <th>Telefone</th>
                         <th>Profissão</th>
@@ -397,7 +394,6 @@ function Home() {
                       </tr>
                     ) : (
                       <tr>
-                        <th>ID</th>
                         <th>Aluno</th>
                         <th>Vencimento</th>
                         <th>Pagamento</th>
@@ -429,12 +425,12 @@ function Home() {
                           key={`${linha.aluno.id}-${linha.mensalidade?.id || "sem-mensalidade"}`}
                           className="align-middle"
                         >
-                          <td className="fw-bold">{linha.aluno.id}</td>
                           <td>{linha.aluno.nome}</td>
                           <td>{linha.aluno.telefone || "-"}</td>
                           <td>{linha.aluno.profissao || "-"}</td>
                           <td>{formatarData(linha.aluno.dataInicio)}</td>
                           <td>{linha.aluno.objetivo || "-"}</td>
+
                           <td>
                             {linha.aluno.ativo ? (
                               <span className="badge bg-success">Ativo</span>
@@ -442,29 +438,38 @@ function Home() {
                               <span className="badge bg-danger">Inativo</span>
                             )}
                           </td>
-                          <td>{linha.mensalidade?.id || "Sem mensalidade"}</td>
+
                           <td>
                             {linha.mensalidade
                               ? formatarData(linha.mensalidade.vencimento)
                               : "Sem vencimento"}
                           </td>
+
                           <td>
                             {linha.mensalidade
                               ? formatarData(linha.mensalidade.pagamento)
                               : "Sem pagamento"}
                           </td>
+
                           <td>
                             {linha.mensalidade
                               ? formatarValor(linha.mensalidade.valor)
                               : formatarValor(0)}
                           </td>
+
                           <td>
                             {!linha.mensalidade ? (
-                              <span className="badge bg-secondary">Sem mensalidade</span>
+                              <span className="badge bg-secondary">
+                                Sem mensalidade
+                              </span>
                             ) : estaPaga(linha.mensalidade) ? (
-                              <span className="badge bg-success">Pago</span>
+                              <span className="badge bg-success">
+                                Pago
+                              </span>
                             ) : estaVencida(linha.mensalidade) ? (
-                              <span className="badge bg-danger">Vencido</span>
+                              <span className="badge bg-danger">
+                                Vencido
+                              </span>
                             ) : (
                               <span className="badge bg-warning text-dark">
                                 {linha.mensalidade.status || "Pendente"}
@@ -476,17 +481,21 @@ function Home() {
                     ) : relatorioAtual.tipo === "alunos" ? (
                       relatorioAtual.dados.map((aluno) => (
                         <tr key={aluno.id} className="align-middle">
-                          <td className="fw-bold">{aluno.id}</td>
                           <td>{aluno.nome}</td>
                           <td>{aluno.telefone || "-"}</td>
                           <td>{aluno.profissao || "-"}</td>
                           <td>{formatarData(aluno.dataInicio)}</td>
                           <td>{aluno.objetivo || "-"}</td>
+
                           <td>
                             {aluno.ativo ? (
-                              <span className="badge bg-success">Ativo</span>
+                              <span className="badge bg-success">
+                                Ativo
+                              </span>
                             ) : (
-                              <span className="badge bg-danger">Inativo</span>
+                              <span className="badge bg-danger">
+                                Inativo
+                              </span>
                             )}
                           </td>
                         </tr>
@@ -494,16 +503,29 @@ function Home() {
                     ) : (
                       relatorioAtual.dados.map((mensalidade) => (
                         <tr key={mensalidade.id} className="align-middle">
-                          <td className="fw-bold">{mensalidade.id}</td>
                           <td>{mensalidade.aluno?.nome || "-"}</td>
-                          <td>{formatarData(mensalidade.vencimento)}</td>
-                          <td>{formatarData(mensalidade.pagamento)}</td>
-                          <td>{formatarValor(mensalidade.valor)}</td>
+
+                          <td>
+                            {formatarData(mensalidade.vencimento)}
+                          </td>
+
+                          <td>
+                            {formatarData(mensalidade.pagamento)}
+                          </td>
+
+                          <td>
+                            {formatarValor(mensalidade.valor)}
+                          </td>
+
                           <td>
                             {estaPaga(mensalidade) ? (
-                              <span className="badge bg-success">Pago</span>
+                              <span className="badge bg-success">
+                                Pago
+                              </span>
                             ) : estaVencida(mensalidade) ? (
-                              <span className="badge bg-danger">Vencido</span>
+                              <span className="badge bg-danger">
+                                Vencido
+                              </span>
                             ) : (
                               <span className="badge bg-warning text-dark">
                                 {mensalidade.status || "Pendente"}

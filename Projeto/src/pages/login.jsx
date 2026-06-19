@@ -24,6 +24,15 @@ function Login() {
                 "token",
                 response.data.token
             );
+            localStorage.setItem(
+                "nomeUsuario",
+                response.data.nome
+            );
+
+            localStorage.setItem(
+                "nomeUsuario",
+                response.data.nome
+            );
 
             navigate("/");
 

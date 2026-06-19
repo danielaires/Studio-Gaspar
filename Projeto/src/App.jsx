@@ -15,6 +15,7 @@ import EditarMensalidade from "./pages/EditarMensalidade";
 import CadastroUsuario from "./pages/CadastroUsuario";
 import Usuarios from "./pages/Usuarios";
 import Horarios from "./pages/horarios";
+import EditarUsuario from "./pages/EditarUsuario";
 
 function App() {
 
@@ -149,6 +150,15 @@ function App() {
           element={
             <PrivateRoute>
               <CadastroUsuario />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/usuarios/editar/:id"
+          element={
+            <PrivateRoute>
+              <EditarUsuario />
             </PrivateRoute>
           }
         />
