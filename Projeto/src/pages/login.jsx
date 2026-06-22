@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/api";
+import logo from "../assets/logo_gaspar.png";
 
 function Login() {
 
@@ -71,11 +72,16 @@ function Login() {
 
                     <div className="text-center mb-4">
 
-                        <h1 className="fw-bold">
-                            🏋️ Studio Gaspar
-                        </h1>
+                        <img
+                            src={logo}
+                            alt="Gaspar Fitness"
+                            style={{
+                                width: "180px",
+                                objectFit: "contain"
+                            }}
+                        />
 
-                        <p className="text-muted mb-0">
+                        <p className="text-muted mt-2">
                             Sistema de Gestão
                         </p>
 

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { logout } from "../services/api";
+import logo from "../assets/logo_gaspar.png";
 
 function Navbar() {
 
@@ -26,12 +27,23 @@ function Navbar() {
             <div className="container">
 
                 <Link
-                    className="navbar-brand fw-bold"
+                    className="navbar-brand fw-bold d-flex align-items-center"
                     to="/"
                 >
-                    🏋️ Studio Gaspar
-                </Link>
+                    <img
+                        src={logo}
+                        alt="Gaspar Fitness"
+                        style={{
+                            width: "40px",
+                            height: "40px",
+                            objectFit: "contain"
+                        }}
+                    />
 
+                    <span className="ms-2">
+                        Studio Gaspar
+                    </span>
+                </Link>
                 <button
                     className="navbar-toggler"
                     type="button"
