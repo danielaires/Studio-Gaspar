@@ -48,7 +48,8 @@ function Horarios() {
                                 <thead className="table-light">
 
                                     <tr>
-                                        <th className="text-center">Horário</th>
+                                        <th className="text-center">Período</th>
+                                        <th className="text-center">Faixa de Horário</th>
                                         <th className="text-center">Alunos</th>
                                     </tr>
 
@@ -58,10 +59,14 @@ function Horarios() {
 
                                     {horarios.map((horario) => (
 
-                                      <tr key={horario.descricao}>
+                                        <tr key={horario.descricao}>
 
                                             <td className="text-center fw-semibold">
                                                 {horario.descricao}
+                                            </td>
+
+                                            <td className="text-center">
+                                                {horario.faixaHorario}
                                             </td>
 
                                             <td className="text-center fw-bold">

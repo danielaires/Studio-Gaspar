@@ -185,39 +185,64 @@ function Alunos() {
                             )}
                           </td>
 
-                          <td>
+                          <td className="text-center">
 
-                            <div className="d-flex justify-content-center gap-2 flex-wrap">
-
-                              <Link
-                                to={`/alunos/${aluno.id}/avaliacoes`}
-                                className="btn btn-sm btn-info text-white"
-                              >
-                                Avaliações
-                              </Link>
-
-                              <Link
-                                to={`/alunos/${aluno.id}/mensalidades`}
-                                className="btn btn-sm btn-success"
-                              >
-                                Mensalidades
-                              </Link>
-
-                              <Link
-                                to={`/editar-aluno/${aluno.id}`}
-                                className="btn btn-sm btn-primary"
-                              >
-                                Editar
-                              </Link>
+                            <div className="dropdown">
 
                               <button
-                                onClick={() =>
-                                  deletarAluno(aluno.id, aluno.nome)
-                                }
-                                className="btn btn-sm btn-danger"
+                                className="btn btn-outline-secondary btn-sm dropdown-toggle"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
                               >
-                                Excluir
+                                Ações
                               </button>
+
+                              <ul className="dropdown-menu">
+
+                                <li>
+                                  <Link
+                                    className="dropdown-item"
+                                    to={`/alunos/${aluno.id}/avaliacoes`}
+                                  >
+                                     Avaliações
+                                  </Link>
+                                </li>
+
+                                <li>
+                                  <Link
+                                    className="dropdown-item"
+                                    to={`/alunos/${aluno.id}/mensalidades`}
+                                  >
+                                     Mensalidades
+                                  </Link>
+                                </li>
+
+                                <li>
+                                  <Link
+                                    className="dropdown-item"
+                                    to={`/editar-aluno/${aluno.id}`}
+                                  >
+                                     Editar
+                                  </Link>
+                                </li>
+
+                                <li>
+                                  <hr className="dropdown-divider" />
+                                </li>
+
+                                <li>
+                                  <button
+                                    className="dropdown-item text-danger"
+                                    onClick={() =>
+                                      deletarAluno(aluno.id, aluno.nome)
+                                    }
+                                  >
+                                     Excluir
+                                  </button>
+                                </li>
+
+                              </ul>
 
                             </div>
 

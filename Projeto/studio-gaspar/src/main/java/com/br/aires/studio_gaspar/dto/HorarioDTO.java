@@ -10,6 +10,7 @@ import lombok.Setter;
 public class HorarioDTO {
 
     private String descricao;
+    private String faixaHorario;
     private Long totalAlunos;
 
 }

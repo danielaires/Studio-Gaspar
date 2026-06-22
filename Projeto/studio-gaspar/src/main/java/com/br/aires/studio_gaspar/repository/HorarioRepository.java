@@ -13,11 +13,20 @@ public interface HorarioRepository
     @Query("""
     SELECT new com.br.aires.studio_gaspar.dto.HorarioDTO(
         h.descricao,
+        CONCAT(
+            FUNCTION('TIME_FORMAT', h.horaInicio, '%H:%i'),
+            ' às ',
+            FUNCTION('TIME_FORMAT', h.horaFim, '%H:%i')
+        ),
         COUNT(a.id)
     )
     FROM Horario h
     LEFT JOIN Aluno a ON a.horario.id = h.id
-    GROUP BY h.id, h.descricao
+    GROUP BY
+        h.id,
+        h.descricao,
+        h.horaInicio,
+        h.horaFim
     ORDER BY h.horaInicio
 """)
     List<HorarioDTO> listarComTotalAlunos();
