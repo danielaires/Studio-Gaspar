@@ -16,6 +16,8 @@ function Navbar() {
     const nomeFormatado =
         nomeUsuario.charAt(0).toUpperCase() +
         nomeUsuario.slice(1).toLowerCase();
+    const role =
+        localStorage.getItem("role");
 
     return (
 
@@ -123,7 +125,7 @@ function Navbar() {
                     <div className="dropdown">
 
                         <button
-                           className="nav-link dropdown-toggle text-white fw-semibold"
+                            className="nav-link dropdown-toggle text-white fw-semibold"
                             type="button"
                             data-bs-toggle="dropdown"
                         >
@@ -132,24 +134,31 @@ function Navbar() {
 
                         <ul className="dropdown-menu dropdown-menu-end">
 
-                            <li>
-                                <Link
-                                    className="dropdown-item"
-                                    to="/usuarios"
-                                >
-                                    Lista de Usuários
-                                </Link>
-                            </li>
+                            {role === "ADMIN" && (
+                                <>
+                                    <li>
+                                        <Link
+                                            className="dropdown-item"
+                                            to="/usuarios"
+                                        >
+                                            Lista de Usuários
+                                        </Link>
+                                    </li>
 
-                            <li>
-                                <Link
-                                    className="dropdown-item"
-                                    to="/cadastro-usuario"
-                                >
-                                    Cadastrar Usuário
-                                </Link>
-                            </li>
+                                    <li>
+                                        <Link
+                                            className="dropdown-item"
+                                            to="/cadastro-usuario"
+                                        >
+                                            Cadastrar Usuário
+                                        </Link>
+                                    </li>
 
+                                    <li>
+                                        <hr className="dropdown-divider" />
+                                    </li>
+                                </>
+                            )}
                             <li>
                                 <hr className="dropdown-divider" />
                             </li>

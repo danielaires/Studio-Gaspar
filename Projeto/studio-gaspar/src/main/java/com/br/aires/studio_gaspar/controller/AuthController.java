@@ -52,7 +52,8 @@ public class AuthController {
         return ResponseEntity.ok(
                 new LoginResponse(
                         token,
-                        usuario.getNome()
+                        usuario.getNome(),
+                        usuario.getRole()
                 )
         );
     }
