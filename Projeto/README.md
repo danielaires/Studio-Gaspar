@@ -1,149 +1,82 @@
-# 🚀 Studio Gaspar
+# 🏋️ Studio Gaspar
 
-Sistema Full Stack desenvolvido para gerenciamento de alunos de academia, utilizando **Java + Spring Boot** no backend e **React + Vite** no frontend.
+Sistema Full Stack para gerenciamento de academias, desenvolvido com **Java + Spring Boot** no backend e **React + Vite** no frontend.
 
-O projeto foi criado com o objetivo de praticar o desenvolvimento de APIs REST e integração entre frontend e backend utilizando tecnologias modernas do ecossistema Java.
+O projeto permite o controle de alunos, avaliações físicas, mensalidades e usuários, além de possuir autenticação com JWT e dashboard administrativo.
 
----
+## 🚀 Tecnologias
 
-# 📌 Tecnologias Utilizadas
+### Backend
 
-## Backend
-
-* ☕ Java 21
-* 🌱 Spring Boot
-* 🔗 Spring Data JPA
-* 🔒 Spring Security (quando aplicado)
-* 🗄️ MySQL
-* 📦 Maven
-
-## Frontend
-
-* ⚛️ React
-* ⚡ Vite
-* 📜 JavaScript
-* 🌐 Axios
-* 🎨 HTML5
-* 🎨 CSS3
-
----
-
-# 📂 Estrutura do Projeto
-
-```text
-Studio-Gaspar/
-│
-├── src/
-│   ├── components/
-│   ├── pages/
-│   ├── services/
-│   ├── App.jsx
-│   └── main.jsx
-│
-├── public/
-│
-├── package.json
-├── vite.config.js
-└── README.md
-```
-
----
-
-# ✨ Funcionalidades
-
-* ✅ Cadastro de alunos
-* ✅ Listagem de alunos
-* ✅ Atualização de cadastro
-* ✅ Exclusão de alunos
-* ✅ Comunicação com API REST
-* ✅ Interface moderna desenvolvida em React
-
----
-
-# 🛠️ Requisitos
-
-Antes de executar o projeto é necessário possuir instalado:
-
-* Node.js
-* npm
-* Java JDK 21
-* Maven
+* Java 21
+* Spring Boot
+* Spring Data JPA
+* Spring Security
+* JWT
 * MySQL
+* Maven
 
----
+### Frontend
 
-# ▶️ Executando o Frontend
+* React
+* Vite
+* Axios
+* Bootstrap 5
 
-Clone o projeto:
+## ✨ Funcionalidades
+
+* ✅ Login com JWT
+* ✅ Cadastro e gerenciamento de alunos
+* ✅ Cadastro de avaliações físicas
+* ✅ Controle de mensalidades
+* ✅ Controle de inadimplência
+* ✅ Cadastro de usuários
+* ✅ Dashboard administrativo
+* ✅ Controle de acesso por perfil
+
+## 🛠️ Executando o Projeto
+
+### Backend
 
 ```bash
-git clone https://github.com/danielaires/Studio-gaspar.git
+mvn spring-boot:run
 ```
 
-Entre na pasta:
-
-```bash
-cd Studio-gaspar
-```
-
-Instale as dependências:
+### Frontend
 
 ```bash
 npm install
-```
-
-Execute a aplicação:
-
-```bash
 npm run dev
 ```
 
-O sistema estará disponível em:
+Frontend:
 
-```
+```text
 http://localhost:5173
 ```
 
----
+Backend:
 
-# 🔗 Backend
-
-O frontend consome uma API REST desenvolvida em **Spring Boot**.
-
-Por padrão, a aplicação espera que o backend esteja sendo executado em:
-
-```
+```text
 http://localhost:8080
 ```
 
-Certifique-se de iniciar o backend antes de utilizar todas as funcionalidades do sistema.
+## 📚 Aprendizados
 
----
+Durante o desenvolvimento deste projeto foram aplicados conceitos de:
 
-# 💾 Banco de Dados
+* APIs REST
+* Spring Security
+* JWT Authentication
+* JPA/Hibernate
+* Integração Frontend e Backend
+* CRUD Completo
+* Boas práticas de desenvolvimento
 
-Banco utilizado:
-
-* MySQL
-
-O backend utiliza o Spring Data JPA para persistência dos dados.
-
----
-
-# 📸 Interface
-
-O sistema possui uma interface responsiva desenvolvida em React, proporcionando uma experiência simples e intuitiva para o gerenciamento de alunos.
-
----
-
-# 👨‍💻 Desenvolvedor
+## 👨‍💻 Desenvolvedor
 
 **Daniel Aires**
 
 Desenvolvedor Java | Spring Boot | React
 
----
-
-# 📄 Licença
-
-Projeto desenvolvido sobre demanda para um cliente, com o objetivo de gerenciar alunos e integrar um backend em Spring Boot a uma interface moderna em React.
+GitHub: https://github.com/danielaires
