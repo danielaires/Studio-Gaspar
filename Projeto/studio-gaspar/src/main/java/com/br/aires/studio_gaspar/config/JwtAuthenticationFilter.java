@@ -1,5 +1,7 @@
 package com.br.aires.studio_gaspar.config;
 
+import com.br.aires.studio_gaspar.entity.Usuario;
+import com.br.aires.studio_gaspar.repository.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +20,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
+    private final UsuarioRepository usuarioRepository;
 
     @Override
     protected void doFilterInternal(
@@ -62,16 +65,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                 + email
                 );
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                email,
-                                null,
-                                AuthorityUtils.NO_AUTHORITIES
-                        );
+                Usuario usuario = usuarioRepository
+                        .findByEmail(email)
+                        .orElse(null);
 
-                SecurityContextHolder
-                        .getContext()
-                        .setAuthentication(authentication);
+                if (usuario != null) {
+
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(
+                                    email,
+                                    null,
+                                    AuthorityUtils.createAuthorityList(
+                                            "ROLE_" + usuario.getRole()
+                                    )
+                            );
+
+                    SecurityContextHolder
+                            .getContext()
+                            .setAuthentication(authentication);
+                }
             }
         }
 
