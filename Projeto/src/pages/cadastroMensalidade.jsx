@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { salvarMensalidade } from "../services/mensalidadesService";
 import api from "../services/api";
 import Navbar from "../components/Navbar";
+import { showSuccess, showError, showWarning } from "../services/notificationService";
 
 function CadastroMensalidade() {
 
@@ -72,7 +73,7 @@ function CadastroMensalidade() {
 
         if (!mensalidade.alunoId) {
 
-            alert("Selecione um aluno.");
+            showWarning("Selecione um aluno.");
 
             return;
         }
@@ -92,20 +93,14 @@ function CadastroMensalidade() {
         salvarMensalidade(payload)
             .then(() => {
 
-                alert(
-                    "Mensalidade cadastrada com sucesso!"
-                );
-
+                showSuccess("Mensalidade cadastrada com sucesso!");
                 navigate("/");
 
             })
             .catch((err) => {
 
                 console.error(err);
-
-                alert(
-                    "Erro ao salvar mensalidade."
-                );
+                showError("Erro ao salvar mensalidade.");
 
             });
     }

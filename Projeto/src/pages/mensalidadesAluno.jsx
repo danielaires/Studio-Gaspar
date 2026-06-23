@@ -5,6 +5,7 @@ import {
     marcarComoPago,
     excluirMensalidade as excluirMensalidadeService
 } from "../services/mensalidadesService";
+import { showSuccess, showError } from "../services/notificationService";
 
 function MensalidadesAluno() {
 
@@ -145,13 +146,13 @@ function MensalidadesAluno() {
 
             await carregarMensalidades();
 
-            alert("Mensalidade atualizada com sucesso!");
+            showSuccess("Mensalidade atualizada com sucesso!");
 
         } catch (erro) {
 
             console.error(erro);
 
-            alert("Erro ao atualizar mensalidade.");
+            showError("Erro ao atualizar mensalidade.");
 
         }
     };

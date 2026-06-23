@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { listarHorarios } from "../services/horarioService";
 import api from "../services/api";
+import { showSuccess, showError } from "../services/notificationService";
 
 function EditarAluno() {
     const navigate = useNavigate();
@@ -41,7 +42,7 @@ function EditarAluno() {
 
                 console.error("ERRO AO BUSCAR ALUNO:", erro);
 
-                alert(erro.message);
+                showError("Erro ao carregar dados do aluno!");
 
             });
     }, [id, navigate]);
@@ -63,10 +64,13 @@ function EditarAluno() {
 
         api.put(`/alunos/${id}`, alunoAtualizado)
             .then(() => {
-                alert("Aluno atualizado com sucesso!");
+                showSuccess("Aluno atualizado com sucesso!");
                 navigate("/");
             })
-            .catch(error => console.error("Erro:", error));
+            .catch(error => {
+                showError("Erro ao atualizar aluno!");
+                console.error("Erro:", error);
+            });
     }
 
     return (

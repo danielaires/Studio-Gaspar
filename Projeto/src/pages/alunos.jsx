@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { listarAlunos, excluirAluno } from "../services/api.js";
 import Navbar from "../components/Navbar";
+import { showSuccess, showError } from "../services/notificationService";
 
 function Alunos() {
   const [alunos, setAlunos] = useState([]);
@@ -69,13 +70,13 @@ function Alunos() {
         .then((resposta) => {
           if (resposta.status === 200 || resposta.status === 204) {
             setAlunos(alunos.filter((aluno) => aluno.id !== id));
-            alert("Aluno excluído com sucesso!");
+            showSuccess("Aluno excluído com sucesso!");
           }
         })
         .catch((erro) => {
           console.error("Erro ao excluir:", erro);
-          alert(
-            "Erro ao excluir! Verifique se este aluno possui avaliações ou mensalidades vinculadas no banco."
+          showError(
+            "Erro ao excluir! Verifique se este aluno possui avaliações ou mensalidades vinculadas."
           );
         });
     }

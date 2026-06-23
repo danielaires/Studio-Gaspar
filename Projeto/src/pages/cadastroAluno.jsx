@@ -3,6 +3,7 @@ import { salvarAluno } from "../services/alunoService";
 import { listarHorarios } from "../services/horarioService";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { showSuccess, showError } from "../services/notificationService";
 
 function CadastroAluno() {
 
@@ -80,20 +81,14 @@ function CadastroAluno() {
         salvarAluno(payload)
             .then(() => {
 
-                alert(
-                    "Aluno cadastrado com sucesso!"
-                );
-
+                showSuccess("Aluno cadastrado com sucesso!");
                 navigate("/");
 
             })
             .catch((error) => {
 
                 console.error(error);
-
-                alert(
-                    "Erro ao cadastrar aluno."
-                );
+                showError("Erro ao cadastrar aluno.");
 
             });
     }

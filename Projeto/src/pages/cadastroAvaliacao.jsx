@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import api from "../services/api";
 import { salvarAvaliacao } from "../services/avaliacaoService";
+import { showSuccess, showError, showWarning } from "../services/notificationService";
 
 function CadastroAvaliacao() {
 
@@ -66,7 +67,7 @@ function CadastroAvaliacao() {
 
         if (!avaliacao.alunoId) {
 
-            alert("Selecione um aluno.");
+            showWarning("Selecione um aluno.");
 
             return;
         }
@@ -83,20 +84,14 @@ function CadastroAvaliacao() {
         salvarAvaliacao(payload)
             .then(() => {
 
-                alert(
-                    "Avaliação salva com sucesso!"
-                );
-
+                showSuccess("Avaliação salva com sucesso!");
                 navigate("/");
 
             })
             .catch((erro) => {
 
                 console.error(erro);
-
-                alert(
-                    "Erro ao salvar avaliação."
-                );
+                showError("Erro ao salvar avaliação.");
 
             });
 

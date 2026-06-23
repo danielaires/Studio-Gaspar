@@ -5,6 +5,7 @@ import {
     buscarMensalidade,
     atualizarMensalidade
 } from "../services/mensalidadesService";
+import { showSuccess, showError } from "../services/notificationService";
 
 function EditarMensalidade() {
 
@@ -37,8 +38,7 @@ function EditarMensalidade() {
             .catch((erro) => {
 
                 console.error(erro);
-
-                alert("Erro ao carregar mensalidade.");
+                showError("Erro ao carregar mensalidade.");
 
             });
 
@@ -65,19 +65,13 @@ function EditarMensalidade() {
                 mensalidade
             );
 
-            alert(
-                "Mensalidade atualizada com sucesso!"
-            );
-
+            showSuccess("Mensalidade atualizada com sucesso!");
             navigate(-1);
 
         } catch (erro) {
 
             console.error(erro);
-
-            alert(
-                "Erro ao atualizar mensalidade."
-            );
+            showError("Erro ao atualizar mensalidade.");
 
         }
     }
