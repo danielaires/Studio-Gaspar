@@ -97,19 +97,17 @@ function Alunos() {
           </p>
         </div>
 
-        {carregando ? (
-          <p>Carregando alunos...</p>
-        ) : alunosFiltrados.length === 0 ? (
-          <>
-            <div className="mb-3">
-              <div className="input-group">
+        {!carregando && (
+          <div className="row mb-4 justify-content-end">
+            <div className="col-12 col-sm-8 col-md-4 col-lg-3 mb-3 ms-auto">
+              <div className="input-group input-group-sm">
                 <span className="input-group-text" id="buscar-aluno-label">
-                  Buscar
+                  🔍
                 </span>
                 <input
                   type="text"
-                  className="form-control"
-                  placeholder="Buscar por nome, profissão, telefone ou objetivo"
+                  className="form-control form-control-sm"
+                  placeholder="Buscar aluno"
                   aria-label="Buscar aluno"
                   aria-describedby="buscar-aluno-label"
                   value={busca}
@@ -117,28 +115,16 @@ function Alunos() {
                 />
               </div>
             </div>
-            <p>Nenhum aluno encontrado para "{busca}".</p>
-          </>
+          </div>
+        )}
+
+        {carregando ? (
+          <p>Carregando alunos...</p>
+        ) : alunosFiltrados.length === 0 ? (
+          <p>Nenhum aluno encontrado para "{busca}".</p>
         ) : (
           <>
             <div className="row mb-4">
-              <div className="col-12 mb-3">
-                <div className="input-group">
-                  <span className="input-group-text" id="buscar-aluno-label">
-                    Buscar
-                  </span>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Buscar por nome, profissão, telefone ou objetivo"
-                    aria-label="Buscar aluno"
-                    aria-describedby="buscar-aluno-label"
-                    value={busca}
-                    onChange={(e) => setBusca(e.target.value)}
-                  />
-                </div>
-              </div>
-
               <div className="col-md-4">
                 <div className="card shadow-sm border-primary">
                   <div className="card-body">
@@ -180,7 +166,7 @@ function Alunos() {
 
               <div className="card-body p-0">
 
-                <div className="table-responsive">
+                <div className="table-responsive" style={{ overflow: 'visible' }}>
 
                   <table className="table table-striped table-hover mb-0">
 
@@ -240,20 +226,21 @@ function Alunos() {
                             )}
                           </td>
 
-                          <td className="text-center">
+                          <td className="text-center text-nowrap" style={{ minWidth: 150, width: 150 }}>
 
-                            <div className="dropdown">
+                            <div className="dropdown" style={{ position: 'static' }}>
 
                               <button
                                 className="btn btn-outline-secondary btn-sm dropdown-toggle"
                                 type="button"
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
+                                style={{ minWidth: 68 }}
                               >
                                 Ações
                               </button>
 
-                              <ul className="dropdown-menu">
+                              <ul className="dropdown-menu dropdown-menu-end" style={{ minWidth: 160 }}>
 
                                 <li>
                                   <Link
