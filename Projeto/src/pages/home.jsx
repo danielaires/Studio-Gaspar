@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { listarAlunos } from "../services/api";
 import {
   listarMensalidades,
@@ -559,7 +560,15 @@ function Home() {
                                 {aluno.ativo ? (
                                   <span className="badge bg-success">Ativo</span>
                                 ) : (
-                                  <span className="badge bg-danger">Inativo</span>
+                                  <>
+                                    <span className="badge bg-danger">Inativo</span>
+                                    <Link
+                                      to={`/editar-aluno/${aluno.id}`}
+                                      className="btn btn-success btn-sm ms-2"
+                                    >
+                                      Ativa
+                                    </Link>
+                                  </>
                                 )}
                               </td>
                             </tr>
@@ -587,9 +596,19 @@ function Home() {
                                     Pago
                                   </span>
                                 ) : estaVencida(mensalidade) ? (
-                                  <span className="badge bg-danger">
-                                    Vencido
-                                  </span>
+                                  <>
+                                    <span className="badge bg-danger">
+                                      Vencido
+                                    </span>
+                                    {mensalidade.aluno?.id && (
+                                      <Link
+                                        to={`/alunos/${mensalidade.aluno.id}/mensalidades`}
+                                        className="btn btn-success btn-sm ms-2"
+                                      >
+                                        Confirmar
+                                      </Link>
+                                    )}
+                                  </>
                                 ) : (
                                   <span className="badge bg-warning text-dark">
                                     {mensalidade.status || "Pendente"}
