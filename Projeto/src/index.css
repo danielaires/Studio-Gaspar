@@ -77,20 +77,24 @@ h1 {
   font-size: 56px;
   letter-spacing: -1.68px;
   margin: 32px 0;
+
   @media (max-width: 1024px) {
     font-size: 36px;
     margin: 20px 0;
   }
 }
+
 h2 {
   font-size: 24px;
   line-height: 118%;
   letter-spacing: -0.24px;
   margin: 0 0 8px;
+
   @media (max-width: 1024px) {
     font-size: 20px;
   }
 }
+
 p {
   margin: 0;
 }
@@ -108,4 +112,71 @@ code {
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
+}
+
+/* =========================
+   IMPRESSÃO DE RELATÓRIOS
+========================= */
+
+.somente-impressao {
+  display: none;
+}
+
+@media print {
+
+  .navbar,
+  .btn,
+  .nao-imprimir {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  #root {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: auto !important;
+  border: none !important;
+}
+
+  .container {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .card {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .somente-impressao {
+    display: block !important;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 11px;
+  }
+
+  th
+  td {
+    border: 1px solid #000 !important;
+    padding: 5px !important;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr {
+    page-break-inside: avoid;
+  }
 }

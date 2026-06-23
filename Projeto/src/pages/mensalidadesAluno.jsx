@@ -242,7 +242,7 @@ function MensalidadesAluno() {
                                 <th>Pagamento</th>
                                 <th>Valor</th>
                                 <th>Status</th>
-                                <th>Ações</th>
+                                <th className="text-center">Ações</th>
                             </tr>
 
                         </thead>

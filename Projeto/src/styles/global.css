@@ -18,3 +18,55 @@ body {
 .form-select {
     border-radius: 8px;
 }
+@media print {
+
+  .navbar,
+  .btn,
+  .nao-imprimir {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  #root {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: auto !important;
+    border: none !important;
+  }
+
+  .container {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .card {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 11px;
+  }
+
+  th,
+  td {
+    border: 1px solid #000 !important;
+    padding: 5px !important;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr {
+    page-break-inside: avoid;
+  }
+}

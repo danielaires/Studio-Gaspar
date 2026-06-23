@@ -16,6 +16,7 @@ import CadastroUsuario from "./pages/CadastroUsuario";
 import Usuarios from "./pages/Usuarios";
 import Horarios from "./pages/horarios";
 import EditarUsuario from "./pages/EditarUsuario";
+import Relatorio from "./pages/Relatorio";
 
 function App() {
 
@@ -159,6 +160,14 @@ function App() {
           element={
             <PrivateRoute>
               <EditarUsuario />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/relatorio"
+          element={
+            <PrivateRoute>
+              <Relatorio />
             </PrivateRoute>
           }
         />

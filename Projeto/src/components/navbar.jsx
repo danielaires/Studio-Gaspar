@@ -131,6 +131,15 @@ function Navbar() {
                                 Mensalidades
                             </Link>
                         </li>
+                        
+                        <li className="nav-item">
+                            <Link
+                                className="nav-link"
+                                to="/relatorio"
+                            >
+                                Relatórios
+                            </Link>
+                        </li>
 
                     </ul>
 
