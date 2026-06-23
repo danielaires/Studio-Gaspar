@@ -24,13 +24,6 @@ function CadastroAluno() {
         foto: "",
         ativo: true
     });
-    <select
-        className="form-select"
-        name="horarioId"
-        value={aluno.horarioId}
-        onChange={alterarCampo}
-        required
-    ></select>
 
     useEffect(() => {
 
@@ -53,11 +46,43 @@ function CadastroAluno() {
 
     function alterarCampo(e) {
 
+        const { name, value } = e.target;
+
+        if (name === "telefone") {
+            setAluno({
+                ...aluno,
+                telefone: formatarTelefone(value)
+            });
+            return;
+        }
+
         setAluno({
             ...aluno,
-            [e.target.name]: e.target.value
+            [name]: value
         });
+    } function alterarCampo(e) {
+        const { name, value } = e.target;
 
+        if (name === "telefone") {
+
+            let telefone = value.replace(/\D/g, "");
+
+            telefone = telefone
+                .replace(/^(\d{2})(\d)/g, "($1) $2")
+                .replace(/(\d{5})(\d)/, "$1-$2");
+
+            setAluno({
+                ...aluno,
+                telefone
+            });
+
+            return;
+        }
+
+        setAluno({
+            ...aluno,
+            [name]: value
+        });
     }
 
     function salvar(e) {
@@ -98,331 +123,225 @@ function CadastroAluno() {
         <>
             <Navbar />
 
-            <div className="container mt-4 mb-5">
+            <div className="container mt-5 mb-5">
 
-                <div className="mb-4">
-
-                    <h2 className="fw-bold mb-1">
-                        Cadastro de Aluno
-                    </h2>
-
-                    <p className="text-muted">
-                        Cadastro de novos alunos da academia.
-                    </p>
-
+                <div className="mb-5">
+                    <div className="d-flex align-items-center gap-3 mb-2">
+                        <div style={{ width: '5px', height: '40px', backgroundColor: '#0d6efd', borderRadius: '3px' }}></div>
+                        <h1 className="fw-bold mb-0">Cadastro de Aluno</h1>
+                    </div>
+                    <p className="text-muted ms-4">Adicione um novo aluno à academia</p>
                 </div>
 
                 <form onSubmit={salvar}>
 
-                    <div className="card shadow border-0">
+                    <div className="card shadow-lg border-0">
 
-                        <div className="card-header bg-dark text-white fw-bold">
-                            Dados do Aluno
+                        <div className="card-header bg-gradient" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+                            <h5 className="mb-0 text-white fw-bold"> Informações Pessoais</h5>
                         </div>
 
-                        <div className="card-body">
+                        <div className="card-body p-4">
 
                             <div className="row g-3">
 
                                 <div className="col-md-6">
-
-                                    <label className="form-label fw-bold">
-                                        Nome
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name="nome"
-                                        value={aluno.nome}
-                                        onChange={alterarCampo}
-                                        required
-                                    />
-
+                                    <div className="form-floating">
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="nome"
+                                            name="nome"
+                                            value={aluno.nome}
+                                            onChange={alterarCampo}
+                                            placeholder="Nome completo"
+                                            required
+                                        />
+                                        <label htmlFor="nome"> Nome Completo</label>
+                                    </div>
                                 </div>
 
                                 <div className="col-md-6">
-
-                                    <label className="form-label fw-bold">
-                                        Data Nascimento
-                                    </label>
-
-                                    <input
-                                        type="date"
-                                        className="form-control"
-                                        name="dataNascimento"
-                                        value={aluno.dataNascimento}
-                                        onChange={alterarCampo}
-                                        required
-                                    />
-
+                                    <div className="form-floating">
+                                        <input
+                                            type="date"
+                                            className="form-control"
+                                            id="dataNascimento"
+                                            name="dataNascimento"
+                                            value={aluno.dataNascimento}
+                                            onChange={alterarCampo}
+                                            required
+                                        />
+                                        <label htmlFor="dataNascimento"> Data de Nascimento</label>
+                                    </div>
                                 </div>
 
                                 <div className="col-md-6">
-
-                                    <label className="form-label fw-bold">
-                                        Telefone
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name="telefone"
-                                        value={aluno.telefone}
-                                        onChange={alterarCampo}
-                                    />
-
+                                    <div className="form-floating">
+                                        <input
+                                            type="tel"
+                                            className="form-control"
+                                            id="telefone"
+                                            name="telefone"
+                                            value={aluno.telefone}
+                                            onChange={alterarCampo}
+                                            placeholder="(00) 99999-9999"
+                                        />
+                                        <label htmlFor="telefone"> Telefone</label>
+                                    </div>
                                 </div>
 
                                 <div className="col-md-6">
-
-                                    <label className="form-label fw-bold">
-                                        Profissão
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name="profissao"
-                                        value={aluno.profissao}
-                                        onChange={alterarCampo}
-                                    />
-
+                                    <div className="form-floating">
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="profissao"
+                                            name="profissao"
+                                            value={aluno.profissao}
+                                            onChange={alterarCampo}
+                                            placeholder="Profissão"
+                                        />
+                                        <label htmlFor="profissao"> Profissão</label>
+                                    </div>
                                 </div>
 
                                 <div className="col-md-6">
+                                    <label className="form-label fw-bold"> Sexo</label>
+                                    <div className="btn-group w-100" role="group">
+                                        <input
+                                            type="radio"
+                                            className="btn-check"
+                                            name="sexo"
+                                            id="masculino"
+                                            value="M"
+                                            checked={aluno.sexo === 'M'}
+                                            onChange={alterarCampo}
+                                        />
+                                        <label className="btn btn-outline-primary" htmlFor="masculino">Masculino</label>
 
-                                    <label className="form-label fw-bold">
-                                        Período
-                                    </label>
+                                        <input
+                                            type="radio"
+                                            className="btn-check"
+                                            name="sexo"
+                                            id="feminino"
+                                            value="F"
+                                            checked={aluno.sexo === 'F'}
+                                            onChange={alterarCampo}
+                                        />
+                                        <label className="btn btn-outline-primary" htmlFor="feminino">Feminino</label>
 
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="card shadow-lg border-0 mt-4">
+                        <div className="card-header bg-gradient" style={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}>
+                            <h5 className="mb-0 text-white fw-bold"> Informações de Treino</h5>
+                        </div>
+
+                        <div className="card-body p-4">
+                            <div className="row g-3">
+
+                                <div className="col-md-6">
+                                    <label className="form-label fw-bold">Data de Início</label>
+                                    <div className="input-group">
+                                        <span className="input-group-text"></span>
+                                        <input
+                                            type="date"
+                                            className="form-control"
+                                            name="dataInicio"
+                                            value={aluno.dataInicio}
+                                            onChange={alterarCampo}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="col-md-6">
+                                    <label className="form-label fw-bold">Objetivo</label>
+                                    <div className="input-group">
+                                        <span className="input-group-text"></span>
+                                        <select
+                                            className="form-select"
+                                            name="objetivo"
+                                            value={aluno.objetivo}
+                                            onChange={alterarCampo}
+                                            required
+                                        >
+                                            <option value="">Selecione um objetivo...</option>
+                                            <option value="Hipertrofia">Hipertrofia</option>
+                                            <option value="Emagrecimento">Emagrecimento</option>
+                                            <option value="Ganho de Massa Muscular">Ganho de Massa Muscular</option>
+                                            <option value="Fortalecimento">Fortalecimento</option>
+                                            <option value="Força">Força</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="col-md-6">
+                                    <label className="form-label fw-bold"> Período</label>
                                     <select
-                                        className="form-select"
+                                        className="form-select form-select-lg"
                                         name="horarioId"
                                         value={aluno.horarioId}
                                         onChange={alterarCampo}
                                         required
                                     >
-
-                                        <option value="">
-                                            Selecione um período...
-                                        </option>
-
+                                        <option value="">Selecione um período...</option>
                                         {horarios.map((h) => (
-
-                                            <option
-                                                key={h.id}
-                                                value={h.id}
-                                            >
-                                                {h.descricao}
-                                            </option>
-
+                                            <option key={h.id} value={h.id}>{h.descricao}</option>
                                         ))}
-
                                     </select>
-
                                 </div>
-                                <div className="mt-3">
 
-                                    <label className="form-label fw-bold">
-                                        Hora do Treino
-                                    </label>
-
+                                <div className="col-md-6">
+                                    <label className="form-label fw-bold"> Hora do Treino</label>
                                     <select
-                                        className="form-select"
+                                        className="form-select form-select-lg"
                                         name="horarioTreino"
                                         value={aluno.horarioTreino}
                                         onChange={alterarCampo}
                                     >
-
-                                        <option value="">
-                                            Selecione a hora...
-                                        </option>
-
-                                        <option value="06:00 às 07:00">
-                                            06:00 às 07:00
-                                        </option>
-
-                                        <option value="07:00 às 08:00">
-                                            07:00 às 08:00
-                                        </option>
-
-                                        <option value="08:00 às 09:00">
-                                            08:00 às 09:00
-                                        </option>
-
-                                        <option value="09:00 às 10:00">
-                                            09:00 às 10:00
-                                        </option>
-
-                                        <option value="10:00 às 11:00">
-                                            10:00 às 11:00
-                                        </option>
-
-                                        <option value="14:00 às 15:00">
-                                            14:00 às 15:00
-                                        </option>
-
-                                        <option value="15:00 às 16:00">
-                                            15:00 às 16:00
-                                        </option>
-
-                                        <option value="16:00 às 17:00">
-                                            16:00 às 17:00
-                                        </option>
-
-                                        <option value="17:00 às 18:00">
-                                            17:00 às 18:00
-                                        </option>
-
-                                        <option value="18:00 às 19:00">
-                                            18:00 às 19:00
-                                        </option>
-
-                                        <option value="19:00 às 20:00">
-                                            19:00 às 20:00
-                                        </option>
-
-                                        <option value="20:00 às 21:00">
-                                            20:00 às 21:00
-                                        </option>
-
-                                        <option value="21:00 às 22:00">
-                                            21:00 às 22:00
-                                        </option>
-
+                                        <option value="">Selecione a hora...</option>
+                                        <option value="06:00 às 07:00">06:00 às 07:00</option>
+                                        <option value="07:00 às 08:00">07:00 às 08:00</option>
+                                        <option value="08:00 às 09:00">08:00 às 09:00</option>
+                                        <option value="09:00 às 10:00">09:00 às 10:00</option>
+                                        <option value="10:00 às 11:00">10:00 às 11:00</option>
+                                        <option value="14:00 às 15:00">14:00 às 15:00</option>
+                                        <option value="15:00 às 16:00">15:00 às 16:00</option>
+                                        <option value="16:00 às 17:00">16:00 às 17:00</option>
+                                        <option value="17:00 às 18:00">17:00 às 18:00</option>
+                                        <option value="18:00 às 19:00">18:00 às 19:00</option>
+                                        <option value="19:00 às 20:00">19:00 às 20:00</option>
+                                        <option value="20:00 às 21:00">20:00 às 21:00</option>
+                                        <option value="21:00 às 22:00">21:00 às 22:00</option>
                                     </select>
-
-                                </div>
-
-                                <div className="col-md-6">
-
-                                    <label className="form-label fw-bold">
-                                        Data Início
-                                    </label>
-
-                                    <input
-                                        type="date"
-                                        className="form-control"
-                                        name="dataInicio"
-                                        value={aluno.dataInicio}
-                                        onChange={alterarCampo}
-                                        required
-                                    />
-
-                                </div>
-
-                                <div className="col-md-6">
-
-                                    <label className="form-label fw-bold d-block">
-                                        Sexo
-                                    </label>
-
-                                    <div className="btn-group w-100">
-
-                                        <button
-                                            type="button"
-                                            className={
-                                                aluno.sexo === "Masculino"
-                                                    ? "btn btn-primary"
-                                                    : "btn btn-outline-primary"
-                                            }
-                                            onClick={() =>
-                                                setAluno({
-                                                    ...aluno,
-                                                    sexo: "Masculino"
-                                                })
-                                            }
-                                        >
-                                            Masculino
-                                        </button>
-
-                                        <button
-                                            type="button"
-                                            className={
-                                                aluno.sexo === "Feminino"
-                                                    ? "btn btn-danger"
-                                                    : "btn btn-outline-danger"
-                                            }
-                                            onClick={() =>
-                                                setAluno({
-                                                    ...aluno,
-                                                    sexo: "Feminino"
-                                                })
-                                            }
-                                        >
-                                            Feminino
-                                        </button>
-
-                                    </div>
-
-                                </div>
-
-                                <div className="col-md-12">
-
-                                    <label className="form-label fw-bold d-block">
-                                        Objetivo
-                                    </label>
-
-                                    <div className="d-flex flex-wrap gap-2">
-
-                                        {[
-                                            "Hipertrofia",
-                                            "Emagrecimento",
-                                            "Ganho de Massa Muscular",
-                                            "Fortalecimento",
-                                            "Força"
-                                        ].map((obj) => (
-
-                                            <button
-                                                key={obj}
-                                                type="button"
-                                                className={
-                                                    aluno.objetivo === obj
-                                                        ? "btn btn-success rounded-pill"
-                                                        : "btn btn-outline-success rounded-pill"
-                                                }
-                                                onClick={() =>
-                                                    setAluno({
-                                                        ...aluno,
-                                                        objetivo: obj
-                                                    })
-                                                }
-                                            >
-                                                {obj}
-                                            </button>
-
-                                        ))}
-
-                                    </div>
-
                                 </div>
 
                             </div>
-
                         </div>
-
                     </div>
 
-                    <div className="mt-4 d-flex justify-content-end gap-3">
-
+                    <div className="d-flex gap-3 mt-5 justify-content-end">
                         <button
                             type="button"
-                            className="btn btn-outline-secondary px-4"
                             onClick={() => navigate("/")}
+                            className="btn btn-light btn-lg px-5"
                         >
-                            Cancelar
+                             Cancelar
                         </button>
-
                         <button
                             type="submit"
-                            className="btn btn-success px-5"
+                            className="btn btn-success btn-lg px-5"
                         >
-                            Salvar
+                             Cadastrar 
                         </button>
-
                     </div>
-
                 </form>
 
             </div>
