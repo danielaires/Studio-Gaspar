@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { listarAlunos, excluirAluno } from "../services/api.js";
 import Navbar from "../components/Navbar";
@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar";
 function Alunos() {
   const [alunos, setAlunos] = useState([]);
   const [carregando, setCarregando] = useState(true);
+  const [busca, setBusca] = useState("");
 
   useEffect(() => {
     listarAlunos()
@@ -37,6 +38,26 @@ function Alunos() {
 
     return dataString;
   };
+
+  const alunosFiltrados = useMemo(() => {
+    const termo = busca.trim().toLowerCase();
+
+    if (!termo) {
+      return alunos;
+    }
+
+    return alunos.filter((aluno) => {
+      return [
+        aluno.nome,
+        aluno.profissao,
+        aluno.telefone,
+        aluno.objetivo,
+        aluno.horario?.descricao,
+      ]
+        .filter(Boolean)
+        .some((valor) => valor.toString().toLowerCase().includes(termo));
+    });
+  }, [alunos, busca]);
 
   const deletarAluno = (id, nome) => {
     const confirmacao = window.confirm(
@@ -78,18 +99,52 @@ function Alunos() {
 
         {carregando ? (
           <p>Carregando alunos...</p>
-        ) : alunos.length === 0 ? (
-          <p>Nenhum aluno encontrado no banco de dados.</p>
+        ) : alunosFiltrados.length === 0 ? (
+          <>
+            <div className="mb-3">
+              <div className="input-group">
+                <span className="input-group-text" id="buscar-aluno-label">
+                  Buscar
+                </span>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Buscar por nome, profissão, telefone ou objetivo"
+                  aria-label="Buscar aluno"
+                  aria-describedby="buscar-aluno-label"
+                  value={busca}
+                  onChange={(e) => setBusca(e.target.value)}
+                />
+              </div>
+            </div>
+            <p>Nenhum aluno encontrado para "{busca}".</p>
+          </>
         ) : (
           <>
             <div className="row mb-4">
+              <div className="col-12 mb-3">
+                <div className="input-group">
+                  <span className="input-group-text" id="buscar-aluno-label">
+                    Buscar
+                  </span>
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Buscar por nome, profissão, telefone ou objetivo"
+                    aria-label="Buscar aluno"
+                    aria-describedby="buscar-aluno-label"
+                    value={busca}
+                    onChange={(e) => setBusca(e.target.value)}
+                  />
+                </div>
+              </div>
 
               <div className="col-md-4">
                 <div className="card shadow-sm border-primary">
                   <div className="card-body">
                     <h6>Alunos Ativos</h6>
                     <h2>
-                      {alunos.filter(a => a.ativo).length}
+                      {alunosFiltrados.filter((a) => a.ativo).length}
                     </h2>
                   </div>
                 </div>
@@ -100,7 +155,7 @@ function Alunos() {
                   <div className="card-body">
                     <h6>Alunos Inativos</h6>
                     <h2>
-                      {alunos.filter(a => !a.ativo).length}
+                      {alunosFiltrados.filter((a) => !a.ativo).length}
                     </h2>
                   </div>
                 </div>
@@ -110,7 +165,7 @@ function Alunos() {
                 <div className="card shadow-sm border-success">
                   <div className="card-body">
                     <h6>Total de Alunos</h6>
-                    <h2>{alunos.length}</h2>
+                    <h2>{alunosFiltrados.length}</h2>
                   </div>
                 </div>
               </div>
@@ -147,7 +202,7 @@ function Alunos() {
 
                     <tbody>
 
-                      {alunos.map((aluno) => (
+                      {alunosFiltrados.map((aluno) => (
 
                         <tr key={aluno.id} className="align-middle">
 

@@ -230,9 +230,36 @@ function Home() {
   const role = localStorage.getItem("role");
   const isAdmin = role === "ADMIN";
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
   const imprimirRelatorio = () => {
     window.print();
   };
+
+  // Reset to first page when report data/type changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [relatorioAtual]);
+
+  const paginacao = useMemo(() => {
+    const totalItems = relatorioAtual?.dados?.length || 0;
+    const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+    const current = Math.min(Math.max(1, currentPage), totalPages);
+    const start = (current - 1) * pageSize;
+    const end = start + pageSize;
+
+    return {
+      totalItems,
+      totalPages,
+      current,
+      pageSize,
+      start,
+      end,
+      pageItems: (relatorioAtual?.dados || []).slice(start, end),
+    };
+  }, [relatorioAtual, currentPage, pageSize]);
 
   return (
     <>
@@ -445,7 +472,7 @@ function Home() {
                       </thead>
 
                       <tbody>
-                        {relatorioAtual.dados.length === 0 ? (
+                        {paginacao.totalItems === 0 ? (
                           <tr>
                             <td
                               colSpan={
@@ -461,7 +488,7 @@ function Home() {
                             </td>
                           </tr>
                         ) : relatorioAtual.tipo === "completo" ? (
-                          relatorioAtual.dados.map((linha) => (
+                          paginacao.pageItems.map((linha) => (
                             <tr
                               key={`${linha.aluno.id}-${linha.mensalidade?.id || "sem-mensalidade"}`}
                               className="align-middle"
@@ -520,7 +547,7 @@ function Home() {
                             </tr>
                           ))
                         ) : relatorioAtual.tipo === "alunos" ? (
-                          relatorioAtual.dados.map((aluno) => (
+                          paginacao.pageItems.map((aluno) => (
                             <tr key={aluno.id} className="align-middle">
                               <td>{aluno.nome}</td>
                               <td>{aluno.telefone || "-"}</td>
@@ -530,19 +557,15 @@ function Home() {
 
                               <td>
                                 {aluno.ativo ? (
-                                  <span className="badge bg-success">
-                                    Ativo
-                                  </span>
+                                  <span className="badge bg-success">Ativo</span>
                                 ) : (
-                                  <span className="badge bg-danger">
-                                    Inativo
-                                  </span>
+                                  <span className="badge bg-danger">Inativo</span>
                                 )}
                               </td>
                             </tr>
                           ))
                         ) : (
-                          relatorioAtual.dados.map((mensalidade) => (
+                          paginacao.pageItems.map((mensalidade) => (
                             <tr key={mensalidade.id} className="align-middle">
                               <td>{mensalidade.aluno?.nome || "-"}</td>
 
@@ -578,6 +601,71 @@ function Home() {
                         )}
                       </tbody>
                     </table>
+                  </div>
+                  {/* Paginação */}
+                  <div className="d-flex justify-content-between align-items-center mt-3">
+                    <div className="text-muted">
+                      {paginacao.totalItems > 0 ? (
+                        <>
+                          Mostrando {paginacao.start + 1} - {Math.min(paginacao.end, paginacao.totalItems)} de {paginacao.totalItems}
+                        </>
+                      ) : (
+                        <>Nenhum item para mostrar</>
+                      )}
+                    </div>
+
+                    <div className="d-flex align-items-center gap-2">
+                      <select
+                        className="form-select form-select-sm"
+                        style={{ width: 80 }}
+                        value={pageSize}
+                        onChange={(e) => {
+                          setPageSize(Number(e.target.value));
+                          setCurrentPage(1);
+                        }}
+                      >
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={25}>25</option>
+                        <option value={50}>50</option>
+                        <option value={100}>100</option>
+                      </select>
+
+                      <nav>
+                        <ul className="pagination mb-0">
+                          <li className={`page-item ${paginacao.current === 1 ? "disabled" : ""}`}>
+                            <button
+                              className="page-link"
+                              onClick={() => setCurrentPage(Math.max(1, paginacao.current - 1))}
+                              disabled={paginacao.current === 1}
+                            >
+                              Anterior
+                            </button>
+                          </li>
+
+                          {Array.from({ length: paginacao.totalPages }).map((_, idx) => {
+                            const p = idx + 1;
+                            return (
+                              <li key={p} className={`page-item ${p === paginacao.current ? "active" : ""}`}>
+                                <button className="page-link" onClick={() => setCurrentPage(p)}>
+                                  {p}
+                                </button>
+                              </li>
+                            );
+                          })}
+
+                          <li className={`page-item ${paginacao.current === paginacao.totalPages ? "disabled" : ""}`}>
+                            <button
+                              className="page-link"
+                              onClick={() => setCurrentPage(Math.min(paginacao.totalPages, paginacao.current + 1))}
+                              disabled={paginacao.current === paginacao.totalPages}
+                            >
+                              Próximo
+                            </button>
+                          </li>
+                        </ul>
+                      </nav>
+                    </div>
                   </div>
                 </div>
               </>
