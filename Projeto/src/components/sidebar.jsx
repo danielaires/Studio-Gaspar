@@ -8,16 +8,20 @@ function Sidebar() {
 
       <div>
 
-        <div className="sidebar-logo">
-          <img
-            src={logo}
-            alt="Studio Gaspar"
-            className="logo-sidebar"
-          />
+        <div className="sidebar-header">
 
-          <h5 className="fw-bold text-center mt-2">
+          <div className="logo-container">
+            <img
+              src={logo}
+              alt="Studio Gaspar"
+              className="logo-sidebar"
+            />
+          </div>
+
+          <h2 className="sidebar-title">
             Studio Gaspar
-          </h5>
+          </h2>
+
         </div>
 
         <div className="sidebar-menu">

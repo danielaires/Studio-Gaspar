@@ -282,13 +282,6 @@ function Home() {
               </h2>
 
             </div>
-
-            <Link
-              to="/cadastro-aluno"
-              className="btn btn-primary"
-            >
-              Novo Aluno
-            </Link>
           </div>
           {carregando ? (
             <p>Carregando dashboard...</p>
