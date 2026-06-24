@@ -179,4 +179,20 @@ code {
   tr {
     page-break-inside: avoid;
   }
+  .card {
+    border-radius: 16px;
+}
+
+.form-control,
+.form-select {
+    border-radius: 10px;
+}
+
+.btn {
+    border-radius: 10px;
+}
+
+.btn-group .btn {
+    min-height: 45px;
+}
 }

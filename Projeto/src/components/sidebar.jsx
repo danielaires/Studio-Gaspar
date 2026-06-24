@@ -1,56 +1,71 @@
 import { Link } from "react-router-dom";
+import logo from "../assets/logo_gaspar.png";
+import "./sidebar.css";
 
 function Sidebar() {
+  return (
+    <aside className="sidebar">
 
-    return (
+      <div>
 
-        <div
-            className="bg-dark text-white p-3"
-            style={{ width: "230px", minHeight: "100vh" }}
-        >
+        <div className="sidebar-logo">
+          <img
+            src={logo}
+            alt="Studio Gaspar"
+            className="logo-sidebar"
+          />
 
-            <h4>Studio Gaspar</h4>
+          <h5 className="fw-bold text-center mt-2">
+            Studio Gaspar
+          </h5>
+        </div>
 
-            <hr />
+        <div className="sidebar-menu">
 
-            <ul className="nav flex-column">
+          <Link to="/" className="menu-item">
+            <span className="menu-icon"></span>
+            <span>Dashboard</span>
+          </Link>
 
-                <li className="nav-item">
-                    <Link className="nav-link text-white" to="/">
-                        Dashboard
-                    </Link>
-                </li>
+          <Link to="/alunos" className="menu-item">
+            <span className="menu-icon"></span>
+            <span>Alunos</span>
+          </Link>
 
-                <li className="nav-item">
-                    <Link className="nav-link text-white" to="/alunos">
-                        Alunos
-                    </Link>
-                </li>
+          <Link to="/avaliacoes" className="menu-item">
+            <span className="menu-icon"></span>
+            <span>Avaliações</span>
+          </Link>
 
-                <li className="nav-item">
-                    <Link className="nav-link text-white" to="/horarios">
-                        Horários
-                    </Link>
-                </li>
+          <Link to="/mensalidades" className="menu-item">
+            <span className="menu-icon"></span>
+            <span>Mensalidades</span>
+          </Link>
 
-                <li className="nav-item">
-                    <Link className="nav-link text-white" to="/avaliacoes">
-                        Avaliações
-                    </Link>
-                </li>
-
-                <li className="nav-item">
-                    <Link className="nav-link text-white" to="/mensalidades">
-                        Mensalidades
-                    </Link>
-                </li>
-
-            </ul>
+          <Link to="/relatorio" className="menu-item">
+            <span className="menu-icon"></span>
+            <span>Relatórios</span>
+          </Link>
 
         </div>
 
-    );
+      </div>
 
+      <div className="usuario-sidebar">
+        <div className="avatar">
+          A
+        </div>
+
+        <div>
+          <strong>Administrador</strong>
+          <small className="d-block text-light opacity-75">
+            admin@studiogaspar.com
+          </small>
+        </div>
+      </div>
+
+    </aside>
+  );
 }
 
 export default Sidebar;

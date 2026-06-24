@@ -334,7 +334,7 @@ function CadastroAvaliacao() {
                                     onChange={alterarCampo}
                                     placeholder="Digite observações..."
                                 ></textarea>
-                                <label htmlFor="observacao"> Observações</label>
+                                <label htmlFor="observacao"></label>
                             </div>
 
                         </div>
