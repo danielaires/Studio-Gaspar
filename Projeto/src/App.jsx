@@ -17,6 +17,8 @@ import Usuarios from "./pages/Usuarios";
 import Horarios from "./pages/horarios";
 import EditarUsuario from "./pages/EditarUsuario";
 import Relatorio from "./pages/Relatorio";
+import Avaliacoes from "./pages/Avaliacoes";
+import Mensalidades from "./pages/Mensalidades";
 
 function App() {
 
@@ -168,6 +170,23 @@ function App() {
           element={
             <PrivateRoute>
               <Relatorio />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/avaliacoes"
+          element={
+            <PrivateRoute>
+              <Avaliacoes />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/mensalidades"
+          element={
+            <PrivateRoute>
+              <Mensalidades />
             </PrivateRoute>
           }
         />
