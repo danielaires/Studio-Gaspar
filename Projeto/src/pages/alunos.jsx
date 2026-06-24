@@ -8,6 +8,8 @@ function Alunos() {
   const [alunos, setAlunos] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [busca, setBusca] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   useEffect(() => {
     listarAlunos()
@@ -59,6 +61,30 @@ function Alunos() {
         .some((valor) => valor.toString().toLowerCase().includes(termo));
     });
   }, [alunos, busca]);
+  const paginacao = useMemo(() => {
+    const totalItems = alunosFiltrados.length;
+    const totalPages = Math.max(
+      1,
+      Math.ceil(totalItems / pageSize)
+    );
+
+    const current = Math.min(
+      Math.max(1, currentPage),
+      totalPages
+    );
+
+    const start = (current - 1) * pageSize;
+    const end = start + pageSize;
+
+    return {
+      totalItems,
+      totalPages,
+      current,
+      start,
+      end,
+      pageItems: alunosFiltrados.slice(start, end),
+    };
+  }, [alunosFiltrados, currentPage, pageSize]);
 
   const deletarAluno = (id, nome) => {
     const confirmacao = window.confirm(
@@ -112,7 +138,10 @@ function Alunos() {
                   aria-label="Buscar aluno"
                   aria-describedby="buscar-aluno-label"
                   value={busca}
-                  onChange={(e) => setBusca(e.target.value)}
+                  onChange={(e) => {
+                    setBusca(e.target.value);
+                    setCurrentPage(1);
+                  }}
                 />
               </div>
             </div>
@@ -189,7 +218,7 @@ function Alunos() {
 
                     <tbody>
 
-                      {alunosFiltrados.map((aluno) => (
+                     {paginacao.pageItems.map((aluno) => (
 
                         <tr key={aluno.id} className="align-middle">
 
@@ -248,7 +277,7 @@ function Alunos() {
                                     className="dropdown-item"
                                     to={`/alunos/${aluno.id}/avaliacoes`}
                                   >
-                                     Avaliações
+                                    Avaliações
                                   </Link>
                                 </li>
 
@@ -257,7 +286,7 @@ function Alunos() {
                                     className="dropdown-item"
                                     to={`/alunos/${aluno.id}/mensalidades`}
                                   >
-                                     Mensalidades
+                                    Mensalidades
                                   </Link>
                                 </li>
 
@@ -266,7 +295,7 @@ function Alunos() {
                                     className="dropdown-item"
                                     to={`/editar-aluno/${aluno.id}`}
                                   >
-                                     Editar
+                                    Editar
                                   </Link>
                                 </li>
 
@@ -281,7 +310,7 @@ function Alunos() {
                                       deletarAluno(aluno.id, aluno.nome)
                                     }
                                   >
-                                     Excluir
+                                    Excluir
                                   </button>
                                 </li>
 
@@ -296,9 +325,71 @@ function Alunos() {
                       ))}
 
                     </tbody>
-
                   </table>
+                       <div className="d-flex justify-content-between align-items-center mt-3">
+                      <div className="text-muted">
+                        {paginacao.totalItems > 0 ? (
+                          <>
+                            Mostrando {paginacao.start + 1} - {Math.min(paginacao.end, paginacao.totalItems)} de {paginacao.totalItems}
+                          </>
+                        ) : (
+                          <>Nenhum item para mostrar</>
+                        )}
+                      </div>
 
+                      <div className="d-flex align-items-center gap-2">
+                        <select
+                          className="form-select form-select-sm"
+                          style={{ width: 80 }}
+                          value={pageSize}
+                          onChange={(e) => {
+                            setPageSize(Number(e.target.value));
+                            setCurrentPage(1);
+                          }}
+                        >
+                          <option value={5}>5</option>
+                          <option value={10}>10</option>
+                          <option value={25}>25</option>
+                          <option value={50}>50</option>
+                          <option value={100}>100</option>
+                        </select>
+
+                        <nav>
+                          <ul className="pagination mb-0">
+                            <li className={`page-item ${paginacao.current === 1 ? "disabled" : ""}`}>
+                              <button
+                                className="page-link"
+                                onClick={() => setCurrentPage(Math.max(1, paginacao.current - 1))}
+                                disabled={paginacao.current === 1}
+                              >
+                                Anterior
+                              </button>
+                            </li>
+
+                            {Array.from({ length: paginacao.totalPages }).map((_, idx) => {
+                              const p = idx + 1;
+                              return (
+                                <li key={p} className={`page-item ${p === paginacao.current ? "active" : ""}`}>
+                                  <button className="page-link" onClick={() => setCurrentPage(p)}>
+                                    {p}
+                                  </button>
+                                </li>
+                              );
+                            })}
+
+                            <li className={`page-item ${paginacao.current === paginacao.totalPages ? "disabled" : ""}`}>
+                              <button
+                                className="page-link"
+                                onClick={() => setCurrentPage(Math.min(paginacao.totalPages, paginacao.current + 1))}
+                                disabled={paginacao.current === paginacao.totalPages}
+                              >
+                                Próximo
+                              </button>
+                            </li>
+                          </ul>
+                        </nav>
+                      </div>
+                    </div>
                 </div>
 
               </div>
