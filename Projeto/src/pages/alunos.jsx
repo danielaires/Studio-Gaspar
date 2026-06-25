@@ -10,6 +10,8 @@ function Alunos() {
   const [busca, setBusca] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [alunoWhatsapp, setAlunoWhatsapp] = useState(null);
+  const [mensagemWhatsapp, setMensagemWhatsapp] = useState("");
 
   useEffect(() => {
     listarAlunos()
@@ -108,6 +110,36 @@ function Alunos() {
     }
   };
 
+  const enviarWhatsApp = async () => {
+
+    if (!alunoWhatsapp || !mensagemWhatsapp.trim()) {
+      showError("Digite uma mensagem.");
+      return;
+    }
+
+    try {
+
+      await fetch(
+        `http://localhost:8080/api/whatsapp/enviar/${alunoWhatsapp.id}?mensagem=${encodeURIComponent(mensagemWhatsapp)}`,
+        {
+          method: "POST",
+        }
+      );
+
+      showSuccess("Mensagem enviada com sucesso!");
+
+      setMensagemWhatsapp("");
+      setAlunoWhatsapp(null);
+
+      document.getElementById("btnFecharWhatsapp")?.click();
+
+    } catch (error) {
+
+      console.error(error);
+      showError("Erro ao enviar mensagem.");
+
+    }
+  };
   return (
     <>
       <Navbar />
@@ -218,7 +250,7 @@ function Alunos() {
 
                     <tbody>
 
-                     {paginacao.pageItems.map((aluno) => (
+                      {paginacao.pageItems.map((aluno) => (
 
                         <tr key={aluno.id} className="align-middle">
 
@@ -298,6 +330,19 @@ function Alunos() {
                                     Editar
                                   </Link>
                                 </li>
+                                <li>
+                                  <button
+                                    className="dropdown-item text-success"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalWhatsapp"
+                                    onClick={() => {
+                                      setAlunoWhatsapp(aluno);
+                                      setMensagemWhatsapp("");
+                                    }}
+                                  >
+                                    WhatsApp
+                                  </button>
+                                </li>
 
                                 <li>
                                   <hr className="dropdown-divider" />
@@ -326,79 +371,139 @@ function Alunos() {
 
                     </tbody>
                   </table>
-                       <div className="d-flex justify-content-between align-items-center mt-3">
-                      <div className="text-muted">
-                        {paginacao.totalItems > 0 ? (
-                          <>
-                            Mostrando {paginacao.start + 1} - {Math.min(paginacao.end, paginacao.totalItems)} de {paginacao.totalItems}
-                          </>
-                        ) : (
-                          <>Nenhum item para mostrar</>
-                        )}
-                      </div>
-
-                      <div className="d-flex align-items-center gap-2">
-                        <select
-                          className="form-select form-select-sm"
-                          style={{ width: 80 }}
-                          value={pageSize}
-                          onChange={(e) => {
-                            setPageSize(Number(e.target.value));
-                            setCurrentPage(1);
-                          }}
-                        >
-                          <option value={5}>5</option>
-                          <option value={10}>10</option>
-                          <option value={25}>25</option>
-                          <option value={50}>50</option>
-                          <option value={100}>100</option>
-                        </select>
-
-                        <nav>
-                          <ul className="pagination mb-0">
-                            <li className={`page-item ${paginacao.current === 1 ? "disabled" : ""}`}>
-                              <button
-                                className="page-link"
-                                onClick={() => setCurrentPage(Math.max(1, paginacao.current - 1))}
-                                disabled={paginacao.current === 1}
-                              >
-                                Anterior
-                              </button>
-                            </li>
-
-                            {Array.from({ length: paginacao.totalPages }).map((_, idx) => {
-                              const p = idx + 1;
-                              return (
-                                <li key={p} className={`page-item ${p === paginacao.current ? "active" : ""}`}>
-                                  <button className="page-link" onClick={() => setCurrentPage(p)}>
-                                    {p}
-                                  </button>
-                                </li>
-                              );
-                            })}
-
-                            <li className={`page-item ${paginacao.current === paginacao.totalPages ? "disabled" : ""}`}>
-                              <button
-                                className="page-link"
-                                onClick={() => setCurrentPage(Math.min(paginacao.totalPages, paginacao.current + 1))}
-                                disabled={paginacao.current === paginacao.totalPages}
-                              >
-                                Próximo
-                              </button>
-                            </li>
-                          </ul>
-                        </nav>
-                      </div>
+                  <div className="d-flex justify-content-between align-items-center mt-3">
+                    <div className="text-muted">
+                      {paginacao.totalItems > 0 ? (
+                        <>
+                          Mostrando {paginacao.start + 1} - {Math.min(paginacao.end, paginacao.totalItems)} de {paginacao.totalItems}
+                        </>
+                      ) : (
+                        <>Nenhum item para mostrar</>
+                      )}
                     </div>
+
+                    <div className="d-flex align-items-center gap-2">
+                      <select
+                        className="form-select form-select-sm"
+                        style={{ width: 80 }}
+                        value={pageSize}
+                        onChange={(e) => {
+                          setPageSize(Number(e.target.value));
+                          setCurrentPage(1);
+                        }}
+                      >
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={25}>25</option>
+                        <option value={50}>50</option>
+                        <option value={100}>100</option>
+                      </select>
+
+                      <nav>
+                        <ul className="pagination mb-0">
+                          <li className={`page-item ${paginacao.current === 1 ? "disabled" : ""}`}>
+                            <button
+                              className="page-link"
+                              onClick={() => setCurrentPage(Math.max(1, paginacao.current - 1))}
+                              disabled={paginacao.current === 1}
+                            >
+                              Anterior
+                            </button>
+                          </li>
+
+                          {Array.from({ length: paginacao.totalPages }).map((_, idx) => {
+                            const p = idx + 1;
+                            return (
+                              <li key={p} className={`page-item ${p === paginacao.current ? "active" : ""}`}>
+                                <button className="page-link" onClick={() => setCurrentPage(p)}>
+                                  {p}
+                                </button>
+                              </li>
+                            );
+                          })}
+
+                          <li className={`page-item ${paginacao.current === paginacao.totalPages ? "disabled" : ""}`}>
+                            <button
+                              className="page-link"
+                              onClick={() => setCurrentPage(Math.min(paginacao.totalPages, paginacao.current + 1))}
+                              disabled={paginacao.current === paginacao.totalPages}
+                            >
+                              Próximo
+                            </button>
+                          </li>
+                        </ul>
+                      </nav>
+                    </div>
+                  </div>
                 </div>
 
               </div>
+            </div>
+            <div
+              className="modal fade"
+              id="modalWhatsapp"
+              tabIndex="-1"
+            >
+              <div className="modal-dialog">
+                <div className="modal-content">
 
+                  <div className="modal-header">
+                    <h5 className="modal-title">
+                      Enviar WhatsApp
+                    </h5>
+
+                    <button
+                      type="button"
+                      className="btn-close"
+                      data-bs-dismiss="modal"
+                    ></button>
+                  </div>
+
+                  <div className="modal-body">
+
+                    <p>
+                      Aluno: <strong>{alunoWhatsapp?.nome}</strong>
+                    </p>
+
+                    <textarea
+                      className="form-control"
+                      rows="5"
+                      value={mensagemWhatsapp}
+                      onChange={(e) =>
+                        setMensagemWhatsapp(e.target.value)
+                      }
+                      placeholder="Digite sua mensagem..."
+                    />
+
+                  </div>
+
+                  <div className="modal-footer">
+
+                    <button
+                      id="btnFecharWhatsapp"
+                      type="button"
+                      className="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Cancelar
+                    </button>
+
+                    <button
+                      type="button"
+                      className="btn btn-success"
+                      onClick={enviarWhatsApp}
+                    >
+                      Enviar
+                    </button>
+
+                  </div>
+
+                </div>
+              </div>
             </div>
           </>
         )}
-
-      </div >
+      </div>
     </>
   );
 }
