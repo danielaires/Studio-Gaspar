@@ -119,14 +119,22 @@ function Alunos() {
 
     try {
 
-      await fetch(
+      const response = await fetch(
         `http://localhost:8080/api/whatsapp/enviar/${alunoWhatsapp.id}?mensagem=${encodeURIComponent(mensagemWhatsapp)}`,
         {
           method: "POST",
         }
       );
 
-      showSuccess("Mensagem enviada com sucesso!");
+      const retorno = await response.text();
+
+      console.log("RETORNO BACKEND:", retorno);
+
+      if (!response.ok) {
+        throw new Error(retorno);
+      }
+
+      showSuccess("Mensagem enviada!");
 
       setMensagemWhatsapp("");
       setAlunoWhatsapp(null);
@@ -136,7 +144,7 @@ function Alunos() {
     } catch (error) {
 
       console.error(error);
-      showError("Erro ao enviar mensagem.");
+      showError(error.message || "Erro ao enviar mensagem.");
 
     }
   };

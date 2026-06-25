@@ -25,11 +25,11 @@ public class WhatsAppController {
         Aluno aluno = alunoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
 
-        whatsappService.enviarMensagem(
+        String retorno = whatsappService.enviarMensagem(
                 aluno.getTelefone(),
                 mensagem
         );
 
-        return ResponseEntity.ok("Mensagem enviada com sucesso!");
+        return ResponseEntity.ok(retorno);
     }
 }

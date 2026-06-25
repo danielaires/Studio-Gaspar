@@ -34,7 +34,11 @@ public class SecurityConfig {
                         )
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
+
+                        .requestMatchers(
+                                "/auth/**",
+                                "/api/whatsapp/**"
+                        ).permitAll()
 
                         .requestMatchers("/relatorios/**")
                         .hasRole("ADMIN")
