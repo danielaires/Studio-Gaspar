@@ -4,10 +4,28 @@ import { listarAlunos } from "../services/alunoService";
 
 function Relatorio() {
     const [alunos, setAlunos] = useState([]);
+    const [pesquisa, setPesquisa] = useState("");
+    const [paginaAtual, setPaginaAtual] = useState(1);
+    const [registrosPorPagina, setRegistrosPorPagina] = useState(10);
 
     useEffect(() => {
         carregarDados();
     }, []);
+    const alunosFiltrados = alunos.filter((aluno) =>
+        aluno.nome.toLowerCase().includes(pesquisa.toLowerCase())
+    );
+
+    const indiceInicial =
+        (paginaAtual - 1) * registrosPorPagina;
+
+    const indiceFinal =
+        indiceInicial + registrosPorPagina;
+
+    const alunosPaginados =
+        alunosFiltrados.slice(indiceInicial, indiceFinal);
+
+    const totalPaginas =
+        Math.ceil(alunosFiltrados.length / registrosPorPagina);
 
     async function carregarDados() {
         try {
@@ -41,8 +59,49 @@ function Relatorio() {
                     </button>
 
                 </div>
+                <div className="row mb-3">
 
-               <div className="nao-imprimir d-none">
+                    <div className="col-md-8">
+
+                        <input
+                            className="form-control"
+                            placeholder="Pesquisar aluno..."
+                            value={pesquisa}
+                            onChange={(e) => {
+                                setPesquisa(e.target.value);
+                                setPaginaAtual(1);
+                            }}
+                        />
+
+                    </div>
+
+                    <div className="col-md-4">
+
+                        <select
+                            className="form-select"
+                            value={registrosPorPagina}
+                            onChange={(e) => {
+
+                                setRegistrosPorPagina(
+                                    Number(e.target.value)
+                                );
+
+                                setPaginaAtual(1);
+
+                            }}
+                        >
+
+                            <option value={10}>10 registros</option>
+                            <option value={20}>20 registros</option>
+                            <option value={50}>50 registros</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div className="nao-imprimir d-none">
                     <h2>STUDIO GASPAR</h2>
                     <h4>Relatório Geral de Alunos</h4>
                     <p>
@@ -74,7 +133,7 @@ function Relatorio() {
 
                                 <tbody>
 
-                                    {alunos.map((aluno) => (
+                                    {alunosPaginados.map((aluno) => (
 
                                         <tr key={aluno.id}>
 
@@ -103,6 +162,75 @@ function Relatorio() {
                                 </tbody>
 
                             </table>
+                            <div className="d-flex justify-content-between align-items-center mt-3">
+
+                                <span className="text-muted">
+
+                                    Mostrando {indiceInicial + 1} -
+
+                                    {" "}
+
+                                    {Math.min(indiceFinal, alunosFiltrados.length)}
+
+                                    {" "}de{" "}
+
+                                    {alunosFiltrados.length}
+
+                                </span>
+
+                                <nav>
+
+                                    <ul className="pagination mb-0">
+
+                                        <li className={`page-item ${paginaAtual === 1 ? "disabled" : ""}`}>
+
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setPaginaAtual(paginaAtual - 1)}
+                                            >
+                                                Anterior
+                                            </button>
+
+                                        </li>
+
+                                        {Array.from(
+                                            { length: totalPaginas },
+                                            (_, index) => (
+
+                                                <li
+                                                    key={index}
+                                                    className={`page-item ${paginaAtual === index + 1 ? "active" : ""
+                                                        }`}
+                                                >
+
+                                                    <button
+                                                        className="page-link"
+                                                        onClick={() => setPaginaAtual(index + 1)}
+                                                    >
+                                                        {index + 1}
+                                                    </button>
+
+                                                </li>
+
+                                            )
+                                        )}
+
+                                        <li className={`page-item ${paginaAtual === totalPaginas ? "disabled" : ""}`}>
+
+                                            <button
+                                                className="page-link"
+                                                onClick={() => setPaginaAtual(paginaAtual + 1)}
+                                            >
+                                                Próximo
+                                            </button>
+
+                                        </li>
+
+                                    </ul>
+
+                                </nav>
+
+                            </div>
 
                         </div>
 
