@@ -447,10 +447,6 @@ function Home() {
                 <>
                   <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3 relatorio-cabecalho">
                     <h2 className="mb-0">Relatórios</h2>
-
-                    <button onClick={imprimirRelatorio} className="btn btn-dark fw-bold">
-                      Exportar / Imprimir
-                    </button>
                   </div>
 
                   <div className="d-flex gap-2 flex-wrap mb-4 relatorio-filtros">
