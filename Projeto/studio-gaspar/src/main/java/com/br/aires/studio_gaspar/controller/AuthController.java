@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import com.br.aires.studio_gaspar.dto.RefreshTokenRequest;
+import com.br.aires.studio_gaspar.dto.RefreshTokenResponse;
 
 @RestController
 @RequestMapping("/auth")
@@ -42,19 +44,50 @@ public class AuthController {
             throw new RuntimeException("Senha inválida");
         }
 
-        String token =
-                jwtService.generateToken(
+        String accessToken =
+                jwtService.generateAccessToken(
                         usuario.getEmail()
                 );
 
-        System.out.println("TOKEN GERADO: " + token);
+        String refreshToken =
+                jwtService.generateRefreshToken(
+                        usuario.getEmail()
+                );
+
+        System.out.println("ACCESS TOKEN: " + accessToken);
+        System.out.println("REFRESH TOKEN: " + refreshToken);
 
         return ResponseEntity.ok(
                 new LoginResponse(
-                        token,
+                        accessToken,
+                        refreshToken,
                         usuario.getNome(),
                         usuario.getRole()
                 )
+        );
+    }
+    @PostMapping("/refresh")
+    public ResponseEntity<RefreshTokenResponse> refreshToken(
+            @RequestBody RefreshTokenRequest request) {
+
+        String refreshToken = request.getRefreshToken();
+
+        if (!jwtService.isTokenValid(refreshToken)) {
+            return ResponseEntity.status(401).build();
+        }
+
+        String email = jwtService.extractEmail(refreshToken);
+
+        Usuario usuario = usuarioRepository
+                .findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("Usuário não encontrado"));
+
+        String novoAccessToken =
+                jwtService.generateAccessToken(usuario.getEmail());
+
+        return ResponseEntity.ok(
+                new RefreshTokenResponse(novoAccessToken)
         );
     }
 }

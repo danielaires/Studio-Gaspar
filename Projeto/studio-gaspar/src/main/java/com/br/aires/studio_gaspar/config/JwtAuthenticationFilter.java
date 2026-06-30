@@ -30,46 +30,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         System.out.println(
-                "REQUISICAO: "
+                "THREAD: "
+                        + Thread.currentThread().getId()
+                        + " | "
                         + request.getMethod()
                         + " "
                         + request.getRequestURI()
         );
 
-        String authHeader =
-                request.getHeader("Authorization");
+        String authHeader = request.getHeader("Authorization");
 
-        System.out.println(
-                "AUTH HEADER: "
-                        + authHeader
-        );
+        System.out.println("AUTH HEADER: " + authHeader);
 
-        if (authHeader != null &&
-                authHeader.startsWith("Bearer ")) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
 
-            String token =
-                    authHeader.substring(7);
+            String token = authHeader.substring(7);
 
-            System.out.println(
-                    "TOKEN RECEBIDO: "
-                            + token
-            );
+            System.out.println("TOKEN RECEBIDO: " + token);
+            System.out.println("TOKEN VÁLIDO? " + jwtService.isTokenValid(token));
 
             if (jwtService.isTokenValid(token)) {
 
-                String email =
-                        jwtService.extractEmail(token);
+                String email = jwtService.extractEmail(token);
 
-                System.out.println(
-                        "USUARIO AUTENTICADO: "
-                                + email
-                );
+                System.out.println("EMAIL: " + email);
 
                 Usuario usuario = usuarioRepository
                         .findByEmail(email)
                         .orElse(null);
 
+                System.out.println("USUÁRIO ENCONTRADO: " + (usuario != null));
+
                 if (usuario != null) {
+
+                    System.out.println("ROLE: " + usuario.getRole());
 
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(
@@ -80,16 +74,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     )
                             );
 
-                    SecurityContextHolder
-                            .getContext()
+                    SecurityContextHolder.getContext()
                             .setAuthentication(authentication);
+
+                    System.out.println("AUTENTICAÇÃO DEFINIDA");
                 }
             }
         }
 
-        filterChain.doFilter(
-                request,
-                response
-        );
+        filterChain.doFilter(request, response);
+
+        System.out.println("STATUS DA RESPOSTA: " + response.getStatus());
     }
 }

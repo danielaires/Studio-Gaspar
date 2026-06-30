@@ -20,18 +20,6 @@ public class JwtService {
                     SECRET.getBytes(StandardCharsets.UTF_8)
             );
 
-    public String generateToken(String email) {
-
-        return Jwts.builder()
-                .setSubject(email)
-                .setIssuedAt(new Date())
-                .setExpiration(
-                        new Date(System.currentTimeMillis() + 86400000)
-                )
-                .signWith(key)
-                .compact();
-    }
-
     public String extractEmail(String token) {
 
         Claims claims = Jwts.parserBuilder()
@@ -56,7 +44,32 @@ public class JwtService {
 
         } catch (Exception e) {
 
+            System.out.println("ERRO JWT: " + e.getClass().getSimpleName());
+            System.out.println("MENSAGEM: " + e.getMessage());
+
             return false;
         }
+    }
+    public String generateAccessToken(String email) {
+
+        return Jwts.builder()
+                .setSubject(email)
+                .setIssuedAt(new Date())
+                .setExpiration(
+                        new Date(System.currentTimeMillis() + 1000 * 60 * 15)
+                )
+                .signWith(key)
+                .compact();
+    }
+    public String generateRefreshToken(String email) {
+
+        return Jwts.builder()
+                .setSubject(email)
+                .setIssuedAt(new Date())
+                .setExpiration(
+                        new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 7)
+                )
+                .signWith(key)
+                .compact();
     }
 }

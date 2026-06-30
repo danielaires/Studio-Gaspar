@@ -11,7 +11,7 @@ public class AniversariosScheduler {
 
     private final AniversarioService aniversarioService;
 
-    @Scheduled(cron = "* * 10,20 * * *")
+    //@Scheduled(cron = "* * * * * *")
     public void executarEnvioAutomatico() {
 
         System.out.println("=====================================");
