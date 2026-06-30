@@ -20,59 +20,43 @@ body {
 }
 @media print {
 
+  body * {
+    visibility: hidden;
+  }
+
+  #relatorio-impressao,
+  #relatorio-impressao * {
+    visibility: visible;
+  }
+
+  #relatorio-impressao {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
   .navbar,
   .btn,
   .nao-imprimir {
     display: none !important;
   }
 
-  body {
-    background: white !important;
-    margin: 0;
-    padding: 0;
+  .somente-impressao{
+    display:block !important;
+    text-align:center;
+    margin-bottom:20px;
   }
 
-  #root {
-    display: block !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-height: auto !important;
-    border: none !important;
-  }
-
-  .container {
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  .card {
-    border: none !important;
-    box-shadow: none !important;
-  }
-
-  table {
-    width: 100% !important;
-    border-collapse: collapse !important;
-    font-size: 11px;
+  table{
+    width:100%;
+    border-collapse:collapse;
   }
 
   th,
-  td {
-    border: 1px solid #000 !important;
-    padding: 5px !important;
+  td{
+    border:1px solid #000 !important;
+    padding:6px;
   }
 
-  thead {
-    display: table-header-group;
-  }
-
-  tr {
-    page-break-inside: avoid;
-  }
-  .somente-impressao{
-    display:block !important;
-}
-}
-.somente-impressao{
-    display:none;
 }
