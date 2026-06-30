@@ -3,14 +3,14 @@ package com.br.aires.studio_gaspar.controller;
 import com.br.aires.studio_gaspar.config.JwtService;
 import com.br.aires.studio_gaspar.dto.LoginRequest;
 import com.br.aires.studio_gaspar.dto.LoginResponse;
+import com.br.aires.studio_gaspar.dto.RefreshTokenRequest;
+import com.br.aires.studio_gaspar.dto.RefreshTokenResponse;
 import com.br.aires.studio_gaspar.entity.Usuario;
 import com.br.aires.studio_gaspar.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import com.br.aires.studio_gaspar.dto.RefreshTokenRequest;
-import com.br.aires.studio_gaspar.dto.RefreshTokenResponse;
 
 @RestController
 @RequestMapping("/auth")
@@ -30,42 +30,34 @@ public class AuthController {
                 .orElseThrow(() ->
                         new RuntimeException("Usuário não encontrado"));
 
-        System.out.println("EMAIL: " + request.getEmail());
-
-        boolean senhaValida =
-                passwordEncoder.matches(
-                        request.getSenha(),
-                        usuario.getSenha()
-                );
-
-        System.out.println("SENHA VALIDA? " + senhaValida);
+        boolean senhaValida = passwordEncoder.matches(
+                request.getSenha(),
+                usuario.getSenha()
+        );
 
         if (!senhaValida) {
             throw new RuntimeException("Senha inválida");
         }
 
-        String accessToken =
-                jwtService.generateAccessToken(
-                        usuario.getEmail()
-                );
+        String accessToken = jwtService.generateAccessToken(
+                usuario.getEmail()
+        );
 
-        String refreshToken =
-                jwtService.generateRefreshToken(
-                        usuario.getEmail()
-                );
-
-        System.out.println("ACCESS TOKEN: " + accessToken);
-        System.out.println("REFRESH TOKEN: " + refreshToken);
+        String refreshToken = jwtService.generateRefreshToken(
+                usuario.getEmail()
+        );
 
         return ResponseEntity.ok(
                 new LoginResponse(
                         accessToken,
                         refreshToken,
                         usuario.getNome(),
+                        usuario.getEmail(),
                         usuario.getRole()
                 )
         );
     }
+
     @PostMapping("/refresh")
     public ResponseEntity<RefreshTokenResponse> refreshToken(
             @RequestBody RefreshTokenRequest request) {
@@ -83,8 +75,9 @@ public class AuthController {
                 .orElseThrow(() ->
                         new RuntimeException("Usuário não encontrado"));
 
-        String novoAccessToken =
-                jwtService.generateAccessToken(usuario.getEmail());
+        String novoAccessToken = jwtService.generateAccessToken(
+                usuario.getEmail()
+        );
 
         return ResponseEntity.ok(
                 new RefreshTokenResponse(novoAccessToken)

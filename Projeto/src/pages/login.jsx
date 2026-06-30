@@ -35,6 +35,10 @@ function Login() {
                 "nomeUsuario",
                 response.data.nome
             );
+            localStorage.setItem(
+                "emailUsuario",
+                response.data.email
+            );
 
             localStorage.setItem(
                 "role",

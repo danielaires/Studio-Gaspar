@@ -3,6 +3,15 @@ import logo from "../assets/logo_gaspar.png";
 import "./sidebar.css";
 
 function Sidebar() {
+
+  const nome = localStorage.getItem("nomeUsuario");
+  const role = localStorage.getItem("role");
+  const email = localStorage.getItem("emailUsuario");
+
+  const avatar = nome
+    ? nome.charAt(0).toUpperCase()
+    : "U";
+
   return (
     <aside className="sidebar">
 
@@ -56,16 +65,19 @@ function Sidebar() {
       </div>
 
       <div className="usuario-sidebar">
+
         <div className="avatar">
-          A
+          {avatar}
         </div>
 
         <div>
-          <strong>Administrador</strong>
+          <strong>{nome || "Usuário"}</strong>
+
           <small className="d-block text-light opacity-75">
-            admin@studiogaspar.com
+            {email || role}
           </small>
         </div>
+
       </div>
 
     </aside>
