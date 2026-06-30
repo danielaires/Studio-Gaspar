@@ -4,7 +4,6 @@ const api = axios.create({
     baseURL: "http://localhost:8080"
 });
 let isRefreshing = false;
-let failedQueue = [];
 
 api.interceptors.request.use((config) => {
 
@@ -29,6 +28,9 @@ export function login(email, senha) {
 
 export function logout() {
     localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("nomeUsuario");
+    localStorage.removeItem("role");
 }
 
 export function usuarioLogado() {
@@ -83,4 +85,64 @@ export function listarInadimplentes() {
     return api.get("/relatorios/inadimplentes");
 }
 
+api.interceptors.response.use(
+
+    (response) => response,
+
+    async (error) => {
+
+        const originalRequest = error.config;
+
+        // Evita loop infinito
+        if (originalRequest._retry) {
+            return Promise.reject(error);
+        }
+
+        // Seu backend hoje devolve 403 quando o token expira.
+        if (error.response?.status === 403) {
+
+            originalRequest._retry = true;
+
+            try {
+
+                const refreshToken =
+                    localStorage.getItem("refreshToken");
+
+                const response = await axios.post(
+                    "http://localhost:8080/auth/refresh",
+                    {
+                        refreshToken
+                    }
+                );
+
+                const novoAccessToken =
+                    response.data.accessToken;
+
+                localStorage.setItem(
+                    "token",
+                    novoAccessToken
+                );
+
+                originalRequest.headers.Authorization =
+                    `Bearer ${novoAccessToken}`;
+
+                return api(originalRequest);
+
+            } catch (e) {
+
+                logout();
+
+                window.location.href = "/login";
+
+                return Promise.reject(e);
+
+            }
+
+        }
+
+        return Promise.reject(error);
+
+    }
+
+);
 export default api;
