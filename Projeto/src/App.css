@@ -182,3 +182,12 @@
     border-right-color: var(--border);
   }
 }
+.form-control {
+    text-align: left;
+}
+
+.form-control::placeholder {
+    color: #6c757d;
+    opacity: 1;
+    text-align: left;
+}

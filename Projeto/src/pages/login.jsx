@@ -7,6 +7,7 @@ function Login() {
 
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
+    const [mostrarSenha, setMostrarSenha] = useState(false);
 
     const navigate = useNavigate();
 
@@ -65,19 +66,19 @@ function Login() {
             className="vh-100 d-flex align-items-center justify-content-center"
             style={{
                 background:
-                    "linear-gradient(135deg, #f8f9fa, #e9ecef)"
+                    "linear-gradient(135deg, #1E1B4B 0%, #312E81 50%, #4F46E5 100%)"
             }}
         >
 
             <div
-                className="card shadow-lg border-0"
+                className="card border-0 shadow-lg"
                 style={{
-                    width: "450px",
-                    borderRadius: "15px"
+                    width: "430px",
+                    borderRadius: "20px"
                 }}
             >
 
-                <div className="card-body p-5">
+                <div className="card-body p-4 p-md-5">
 
                     <div className="text-center mb-4">
 
@@ -90,9 +91,9 @@ function Login() {
                             }}
                         />
 
-                        <p className="text-muted mt-2">
-                            Sistema de Gestão
-                        </p>
+                        <h4 className="fw-bold text-dark mb-1">
+                            Bem-vindo
+                        </h4>
 
                     </div>
 
@@ -100,43 +101,41 @@ function Login() {
 
                         <div className="mb-3">
 
-                            <label className="form-label fw-bold">
-                                Email
-                            </label>
-
                             <input
                                 type="email"
                                 className="form-control form-control-lg"
-                                placeholder="Digite seu email"
+                                placeholder="Digite seu e-mail"
                                 value={email}
-                                onChange={(e) =>
-                                    setEmail(
-                                        e.target.value
-                                    )
-                                }
+                                onChange={(e) => setEmail(e.target.value)}
                                 required
                             />
 
                         </div>
 
-                        <div className="mb-4">
-
-                            <label className="form-label fw-bold">
-                                Senha
-                            </label>
+                        <div className="mb-4 position-relative">
 
                             <input
-                                type="password"
-                                className="form-control form-control-lg"
+                                type={mostrarSenha ? "text" : "password"}
+                                className="form-control form-control-lg pe-5"
                                 placeholder="Digite sua senha"
                                 value={senha}
-                                onChange={(e) =>
-                                    setSenha(
-                                        e.target.value
-                                    )
-                                }
+                                onChange={(e) => setSenha(e.target.value)}
                                 required
                             />
+
+                            <button
+                                type="button"
+                                className="btn border-0 bg-transparent position-absolute top-50 end-0 translate-middle-y me-2"
+                                onClick={() => setMostrarSenha(!mostrarSenha)}
+                            >
+                                <i
+                                    className={
+                                        mostrarSenha
+                                            ? "bi bi-eye-slash"
+                                            : "bi bi-eye"
+                                    }
+                                ></i>
+                            </button>
 
                         </div>
 
@@ -150,11 +149,8 @@ function Login() {
                     </form>
 
                 </div>
-
             </div>
-
         </div>
-
     );
 }
 
