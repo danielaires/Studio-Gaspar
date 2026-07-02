@@ -30,11 +30,17 @@ export function logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("nomeUsuario");
+    localStorage.removeItem("emailUsuario");
     localStorage.removeItem("role");
+    localStorage.removeItem("usuario");
 }
 
 export function usuarioLogado() {
-    return !!localStorage.getItem("token");
+    const token = localStorage.getItem("token");
+
+    return !!token &&
+        token !== "undefined" &&
+        token !== "null";
 }
 
 export function listarAlunos() {

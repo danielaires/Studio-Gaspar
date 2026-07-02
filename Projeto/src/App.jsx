@@ -9,7 +9,7 @@ import AvaliacoesAluno from "./pages/AvaliacoesAluno";
 import DetalhesAvaliacao from "./pages/DetalhesAvaliacao";
 import MensalidadesAluno from "./pages/MensalidadesAluno";
 import Home from "./pages/home";
-import Login from "./pages/Login";
+import Login from "./pages/login";
 import PrivateRoute from "./routes/PrivateRoute";
 import EditarMensalidade from "./pages/EditarMensalidade";
 import CadastroUsuario from "./pages/CadastroUsuario";

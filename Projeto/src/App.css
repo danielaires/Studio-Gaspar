@@ -191,3 +191,175 @@
     opacity: 1;
     text-align: left;
 }
+}
+
+.login-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.remember-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.remember-option input {
+  width: 22px;
+  height: 22px;
+  appearance: none;
+  border: 2px solid #b334ff;
+  border-radius: 5px;
+  background: rgba(8, 8, 37, 0.72);
+  box-shadow: 0 0 10px rgba(179, 52, 255, 0.36);
+}
+
+.remember-option input:checked {
+  background:
+    linear-gradient(135deg, #8520ff, #e133ff),
+    #8f22ff;
+  box-shadow: 0 0 16px rgba(211, 47, 255, 0.76);
+}
+
+.forgot-password {
+  padding: 0;
+  color: #e13cff;
+  font-weight: 600;
+}
+
+.login-submit {
+  height: 76px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  margin-top: 8px;
+  border: 1px solid rgba(235, 94, 255, 0.66);
+  border-radius: 12px;
+  color: #ffffff;
+  background: linear-gradient(100deg, #6d16ff 0%, #a322ff 46%, #e231ff 100%);
+  box-shadow:
+    0 16px 36px rgba(112, 25, 255, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  font-size: 1.45rem;
+  font-weight: 900;
+}
+
+.login-submit:hover,
+.login-submit:focus-visible {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.login-submit svg {
+  width: 34px;
+  height: 34px;
+}
+
+.secure-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 34px;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 1.02rem;
+  text-align: center;
+}
+
+.secure-note span {
+  width: 58px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.secure-note svg {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+}
+
+.login-footer {
+  position: absolute;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  width: min(720px, calc(100% - 40px));
+  text-align: center;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.login-footer strong {
+  color: #c33cff;
+}
+
+@media (max-width: 1080px) {
+  .login-shell {
+    grid-template-columns: 1fr;
+    max-width: 720px;
+  }
+
+  .login-brand-panel {
+    min-height: auto;
+    padding-top: 0;
+  }
+
+  .athlete-shadow {
+    opacity: 0.3;
+    left: -120px;
+  }
+}
+
+@media (max-width: 640px) {
+  .login-page {
+    padding: 26px 18px 74px;
+  }
+
+  .login-brand-panel {
+    display: none;
+  }
+
+  .login-card {
+    min-height: auto;
+    padding: 30px 20px;
+    border-radius: 24px;
+  }
+
+  .login-card-icon {
+    width: 78px;
+    height: 78px;
+  }
+
+  .login-field {
+    height: 64px;
+  }
+
+  .field-icon {
+    width: 60px;
+    flex-basis: 60px;
+  }
+
+  .login-field input {
+    padding: 0 14px;
+    font-size: 1rem;
+  }
+
+  .login-options {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .secure-note {
+    gap: 10px;
+    font-size: 0.9rem;
+  }
+
+  .secure-note span {
+    width: 28px;
+  }
+}
+
