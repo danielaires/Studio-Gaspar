@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/api";
 import logo from "../assets/logo_gaspar.png";
@@ -83,6 +83,24 @@ function Login() {
   const [lembrar, setLembrar] = useState(false);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const remembered = localStorage.getItem("emailLembrado");
+    if (remembered) {
+      setEmail(remembered);
+      setLembrar(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (lembrar) {
+      if (email) {
+        localStorage.setItem("emailLembrado", email);
+      }
+    } else {
+      localStorage.removeItem("emailLembrado");
+    }
+  }, [lembrar, email]);
 
   const realizarLogin = async (e) => {
     e.preventDefault();
