@@ -5,26 +5,30 @@ import logo from "../assets/logo_gaspar.png";
 
 function Navbar() {
 
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(() => {
+        try {
+            return localStorage.getItem("sidebarCollapsed") === "true";
+        } catch {
+            return false;
+        }
+    });
 
     useEffect(() => {
-        try {
-            const stored = localStorage.getItem("sidebarCollapsed");
-            const isCollapsed = stored === "true";
-            setCollapsed(isCollapsed);
-            if (isCollapsed) document.body.classList.add("sidebar-collapsed");
-            else document.body.classList.remove("sidebar-collapsed");
-        } catch (e) {
-            // ignore
-        }
-    }, []);
+        if (collapsed) document.body.classList.add("sidebar-collapsed");
+        else document.body.classList.remove("sidebar-collapsed");
+    }, [collapsed]);
 
     function toggleSidebar() {
         const next = !collapsed;
         setCollapsed(next);
         if (next) document.body.classList.add("sidebar-collapsed");
         else document.body.classList.remove("sidebar-collapsed");
-        try { localStorage.setItem("sidebarCollapsed", next ? "true" : "false"); } catch (e) {}
+
+        try {
+            localStorage.setItem("sidebarCollapsed", next ? "true" : "false");
+        } catch (error) {
+            console.warn("Não foi possível salvar o estado do menu.", error);
+        }
     }
 
     function sair() {

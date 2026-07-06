@@ -139,10 +139,6 @@ function Mensalidades() {
             (m) => m.paga
         ).length;
 
-    const totalPendentes =
-        mensalidades.length -
-        totalPagas;
-
     const totalAlunosAtivos =
         new Set(
             mensalidades.map(

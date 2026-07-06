@@ -78,20 +78,24 @@ function Icon({ name }) {
 }
 
 function Login() {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(() => {
+    try {
+      return localStorage.getItem("emailLembrado") || "";
+    } catch {
+      return "";
+    }
+  });
   const [senha, setSenha] = useState("");
   const [mostrarSenha, setMostrarSenha] = useState(false);
-  const [lembrar, setLembrar] = useState(false);
+  const [lembrar, setLembrar] = useState(() => {
+    try {
+      return !!localStorage.getItem("emailLembrado");
+    } catch {
+      return false;
+    }
+  });
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const remembered = localStorage.getItem("emailLembrado");
-    if (remembered) {
-      setEmail(remembered);
-      setLembrar(true);
-    }
-  }, []);
 
   useEffect(() => {
     if (lembrar) {

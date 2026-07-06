@@ -5,7 +5,7 @@ import { listarAvaliacoesDoAluno } from "../services/api.js";
 function AvaliacoesAluno() {
   const { id } = useParams(); // ID do Aluno vindo da URL
   const [avaliacoes, setAvaliacoes] = useState([]);
-  const [carregando, setCarregando] = useState(true);
+  const [carregando, setCarregando] = useState(() => !id);
 
   // Formatação profissional de data
   const formatarData = (dataStr) => {
@@ -15,10 +15,7 @@ function AvaliacoesAluno() {
   };
 
   useEffect(() => {
-    if (!id) {
-      setCarregando(false);
-      return;
-    }
+    if (!id) return;
 
     // Chamada ao serviço de API
     listarAvaliacoesDoAluno(id)

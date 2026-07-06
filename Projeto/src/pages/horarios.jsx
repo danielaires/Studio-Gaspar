@@ -6,17 +6,17 @@ function Horarios() {
     const [horarios, setHorarios] = useState([]);
 
     useEffect(() => {
+        async function carregarHorarios() {
+            try {
+                const response = await listarResumoHorarios();
+                setHorarios(response.data);
+            } catch (error) {
+                console.error("Erro ao carregar horários:", error);
+            }
+        }
+
         carregarHorarios();
     }, []);
-
-    async function carregarHorarios() {
-        try {
-            const response = await listarResumoHorarios();
-            setHorarios(response.data);
-        } catch (error) {
-            console.error("Erro ao carregar horários:", error);
-        }
-    }
 
     return (
         <>

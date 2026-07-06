@@ -5,35 +5,24 @@ import {
     listarUsuarios,
     excluirUsuario
 } from "../services/usuarioService";
-import { showSuccess, showError } from "../services/notificationService";
+import { showConfirmation, showSuccess, showError } from "../services/notificationService";
 
 function Usuarios() {
 
     const [usuarios, setUsuarios] = useState([]);
 
-    useEffect(() => {
-
-        carregarUsuarios();
-
-    }, []);
-
     async function carregarUsuarios() {
-
         try {
-
-            const response =
-                await listarUsuarios();
-
-            setUsuarios(
-                response.data
-            );
-
+            const response = await listarUsuarios();
+            setUsuarios(response.data);
         } catch (erro) {
-
             console.error(erro);
-
         }
     }
+
+    useEffect(() => {
+        carregarUsuarios();
+    }, []);
 
     async function excluir(id, nome) {
 

@@ -202,17 +202,17 @@ function MensalidadesAluno() {
     };
 
     const editarMensalidade = (mensalidadeId) => {
-
-        showInfo(
-            `Editar mensalidade ${mensalidadeId}`
-        );
-
+        showInfo(`Editar mensalidade ${mensalidadeId}`);
     };
 
     useEffect(() => {
+        if (!id) return;
 
-        carregarMensalidades();
+        async function carregarMensalidadesInicial() {
+            await carregarMensalidades();
+        }
 
+        carregarMensalidadesInicial();
     }, [id]);
 
     return (

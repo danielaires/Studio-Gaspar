@@ -20,36 +20,26 @@ function EditarUsuario() {
     });
 
     useEffect(() => {
+        async function carregarUsuario() {
+            try {
+                const response = await buscarUsuario(id);
 
-        carregarUsuario();
-
-    }, [id]);
-
-    async function carregarUsuario() {
-
-        try {
-
-            const response =
-                await buscarUsuario(id);
-
-            setUsuario({
-                nome: response.data.nome,
-                email: response.data.email,
-                senha: "",
-                role: response.data.role
-            });
-
-        } catch (erro) {
-
-            console.error(erro);
-
-            showError(
-                "Erro ao carregar usuário."
-            );
-
+                setUsuario({
+                    nome: response.data.nome,
+                    email: response.data.email,
+                    senha: "",
+                    role: response.data.role,
+                });
+            } catch (erro) {
+                console.error(erro);
+                showError("Erro ao carregar usuário.");
+            }
         }
 
-    }
+        if (id) {
+            carregarUsuario();
+        }
+    }, [id]);
 
     function alterarCampo(e) {
 

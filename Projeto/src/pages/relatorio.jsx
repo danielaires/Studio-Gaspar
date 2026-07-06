@@ -9,8 +9,18 @@ function Relatorio() {
     const [registrosPorPagina, setRegistrosPorPagina] = useState(10);
 
     useEffect(() => {
+        async function carregarDados() {
+            try {
+                const response = await listarAlunos();
+                setAlunos(response.data);
+            } catch (error) {
+                console.error("Erro ao carregar relatório", error);
+            }
+        }
+
         carregarDados();
     }, []);
+
     const alunosFiltrados = alunos.filter((aluno) =>
         aluno.nome.toLowerCase().includes(pesquisa.toLowerCase())
     );

@@ -13,25 +13,32 @@ import "./home.css";
 import Sidebar from "../components/Sidebar";
 
 function Home() {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    try {
+      return localStorage.getItem("sidebarCollapsed") === "true";
+    } catch {
+      return false;
+    }
+  });
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem("sidebarCollapsed");
-      const isCollapsed = stored === "true";
-      setSidebarCollapsed(isCollapsed);
-      if (isCollapsed) document.body.classList.add("sidebar-collapsed");
-      else document.body.classList.remove("sidebar-collapsed");
-    } catch (e) {}
-  }, []);
+    if (sidebarCollapsed) document.body.classList.add("sidebar-collapsed");
+    else document.body.classList.remove("sidebar-collapsed");
+  }, [sidebarCollapsed]);
 
   function toggleSidebarLocal() {
     const next = !sidebarCollapsed;
     setSidebarCollapsed(next);
     if (next) document.body.classList.add("sidebar-collapsed");
     else document.body.classList.remove("sidebar-collapsed");
-    try { localStorage.setItem("sidebarCollapsed", next ? "true" : "false"); } catch (e) {}
+
+    try {
+      localStorage.setItem("sidebarCollapsed", next ? "true" : "false");
+    } catch (error) {
+      console.warn("Não foi possível salvar o estado do menu.", error);
+    }
   }
+
   const [todosAlunos, setTodosAlunos] = useState([]);
   const [alunosAtivos, setAlunosAtivos] = useState([]);
   const [alunosInativos, setAlunosInativos] = useState([]);
@@ -40,9 +47,6 @@ function Home() {
   const [mensalidadesVencidas, setMensalidadesVencidas] = useState([]);
   const [tipoRelatorio, setTipoRelatorio] = useState("todos");
   const [carregando, setCarregando] = useState(true);
-
-  const hoje = new Date();
-  hoje.setHours(0, 0, 0, 0);
 
   const normalizarStatus = (status) => {
     return (status || "").toString().trim().toUpperCase();
@@ -66,6 +70,9 @@ function Home() {
     if (status === "PENDENTE" || !mensalidade.vencimento) {
       return false;
     }
+
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
 
     const vencimento = new Date(`${mensalidade.vencimento}T00:00:00`);
     return vencimento < hoje;
@@ -108,9 +115,7 @@ function Home() {
           const dadosMensalidades = mensalidadesPorAluno.flat();
 
           setTodasMensalidades(dadosMensalidades);
-          setMensalidadesPagas(
-            dadosMensalidades.filter(estaPaga)
-          );
+          setMensalidadesPagas(dadosMensalidades.filter(estaPaga));
           setMensalidadesVencidas(dadosMensalidades.filter(estaVencida));
         } catch (erro) {
           console.error("Erro ao carregar mensalidades por aluno:", erro);
@@ -119,9 +124,7 @@ function Home() {
           const dadosMensalidades = mensalidades.data || [];
 
           setTodasMensalidades(dadosMensalidades);
-          setMensalidadesPagas(
-            dadosMensalidades.filter(estaPaga)
-          );
+          setMensalidadesPagas(dadosMensalidades.filter(estaPaga));
           setMensalidadesVencidas(dadosMensalidades.filter(estaVencida));
         }
 
@@ -137,7 +140,6 @@ function Home() {
         if (inativos.status === "fulfilled") {
           setAlunosInativos(inativos.value.data || []);
         }
-
       } catch (erro) {
         console.error("Erro ao carregar alunos no dashboard:", erro);
       } finally {
@@ -146,7 +148,7 @@ function Home() {
     }
 
     carregarDashboard();
-  }, []);
+  }, []); // <- roda só uma vez ao montar, sem loop
 
   const formatarData = (dataString) => {
     if (!dataString) return "-";
@@ -174,19 +176,12 @@ function Home() {
     }, 0);
   };
 
-  const buscarMensalidadesDoAluno = (aluno) => {
-    if (Array.isArray(aluno.mensalidades) && aluno.mensalidades.length > 0) {
-      return aluno.mensalidades;
-    }
-
-    return todasMensalidades.filter((mensalidade) => {
-      return mensalidade.aluno?.id === aluno.id;
-    });
-  };
-
   const linhasRelatorioCompleto = useMemo(() => {
     return todosAlunos.flatMap((aluno) => {
-      const mensalidadesDoAluno = buscarMensalidadesDoAluno(aluno);
+      const mensalidadesDoAluno =
+        Array.isArray(aluno.mensalidades) && aluno.mensalidades.length > 0
+          ? aluno.mensalidades
+          : todasMensalidades.filter((mensalidade) => mensalidade.aluno?.id === aluno.id);
 
       if (mensalidadesDoAluno.length === 0) {
         return [{ aluno, mensalidade: null }];
@@ -235,7 +230,6 @@ function Home() {
 
     return opcoes[tipoRelatorio];
   }, [
-    todosAlunos,
     alunosAtivos,
     alunosInativos,
     todasMensalidades,
@@ -253,15 +247,6 @@ function Home() {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-
-  const imprimirRelatorio = () => {
-    window.print();
-  };
-
-  // Reset to first page when report data/type changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [relatorioAtual]);
 
   const paginacao = useMemo(() => {
     const totalItems = relatorioAtual?.dados?.length || 0;
@@ -284,14 +269,11 @@ function Home() {
   return (
     <>
       <div className="layout">
-
         <Sidebar />
 
         <div className="dashboard-container">
-
           <div className="mb-4">
-              <div className="d-flex align-items-center gap-3 mb-4">
-
+            <div className="d-flex align-items-center gap-3 mb-4">
               <button
                 className="sidebar-toggle"
                 onClick={toggleSidebarLocal}
@@ -301,78 +283,42 @@ function Home() {
                 <span style={{ fontSize: 16 }}>☰</span>
               </button>
 
-              <h2 className="mb-0 fw-bold">
-                Dashboard
-              </h2>
-
+              <h2 className="mb-0 fw-bold">Dashboard</h2>
             </div>
           </div>
+
           {carregando ? (
             <p>Carregando dashboard...</p>
           ) : (
             <>
-
               <div className="row g-3 mb-4 dashboard-resumo">
-
                 {/* Alunos Ativos */}
                 <div className="col-12 col-md-6 col-xl-3">
                   <div className="card dashboard-card dashboard-card-blue h-100">
-
                     <div className="card-body d-flex justify-content-between align-items-center">
-
                       <div>
-                        <p className="card-title-custom">
-                          Alunos Ativos
-                        </p>
-
-                        <h2 className="card-number">
-                          {alunosAtivos.length}
-                        </h2>
-
-                        <small className="text-success">
-                          cadastrados
-                        </small>
+                        <p className="card-title-custom">Alunos Ativos</p>
+                        <h2 className="card-number">{alunosAtivos.length}</h2>
+                        <small className="text-success">cadastrados</small>
                       </div>
-
-                      <div className="card-icon card-icon-blue">
-                        👥
-                      </div>
-
+                      <div className="card-icon card-icon-blue">👥</div>
                     </div>
-
                     <div className="card-wave card-wave-blue"></div>
-
                   </div>
                 </div>
 
                 {/* Alunos Inativos */}
                 <div className="col-12 col-md-6 col-xl-3">
                   <div className="card dashboard-card dashboard-card-gray h-100">
-
                     <div className="card-body d-flex justify-content-between align-items-center">
-
                       <div>
-                        <p className="card-title-custom">
-                          Alunos Inativos
-                        </p>
-
-                        <h2 className="card-number">
-                          {alunosInativos.length}
-                        </h2>
-
-                        <small className="text-secondary">
-                          fora do plano
-                        </small>
+                        <p className="card-title-custom">Alunos Inativos</p>
+                        <h2 className="card-number">{alunosInativos.length}</h2>
+                        <small className="text-secondary">fora do plano</small>
                       </div>
-
-                      <div className="card-icon card-icon-gray">
-                        👤
-                      </div>
-
+                      <div className="card-icon card-icon-gray">👤</div>
                     </div>
-
                     <div className="card-wave card-wave-gray"></div>
-
                   </div>
                 </div>
 
@@ -380,31 +326,15 @@ function Home() {
                 {isAdmin && (
                   <div className="col-12 col-md-6 col-xl-3">
                     <div className="card dashboard-card dashboard-card-green h-100">
-
                       <div className="card-body d-flex justify-content-between align-items-center">
-
                         <div>
-                          <p className="card-title-custom">
-                            Mensalidades Pagas
-                          </p>
-
-                          <h2 className="card-number">
-                            {mensalidadesPagas.length}
-                          </h2>
-
-                          <small className="text-success">
-                            em dia
-                          </small>
+                          <p className="card-title-custom">Mensalidades Pagas</p>
+                          <h2 className="card-number">{mensalidadesPagas.length}</h2>
+                          <small className="text-success">em dia</small>
                         </div>
-
-                        <div className="card-icon card-icon-green">
-                          💳
-                        </div>
-
+                        <div className="card-icon card-icon-green">💳</div>
                       </div>
-
                       <div className="card-wave card-wave-green"></div>
-
                     </div>
                   </div>
                 )}
@@ -413,35 +343,18 @@ function Home() {
                 {isAdmin && (
                   <div className="col-12 col-md-6 col-xl-3">
                     <div className="card dashboard-card dashboard-card-red h-100">
-
                       <div className="card-body d-flex justify-content-between align-items-center">
-
                         <div>
-                          <p className="card-title-custom">
-                            Mensalidades Vencidas
-                          </p>
-
-                          <h2 className="card-number">
-                            {mensalidadesVencidas.length}
-                          </h2>
-
-                          <small className="text-danger">
-                            atenção
-                          </small>
+                          <p className="card-title-custom">Mensalidades Vencidas</p>
+                          <h2 className="card-number">{mensalidadesVencidas.length}</h2>
+                          <small className="text-danger">atenção</small>
                         </div>
-
-                        <div className="card-icon card-icon-red">
-                          ⚠️
-                        </div>
-
+                        <div className="card-icon card-icon-red">⚠️</div>
                       </div>
-
                       <div className="card-wave card-wave-red"></div>
-
                     </div>
                   </div>
                 )}
-
               </div>
 
               {isAdmin && (
@@ -467,6 +380,7 @@ function Home() {
                   </div>
                 </div>
               )}
+
               {isAdmin && (
                 <>
                   <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3 relatorio-cabecalho">
@@ -486,28 +400,24 @@ function Home() {
                     >
                       Alunos Ativos
                     </button>
-
                     <button
                       className={`btn fw-bold ${tipoRelatorio === "inativos" ? "btn-secondary" : "btn-outline-secondary"}`}
                       onClick={() => setTipoRelatorio("inativos")}
                     >
                       Alunos Inativos
                     </button>
-
                     <button
                       className={`btn fw-bold ${tipoRelatorio === "mensalidades" ? "btn-dark" : "btn-outline-dark"}`}
                       onClick={() => setTipoRelatorio("mensalidades")}
                     >
                       Relatorio Completo Mensalidades
                     </button>
-
                     <button
                       className={`btn fw-bold ${tipoRelatorio === "pagos" ? "btn-success" : "btn-outline-success"}`}
                       onClick={() => setTipoRelatorio("pagos")}
                     >
                       Mensalidades Pagas
                     </button>
-
                     <button
                       className={`btn fw-bold ${tipoRelatorio === "vencidos" ? "btn-danger" : "btn-outline-danger"}`}
                       onClick={() => setTipoRelatorio("vencidos")}
@@ -612,17 +522,11 @@ function Home() {
 
                                 <td>
                                   {!linha.mensalidade ? (
-                                    <span className="badge bg-secondary">
-                                      Sem mensalidade
-                                    </span>
+                                    <span className="badge bg-secondary">Sem mensalidade</span>
                                   ) : estaPaga(linha.mensalidade) ? (
-                                    <span className="badge bg-success">
-                                      Pago
-                                    </span>
+                                    <span className="badge bg-success">Pago</span>
                                   ) : estaVencida(linha.mensalidade) ? (
-                                    <span className="badge bg-danger">
-                                      Vencido
-                                    </span>
+                                    <span className="badge bg-danger">Vencido</span>
                                   ) : (
                                     <span className="badge bg-warning text-dark">
                                       {linha.mensalidade.status || "Pendente"}
@@ -661,29 +565,15 @@ function Home() {
                             paginacao.pageItems.map((mensalidade) => (
                               <tr key={mensalidade.id} className="align-middle">
                                 <td>{mensalidade.aluno?.nome || "-"}</td>
-
-                                <td>
-                                  {formatarData(mensalidade.vencimento)}
-                                </td>
-
-                                <td>
-                                  {formatarData(mensalidade.pagamento)}
-                                </td>
-
-                                <td>
-                                  {formatarValor(mensalidade.valor)}
-                                </td>
-
+                                <td>{formatarData(mensalidade.vencimento)}</td>
+                                <td>{formatarData(mensalidade.pagamento)}</td>
+                                <td>{formatarValor(mensalidade.valor)}</td>
                                 <td>
                                   {estaPaga(mensalidade) ? (
-                                    <span className="badge bg-success">
-                                      Pago
-                                    </span>
+                                    <span className="badge bg-success">Pago</span>
                                   ) : estaVencida(mensalidade) ? (
                                     <>
-                                      <span className="badge bg-danger">
-                                        Vencido
-                                      </span>
+                                      <span className="badge bg-danger">Vencido</span>
                                       {mensalidade.aluno?.id && (
                                         <Link
                                           to={`/alunos/${mensalidade.aluno.id}/mensalidades`}
@@ -705,6 +595,7 @@ function Home() {
                         </tbody>
                       </table>
                     </div>
+
                     {/* Paginação */}
                     <div className="d-flex justify-content-between align-items-center mt-3">
                       <div className="text-muted">
@@ -770,7 +661,7 @@ function Home() {
                         </nav>
                       </div>
                     </div>
-                   </div>
+                  </div>
                 </>
               )}
             </>
