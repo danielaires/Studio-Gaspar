@@ -44,8 +44,21 @@ function CadastroAluno() {
 
     }, []);
 
-    function alterarCampo(e) {
+    function formatarTelefone(value) {
+        const apenasNumeros = value.replace(/\D/g, "");
 
+        if (apenasNumeros.length <= 2) {
+            return apenasNumeros;
+        }
+
+        if (apenasNumeros.length <= 7) {
+            return `(${apenasNumeros.slice(0, 2)}) ${apenasNumeros.slice(2)}`;
+        }
+
+        return `(${apenasNumeros.slice(0, 2)}) ${apenasNumeros.slice(2, 7)}-${apenasNumeros.slice(7, 11)}`;
+    }
+
+    function alterarCampo(e) {
         const { name, value } = e.target;
 
         if (name === "telefone") {
@@ -53,29 +66,6 @@ function CadastroAluno() {
                 ...aluno,
                 telefone: formatarTelefone(value)
             });
-            return;
-        }
-
-        setAluno({
-            ...aluno,
-            [name]: value
-        });
-    } function alterarCampo(e) {
-        const { name, value } = e.target;
-
-        if (name === "telefone") {
-
-            let telefone = value.replace(/\D/g, "");
-
-            telefone = telefone
-                .replace(/^(\d{2})(\d)/g, "($1) $2")
-                .replace(/(\d{5})(\d)/, "$1-$2");
-
-            setAluno({
-                ...aluno,
-                telefone
-            });
-
             return;
         }
 

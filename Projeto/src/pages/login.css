@@ -334,7 +334,7 @@
   color: #c084fc;
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 960px) {
   .login-page {
     grid-template-columns: 1fr;
     gap: 28px;

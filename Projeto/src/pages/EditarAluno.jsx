@@ -43,15 +43,66 @@ function EditarAluno() {
             });
     }, [id]);
 
+    function formatarTelefone(value) {
+        const apenasNumeros = value.replace(/\D/g, "");
+
+        if (apenasNumeros.length <= 2) {
+            return apenasNumeros;
+        }
+
+        if (apenasNumeros.length <= 7) {
+            return `(${apenasNumeros.slice(0, 2)}) ${apenasNumeros.slice(2)}`;
+        }
+
+        return `(${apenasNumeros.slice(0, 2)}) ${apenasNumeros.slice(2, 7)}-${apenasNumeros.slice(7, 11)}`;
+    }
+
     function alterarCampo(e) {
-        setAluno({
-            ...aluno,
-            [e.target.name]: e.target.value,
-        });
+        const { name, value } = e.target;
+
+        if (name === "telefone") {
+            setAluno((prev) => ({ ...prev, telefone: formatarTelefone(value) }));
+            return;
+        }
+
+        setAluno((prev) => ({ ...prev, [name]: value }));
+    }
+
+    function validarCampos() {
+        if (!aluno.nome?.trim()) {
+            showError("Informe o nome do aluno.");
+            return false;
+        }
+
+        if (!aluno.dataNascimento) {
+            showError("Informe a data de nascimento.");
+            return false;
+        }
+
+        if (!aluno.sexo) {
+            showError("Selecione o sexo do aluno.");
+            return false;
+        }
+
+        if (!aluno.dataInicio) {
+            showError("Informe a data de início do treino.");
+            return false;
+        }
+
+        if (!aluno.horarioId) {
+            showError("Selecione um horário de treino.");
+            return false;
+        }
+
+        return true;
     }
 
     function salvar(e) {
         e.preventDefault();
+
+        if (!validarCampos()) {
+            return;
+        }
 
         const alunoAtualizado = {
             ...aluno,
