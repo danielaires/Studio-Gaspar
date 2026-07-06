@@ -56,7 +56,7 @@ function Navbar() {
                     className="sidebar-toggle me-2"
                     title={collapsed ? "Abrir menu" : "Fechar menu"}
                 >
-                    <span style={{ fontSize: 16 }}>{collapsed ? '✕' : '☰'}</span>
+                    <span style={{ fontSize: 16 }}>☰</span>
                 </button>
 
                 <Link

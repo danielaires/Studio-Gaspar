@@ -298,7 +298,7 @@ function Home() {
                 aria-label="Toggle sidebar"
                 title={sidebarCollapsed ? 'Abrir menu' : 'Fechar menu'}
               >
-                <span style={{ fontSize: 16 }}>{sidebarCollapsed ? '✕' : '☰'}</span>
+                <span style={{ fontSize: 16 }}>☰</span>
               </button>
 
               <h2 className="mb-0 fw-bold">
