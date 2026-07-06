@@ -99,17 +99,17 @@ export const showConfirmation = (
     const overlay = document.createElement("div");
     overlay.id = "confirmation-overlay";
     overlay.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.45);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 11000;
-      padding: 16px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 11000;
+    padding-top: 80px;
     `;
 
     const card = document.createElement("div");
