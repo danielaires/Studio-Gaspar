@@ -13,6 +13,25 @@ import "./home.css";
 import Sidebar from "../components/Sidebar";
 
 function Home() {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("sidebarCollapsed");
+      const isCollapsed = stored === "true";
+      setSidebarCollapsed(isCollapsed);
+      if (isCollapsed) document.body.classList.add("sidebar-collapsed");
+      else document.body.classList.remove("sidebar-collapsed");
+    } catch (e) {}
+  }, []);
+
+  function toggleSidebarLocal() {
+    const next = !sidebarCollapsed;
+    setSidebarCollapsed(next);
+    if (next) document.body.classList.add("sidebar-collapsed");
+    else document.body.classList.remove("sidebar-collapsed");
+    try { localStorage.setItem("sidebarCollapsed", next ? "true" : "false"); } catch (e) {}
+  }
   const [todosAlunos, setTodosAlunos] = useState([]);
   const [alunosAtivos, setAlunosAtivos] = useState([]);
   const [alunosInativos, setAlunosInativos] = useState([]);
@@ -271,10 +290,15 @@ function Home() {
         <div className="dashboard-container">
 
           <div className="mb-4">
-            <div className="d-flex align-items-center gap-3 mb-4">
+              <div className="d-flex align-items-center gap-3 mb-4">
 
-              <button className="btn btn-light shadow-sm">
-                ☰
+              <button
+                className="sidebar-toggle"
+                onClick={toggleSidebarLocal}
+                aria-label="Toggle sidebar"
+                title={sidebarCollapsed ? 'Abrir menu' : 'Fechar menu'}
+              >
+                <span style={{ fontSize: 16 }}>{sidebarCollapsed ? '✕' : '☰'}</span>
               </button>
 
               <h2 className="mb-0 fw-bold">

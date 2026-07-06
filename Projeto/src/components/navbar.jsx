@@ -1,8 +1,31 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { logout } from "../services/api";
 import logo from "../assets/logo_gaspar.png";
 
 function Navbar() {
+
+    const [collapsed, setCollapsed] = useState(false);
+
+    useEffect(() => {
+        try {
+            const stored = localStorage.getItem("sidebarCollapsed");
+            const isCollapsed = stored === "true";
+            setCollapsed(isCollapsed);
+            if (isCollapsed) document.body.classList.add("sidebar-collapsed");
+            else document.body.classList.remove("sidebar-collapsed");
+        } catch (e) {
+            // ignore
+        }
+    }, []);
+
+    function toggleSidebar() {
+        const next = !collapsed;
+        setCollapsed(next);
+        if (next) document.body.classList.add("sidebar-collapsed");
+        else document.body.classList.remove("sidebar-collapsed");
+        try { localStorage.setItem("sidebarCollapsed", next ? "true" : "false"); } catch (e) {}
+    }
 
     function sair() {
 
@@ -25,6 +48,16 @@ function Navbar() {
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
 
             <div className="container">
+
+                <button
+                    onClick={toggleSidebar}
+                    aria-label="Toggle sidebar"
+                    aria-expanded={!collapsed}
+                    className="sidebar-toggle me-2"
+                    title={collapsed ? "Abrir menu" : "Fechar menu"}
+                >
+                    <span style={{ fontSize: 16 }}>{collapsed ? '✕' : '☰'}</span>
+                </button>
 
                 <Link
                     className="navbar-brand fw-bold d-flex align-items-center"

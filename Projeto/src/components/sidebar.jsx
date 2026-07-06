@@ -4,13 +4,44 @@ import "./sidebar.css";
 
 function Sidebar() {
 
-  const nome = localStorage.getItem("nomeUsuario");
+  const nome = localStorage.getItem("nomeUsuario") || "Usuário";
   const role = localStorage.getItem("role");
   const email = localStorage.getItem("emailUsuario");
 
-  const avatar = nome
-    ? nome.charAt(0).toUpperCase()
-    : "U";
+  // deterministic emoji picker based on name
+  const emojiPalette = [
+    "😀",
+    "😄",
+    "😃",
+    "😊",
+    "😉",
+    "🤩",
+    "😎",
+    "🤠",
+    "🤓",
+    "🧐",
+    "😇",
+    "🙂",
+    "🙃",
+    "😺",
+    "👋",
+  ];
+
+  function pickEmojiFromName(n) {
+    if (!n) return "🙂";
+    const code = n.charCodeAt(0) || 0;
+    return emojiPalette[code % emojiPalette.length];
+  }
+
+  const avatarEmoji = pickEmojiFromName(nome);
+
+  const menu = [
+    { to: "/", label: "Dashboard", icon: "📊" },
+    { to: "/alunos", label: "Alunos", icon: "👥" },
+    { to: "/avaliacoes", label: "Avaliações", icon: "📋" },
+    { to: "/mensalidades", label: "Mensalidades", icon: "💳" },
+    { to: "/relatorio", label: "Relatórios", icon: "📈" },
+  ];
 
   return (
     <aside className="sidebar">
@@ -27,38 +58,20 @@ function Sidebar() {
             />
           </div>
 
-          <h2 className="sidebar-title">
-            Studio Gaspar
-          </h2>
+          <h2 className="sidebar-title">Studio Gaspar</h2>
 
         </div>
 
         <div className="sidebar-menu">
 
-          <Link to="/" className="menu-item">
-            <span className="menu-icon"></span>
-            <span>Dashboard</span>
-          </Link>
-
-          <Link to="/alunos" className="menu-item">
-            <span className="menu-icon"></span>
-            <span>Alunos</span>
-          </Link>
-
-          <Link to="/avaliacoes" className="menu-item">
-            <span className="menu-icon"></span>
-            <span>Avaliações</span>
-          </Link>
-
-          <Link to="/mensalidades" className="menu-item">
-            <span className="menu-icon"></span>
-            <span>Mensalidades</span>
-          </Link>
-
-          <Link to="/relatorio" className="menu-item">
-            <span className="menu-icon"></span>
-            <span>Relatórios</span>
-          </Link>
+          {menu.map((item) => (
+            <Link key={item.to} to={item.to} className="menu-item">
+              <span className="menu-icon" aria-hidden>
+                {item.icon}
+              </span>
+              <span>{item.label}</span>
+            </Link>
+          ))}
 
         </div>
 
@@ -66,12 +79,12 @@ function Sidebar() {
 
       <div className="usuario-sidebar">
 
-        <div className="avatar">
-          {avatar}
+        <div className="avatar" title={nome} aria-label={`Avatar de ${nome}`}>
+          {avatarEmoji}
         </div>
 
         <div>
-          <strong>{nome || "Usuário"}</strong>
+          <strong>{nome}</strong>
 
           <small className="d-block text-light opacity-75">
             {email || role}

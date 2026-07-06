@@ -9,17 +9,17 @@ function Layout({ children }) {
 
             <Sidebar />
 
-            <div className="flex-grow-1">
+                <div className="main-area flex-grow-1">
 
-                <Navbar />
+                    <Navbar />
 
-                <div className="container mt-4">
+                    <div className="container mt-4">
 
-                    {children}
+                        {children}
+
+                    </div>
 
                 </div>
-
-            </div>
 
         </div>
 
