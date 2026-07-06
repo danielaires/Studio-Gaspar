@@ -41,6 +41,7 @@ public class AvaliacaoFisica {
     private Double subescapular;
     private Double suprailiaca;
     private Double dobraAbdomen;
+    private Double imc;
 
     @Column(length = 1000)
     private String observacao;
