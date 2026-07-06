@@ -221,6 +221,7 @@ body {
   padding: 25px;
   background: #f8fafc;
   margin-left: 250px;
+  transition: margin-left 0.25s ease, padding 0.25s ease;
 }
 
 /* ===== CARDS ===== */
@@ -446,4 +447,26 @@ body {
 
 .card-wave-red {
     background: rgba(220,53,69,.08);
+}
+
+/* ===== OPTIMIZE SPACE WHEN SIDEBAR COLLAPSED ===== */
+body.sidebar-collapsed .dashboard-container {
+  margin-left: 80px !important;
+  padding: 16px !important;
+}
+
+body.sidebar-collapsed .mb-4 {
+  margin-bottom: 0.75rem !important;
+}
+
+body.sidebar-collapsed .row {
+  --bs-gutter-x: 0.75rem;
+}
+
+body.sidebar-collapsed .relatorio-tabela {
+  font-size: 12px;
+}
+
+body.sidebar-collapsed .card-number {
+  font-size: 28px;
 }
