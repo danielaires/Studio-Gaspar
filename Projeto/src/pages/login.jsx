@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/api";
+import { showError } from "../services/notificationService";
 import logo from "../assets/logo_gaspar.png";
 import "./login.css";
 
@@ -136,7 +137,7 @@ function Login() {
       navigate("/", { replace: true });
     } catch (error) {
       console.error(error);
-      alert("Email ou senha inv\u00e1lidos.");
+      showError("Email ou senha inválidos.");
     }
   };
 

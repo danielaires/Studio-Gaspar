@@ -2,7 +2,11 @@ import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { listarAlunos, excluirAluno } from "../services/api.js";
 import Navbar from "../components/Navbar";
-import { showSuccess, showError } from "../services/notificationService";
+import {
+  showSuccess,
+  showError,
+  showConfirmation,
+} from "../services/notificationService";
 
 function Alunos() {
   const [alunos, setAlunos] = useState([]);
@@ -42,6 +46,13 @@ function Alunos() {
     }
 
     return dataString;
+  };
+
+  const formatarSexo = (sexo) => {
+    if (!sexo) return "-";
+    if (sexo === "M" || sexo === "m") return "Masculino";
+    if (sexo === "F" || sexo === "f") return "Feminino";
+    return sexo;
   };
 
   const alunosFiltrados = useMemo(() => {
@@ -88,26 +99,30 @@ function Alunos() {
     };
   }, [alunosFiltrados, currentPage, pageSize]);
 
-  const deletarAluno = (id, nome) => {
-    const confirmacao = window.confirm(
-      `Tem certeza que deseja excluir o aluno(a) ${nome}?`
+  const deletarAluno = async (id, nome) => {
+    const confirmacao = await showConfirmation(
+      `Tem certeza que deseja excluir o aluno(a) ${nome}?`,
+      {
+        confirmText: "Excluir",
+        cancelText: "Cancelar",
+      }
     );
 
-    if (confirmacao) {
-      excluirAluno(id)
-        .then((resposta) => {
-          if (resposta.status === 200 || resposta.status === 204) {
-            setAlunos(alunos.filter((aluno) => aluno.id !== id));
-            showSuccess("Aluno excluído com sucesso!");
-          }
-        })
-        .catch((erro) => {
-          console.error("Erro ao excluir:", erro);
-          showError(
-            "Erro ao excluir! Verifique se este aluno possui avaliações ou mensalidades vinculadas."
-          );
-        });
-    }
+    if (!confirmacao) return;
+
+    excluirAluno(id)
+      .then((resposta) => {
+        if (resposta.status === 200 || resposta.status === 204) {
+          setAlunos(alunos.filter((aluno) => aluno.id !== id));
+          showSuccess("Aluno excluído com sucesso!");
+        }
+      })
+      .catch((erro) => {
+        console.error("Erro ao excluir:", erro);
+        showError(
+          "Erro ao excluir! Verifique se este aluno possui avaliações ou mensalidades vinculadas."
+        );
+      });
   };
 
   const enviarWhatsApp = async () => {
@@ -266,7 +281,7 @@ function Alunos() {
 
                           <td>{formatarData(aluno.dataNascimento)}</td>
 
-                          <td>{aluno.sexo || "-"}</td>
+                          <td>{formatarSexo(aluno.sexo)}</td>
 
                           <td>{aluno.profissao || "-"}</td>
 

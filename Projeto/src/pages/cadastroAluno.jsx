@@ -204,8 +204,8 @@ function CadastroAluno() {
                                             className="btn-check"
                                             name="sexo"
                                             id="masculino"
-                                            value="M"
-                                            checked={aluno.sexo === 'M'}
+                                            value="Masculino"
+                                            checked={aluno.sexo === 'Masculino'}
                                             onChange={alterarCampo}
                                         />
                                         <label className="btn btn-outline-primary" htmlFor="masculino">Masculino</label>
@@ -215,8 +215,8 @@ function CadastroAluno() {
                                             className="btn-check"
                                             name="sexo"
                                             id="feminino"
-                                            value="F"
-                                            checked={aluno.sexo === 'F'}
+                                            value="Feminino"
+                                            checked={aluno.sexo === 'Feminino'}
                                             onChange={alterarCampo}
                                         />
                                         <label className="btn btn-outline-primary" htmlFor="feminino">Feminino</label>

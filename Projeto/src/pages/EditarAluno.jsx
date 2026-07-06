@@ -31,9 +31,16 @@ function EditarAluno() {
         api.get(`/alunos/${id}`)
             .then((res) => {
                 const dados = res.data;
+                const sexoFormatado =
+                    dados.sexo === "M" || dados.sexo === "m"
+                        ? "Masculino"
+                        : dados.sexo === "F" || dados.sexo === "f"
+                        ? "Feminino"
+                        : dados.sexo || "";
 
                 setAluno({
                     ...dados,
+                    sexo: sexoFormatado,
                     horarioId: dados.horario ? dados.horario.id : "",
                 });
             })

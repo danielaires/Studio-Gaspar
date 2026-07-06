@@ -5,6 +5,7 @@ import {
     listarUsuarios,
     excluirUsuario
 } from "../services/usuarioService";
+import { showSuccess, showError } from "../services/notificationService";
 
 function Usuarios() {
 
@@ -36,8 +37,12 @@ function Usuarios() {
 
     async function excluir(id, nome) {
 
-        const confirmar = window.confirm(
-            `Deseja excluir o usuário ${nome}?`
+        const confirmar = await showConfirmation(
+            `Deseja excluir o usuário ${nome}?`,
+            {
+                confirmText: "Sim, excluir",
+                cancelText: "Cancelar",
+            }
         );
 
         if (!confirmar) return;
@@ -48,7 +53,7 @@ function Usuarios() {
 
             carregarUsuarios();
 
-            alert(
+            showSuccess(
                 "Usuário excluído com sucesso!"
             );
 
@@ -56,7 +61,7 @@ function Usuarios() {
 
             console.error(erro);
 
-            alert(
+            showError(
                 "Erro ao excluir usuário."
             );
 

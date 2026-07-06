@@ -5,7 +5,12 @@ import {
     marcarComoPago,
     excluirMensalidade as excluirMensalidadeService
 } from "../services/mensalidadesService";
-import { showSuccess, showError } from "../services/notificationService";
+import {
+  showSuccess,
+  showError,
+  showInfo,
+  showConfirmation,
+} from "../services/notificationService";
 
 function MensalidadesAluno() {
 
@@ -134,8 +139,12 @@ function MensalidadesAluno() {
 
     const pagarMensalidade = async (mensalidadeId) => {
 
-        const confirmar = window.confirm(
-            "Deseja marcar esta mensalidade como paga?"
+        const confirmar = await showConfirmation(
+            "Deseja marcar esta mensalidade como paga?",
+            {
+                confirmText: "Sim, pagar",
+                cancelText: "Cancelar",
+            }
         );
 
         if (!confirmar) return;
@@ -159,8 +168,12 @@ function MensalidadesAluno() {
 
     const excluirMensalidade = async (mensalidadeId) => {
 
-        const confirmar = window.confirm(
-            "Deseja excluir esta mensalidade?"
+        const confirmar = await showConfirmation(
+            "Deseja excluir esta mensalidade?",
+            {
+                confirmText: "Sim, excluir",
+                cancelText: "Cancelar",
+            }
         );
 
         if (!confirmar) return;
@@ -173,7 +186,7 @@ function MensalidadesAluno() {
 
             await carregarMensalidades();
 
-            alert(
+            showSuccess(
                 "Mensalidade excluída com sucesso!"
             );
 
@@ -181,7 +194,7 @@ function MensalidadesAluno() {
 
             console.error(erro);
 
-            alert(
+            showError(
                 "Erro ao excluir mensalidade."
             );
 
@@ -190,7 +203,7 @@ function MensalidadesAluno() {
 
     const editarMensalidade = (mensalidadeId) => {
 
-        alert(
+        showInfo(
             `Editar mensalidade ${mensalidadeId}`
         );
 

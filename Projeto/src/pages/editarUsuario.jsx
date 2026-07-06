@@ -5,6 +5,7 @@ import {
     buscarUsuario,
     atualizarUsuario
 } from "../services/usuarioService";
+import { showSuccess, showError } from "../services/notificationService";
 
 function EditarUsuario() {
 
@@ -42,7 +43,7 @@ function EditarUsuario() {
 
             console.error(erro);
 
-            alert(
+            showError(
                 "Erro ao carregar usuário."
             );
 
@@ -70,7 +71,7 @@ function EditarUsuario() {
                 usuario
             );
 
-            alert(
+            showSuccess(
                 "Usuário atualizado com sucesso!"
             );
 
@@ -80,7 +81,7 @@ function EditarUsuario() {
 
             console.error(erro);
 
-            alert(
+            showError(
                 "Erro ao atualizar usuário."
             );
 
