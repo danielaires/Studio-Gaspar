@@ -27,6 +27,8 @@ function Relatorio() {
     const totalPaginas =
         Math.ceil(alunosFiltrados.length / registrosPorPagina);
 
+    const alunosParaImpressao = alunosFiltrados;
+
     async function carregarDados() {
         try {
             const response = await listarAlunos();
@@ -40,7 +42,7 @@ function Relatorio() {
         <>
             <Navbar />
 
-            <div className="container mt-4">
+            <div id="relatorio-impressao" className="container mt-4">
 
                 <div className="d-flex justify-content-between align-items-center mb-3 nao-imprimir">
 
@@ -110,7 +112,39 @@ function Relatorio() {
                     </p>
                 </div>
 
-                <div className="card shadow">
+                <div id="printable" className="somente-impressao">
+                    <h2>STUDIO GASPAR</h2>
+                    <h4>Relatório Geral de Alunos</h4>
+                    <p>Emitido em {new Date().toLocaleDateString("pt-BR")}</p>
+                    <div className="table-responsive">
+                        <table className="table table-bordered table-striped">
+                            <thead className="table-dark">
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Telefone</th>
+                                    <th>Profissão</th>
+                                    <th>Data Início</th>
+                                    <th>Objetivo</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {alunosParaImpressao.map((aluno) => (
+                                    <tr key={`print-${aluno.id}`}>
+                                        <td>{aluno.nome}</td>
+                                        <td>{aluno.telefone}</td>
+                                        <td>{aluno.profissao}</td>
+                                        <td>{new Date(aluno.dataInicio).toLocaleDateString("pt-BR")}</td>
+                                        <td>{aluno.objetivo}</td>
+                                        <td>{aluno.ativo ? "Ativo" : "Inativo"}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div className="card shadow nao-imprimir">
 
                     <div className="card-body">
 
