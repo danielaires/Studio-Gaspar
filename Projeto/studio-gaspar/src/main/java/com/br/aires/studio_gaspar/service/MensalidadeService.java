@@ -22,6 +22,11 @@ public class MensalidadeService {
     }
 
     public Mensalidade salvar(Mensalidade mensalidade) {
+
+        if (mensalidade.getStatus() == null || mensalidade.getStatus().isBlank()) {
+            mensalidade.setStatus("PENDENTE");
+        }
+
         return repository.save(mensalidade);
     }
 

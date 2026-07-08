@@ -49,7 +49,7 @@ function Mensalidades() {
                                     });
                                 });
                             })
-                            .catch(() => {})
+                            .catch(() => { })
                     )
                 );
 
@@ -136,7 +136,7 @@ function Mensalidades() {
 
     const totalPagas =
         mensalidades.filter(
-            (m) => m.paga
+            (m) => m.status === "PAGO"
         ).length;
 
     const totalAlunosAtivos =
@@ -198,7 +198,7 @@ function Mensalidades() {
                         mensalidades...
                     </p>
                 ) : mensalidadesFiltradas.length ===
-                  0 ? (
+                    0 ? (
                     <p>
                         Nenhuma
                         mensalidade
@@ -324,16 +324,20 @@ function Mensalidades() {
                                                             R${" "}
                                                             {Number(
                                                                 mens.valor ||
-                                                                    0
+                                                                0
                                                             ).toFixed(
                                                                 2
                                                             )}
                                                         </td>
 
                                                         <td>
-                                                            {mens.paga ? (
+                                                            {mens.status === "PAGO" ? (
                                                                 <span className="badge bg-success">
-                                                                    Paga
+                                                                    Pago
+                                                                </span>
+                                                            ) : mens.status === "VENCIDO" ? (
+                                                                <span className="badge bg-warning text-dark">
+                                                                    Vencido
                                                                 </span>
                                                             ) : (
                                                                 <span className="badge bg-danger">
@@ -352,7 +356,7 @@ function Mensalidades() {
 
                                         <div className="text-muted">
                                             {paginacao.totalItems >
-                                            0 ? (
+                                                0 ? (
                                                 <>
                                                     Mostrando{" "}
                                                     {paginacao.start +
@@ -420,12 +424,11 @@ function Mensalidades() {
                                             <nav>
                                                 <ul className="pagination mb-0">
 
-                                                    <li className={`page-item ${
-                                                        paginacao.current ===
+                                                    <li className={`page-item ${paginacao.current ===
                                                         1
-                                                            ? "disabled"
-                                                            : ""
-                                                    }`}>
+                                                        ? "disabled"
+                                                        : ""
+                                                        }`}>
                                                         <button
                                                             className="page-link"
                                                             onClick={() =>
@@ -433,7 +436,7 @@ function Mensalidades() {
                                                                     Math.max(
                                                                         1,
                                                                         paginacao.current -
-                                                                            1
+                                                                        1
                                                                     )
                                                                 )
                                                             }
@@ -459,12 +462,11 @@ function Mensalidades() {
                                                                     key={
                                                                         p
                                                                     }
-                                                                    className={`page-item ${
-                                                                        p ===
+                                                                    className={`page-item ${p ===
                                                                         paginacao.current
-                                                                            ? "active"
-                                                                            : ""
-                                                                    }`}
+                                                                        ? "active"
+                                                                        : ""
+                                                                        }`}
                                                                 >
                                                                     <button
                                                                         className="page-link"
@@ -483,12 +485,11 @@ function Mensalidades() {
                                                         }
                                                     )}
 
-                                                    <li className={`page-item ${
-                                                        paginacao.current ===
+                                                    <li className={`page-item ${paginacao.current ===
                                                         paginacao.totalPages
-                                                            ? "disabled"
-                                                            : ""
-                                                    }`}>
+                                                        ? "disabled"
+                                                        : ""
+                                                        }`}>
                                                         <button
                                                             className="page-link"
                                                             onClick={() =>
@@ -496,7 +497,7 @@ function Mensalidades() {
                                                                     Math.min(
                                                                         paginacao.totalPages,
                                                                         paginacao.current +
-                                                                            1
+                                                                        1
                                                                     )
                                                                 )
                                                             }
