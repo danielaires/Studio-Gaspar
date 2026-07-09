@@ -11,6 +11,7 @@ import {
 } from "../services/relatorioService";
 import "./home.css";
 import Sidebar from "../components/Sidebar";
+import { buscarDashboardFinanceiro } from "../services/financeiroService";
 
 function Home() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
@@ -20,11 +21,27 @@ function Home() {
       return false;
     }
   });
-
+  const carregarDashboardFinanceiro = async () => {
+    try {
+      const dados = await buscarDashboardFinanceiro();
+      setDashboardFinanceiro(dados);
+    } catch (erro) {
+      console.error("Erro ao carregar dashboard financeiro", erro);
+    }
+  };
   useEffect(() => {
     if (sidebarCollapsed) document.body.classList.add("sidebar-collapsed");
     else document.body.classList.remove("sidebar-collapsed");
   }, [sidebarCollapsed]);
+  const [dashboardFinanceiro, setDashboardFinanceiro] = useState({
+    totalRecebido: 0,
+    totalReceber: 0,
+    totalPagas: 0,
+    totalPendentes: 0,
+    totalVencidas: 0,
+    totalMensalidades: 0,
+    inadimplencia: 0,
+  });
 
   function toggleSidebarLocal() {
     const next = !sidebarCollapsed;

@@ -19,6 +19,7 @@ import EditarUsuario from "./pages/EditarUsuario";
 import Relatorio from "./pages/Relatorio";
 import Avaliacoes from "./pages/Avaliacoes";
 import Mensalidades from "./pages/Mensalidades";
+import Financeiro from "./pages/Financeiro";
 
 function App() {
 
@@ -187,6 +188,14 @@ function App() {
           element={
             <PrivateRoute>
               <Mensalidades />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/financeiro"
+          element={
+            <PrivateRoute>
+              <Financeiro />
             </PrivateRoute>
           }
         />

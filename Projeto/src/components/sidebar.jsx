@@ -40,6 +40,8 @@ function Sidebar() {
     { to: "/alunos", label: "Alunos", icon: "👥" },
     { to: "/avaliacoes", label: "Avaliações", icon: "📋" },
     { to: "/mensalidades", label: "Mensalidades", icon: "💳" },
+    { to: "/financeiro", label: "Financeiro", icon: "💰" },
+
     { to: "/relatorio", label: "Relatórios", icon: "📈" },
   ];
 
