@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { logout } from "../services/api";
 import logo from "../assets/logo_gaspar.png";
+import "./navbar.css";
 
 function Navbar() {
   const [collapsed, setCollapsed] = useState(() => {

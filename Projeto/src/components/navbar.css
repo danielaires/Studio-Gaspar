@@ -1,0 +1,4 @@
+/* Nas páginas secundárias não há barra lateral para ocultar. */
+.navbar .sidebar-toggle {
+  display: none;
+}

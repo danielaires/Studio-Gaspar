@@ -1,0 +1,8 @@
+/* A barra lateral é exclusiva do Dashboard principal. */
+.finance-page > .sidebar {
+  display: none;
+}
+
+.finance-main {
+  margin-left: 0;
+}
