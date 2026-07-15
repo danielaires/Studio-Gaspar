@@ -32,6 +32,8 @@ public class Aluno {
 
     private String objetivo;
 
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private String foto;
 
     private Boolean ativo = true;
