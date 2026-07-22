@@ -1,8 +1,11 @@
 package com.br.aires.studio_gaspar.service;
 
 import com.br.aires.studio_gaspar.entity.Aluno;
+import com.br.aires.studio_gaspar.repository.MensalidadeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import com.br.aires.studio_gaspar.repository.AlunoRepository;
 
 import java.util.List;
@@ -12,6 +15,7 @@ import java.util.List;
 public class AlunoService {
 
     private final AlunoRepository repository;
+    private final MensalidadeRepository mensalidadeRepository;
 
     public List<Aluno> listar(){
 
@@ -40,6 +44,16 @@ public class AlunoService {
     }
 
     public void excluir(Long id){
+
+        if (mensalidadeRepository.existsByAlunoIdAndStatusIn(
+                id,
+                List.of("PENDENTE", "VENCIDO")
+        )) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "O aluno possui mensalidades pendentes ou vencidas e não pode ser excluído."
+            );
+        }
 
         repository.deleteById(id);
     }

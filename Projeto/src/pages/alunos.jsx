@@ -120,7 +120,8 @@ function Alunos() {
       .catch((erro) => {
         console.error("Erro ao excluir:", erro);
         showError(
-          "Erro ao excluir! Verifique se este aluno possui avaliações ou mensalidades vinculadas."
+          erro.response?.data?.message ||
+          "O aluno não pode ser excluído porque possui mensalidades pendentes ou vencidas."
         );
       });
   };

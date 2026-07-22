@@ -20,6 +20,8 @@ public interface MensalidadeRepository extends JpaRepository<Mensalidade,Long> {
 
     List<Mensalidade> findByAlunoId(Long id);
 
+    boolean existsByAlunoIdAndStatusIn(Long alunoId, List<String> status);
+
     @Query("""
             SELECT COALESCE(SUM(m.valor), 0)
             FROM Mensalidade m
