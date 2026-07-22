@@ -36,11 +36,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
                         .requestMatchers(
-                                "/auth/**",
-                                "/api/whatsapp/**"
+                                "/auth/**"
                         ).permitAll()
 
-                        .requestMatchers("/relatorios/**")
+                        .requestMatchers(
+                                "/relatorios/**",
+                                "/usuarios/**",
+                                "/api/whatsapp/**"
+                        )
                         .hasRole("ADMIN")
 
                         .anyRequest()
