@@ -2,6 +2,7 @@ package com.br.aires.studio_gaspar.service;
 
 import com.br.aires.studio_gaspar.entity.Aluno;
 import com.br.aires.studio_gaspar.repository.AlunoRepository;
+import com.br.aires.studio_gaspar.repository.MensalidadeRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,6 +24,9 @@ class AlunoServiceTest {
 
     @InjectMocks
     private AlunoService service;
+
+    @Mock
+    private MensalidadeRepository mensalidadeRepository;
 
     @Test
     void deveListarAlunos() {

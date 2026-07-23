@@ -15,9 +15,6 @@ public class MensalidadeService {
     private final MensalidadeRepository repository;
 
     public List<Mensalidade> listar() {
-
-        atualizarMensalidadesVencidas();
-
         return repository.findAll();
     }
 
@@ -31,9 +28,6 @@ public class MensalidadeService {
     }
 
     public List<Mensalidade> listarPorAluno(Long id) {
-
-        atualizarMensalidadesVencidas();
-
         return repository.findByAlunoId(id);
     }
 
@@ -48,7 +42,7 @@ public class MensalidadeService {
         return repository.save(mensalidade);
     }
 
-    private void atualizarMensalidadesVencidas() {
+    public void atualizarMensalidadesVencidas() {
 
         LocalDate hoje = LocalDate.now();
 
