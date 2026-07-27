@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { showSuccess, showError } from "../services/notificationService";
 import "./cadastroAluno.css";
+import CapturaFotoCamera from "../components/CapturaFotoCamera";
 
 function CadastroAluno() {
 
@@ -180,9 +181,12 @@ function CadastroAluno() {
                                                 type="file"
                                                 className="form-control"
                                                 accept="image/*"
+                                                capture="user"
                                                 onChange={alterarFoto}
                                             />
                                             <small className="text-muted">JPG, PNG ou WEBP, até 5 MB.</small>
+                                            <br />
+                                            <CapturaFotoCamera onCapture={(foto) => setAluno((dados) => ({ ...dados, foto }))} onError={showError} />
                                         </div>
                                     </div>
                                 </div>

@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { listarHorarios } from "../services/horarioService";
 import api from "../services/api";
 import { showSuccess, showError } from "../services/notificationService";
+import "./cadastroAluno.css";
+import CapturaFotoCamera from "../components/CapturaFotoCamera";
 
 function EditarAluno() {
     const navigate = useNavigate();
@@ -73,6 +75,31 @@ function EditarAluno() {
         }
 
         setAluno((prev) => ({ ...prev, [name]: value }));
+    }
+
+    function alterarFoto(e) {
+        const arquivo = e.target.files?.[0];
+
+        if (!arquivo) return;
+
+        if (!arquivo.type.startsWith("image/")) {
+            showError("Selecione um arquivo de imagem.");
+            e.target.value = "";
+            return;
+        }
+
+        if (arquivo.size > 5 * 1024 * 1024) {
+            showError("A foto deve ter no máximo 5 MB.");
+            e.target.value = "";
+            return;
+        }
+
+        const leitor = new FileReader();
+        leitor.onload = () => setAluno((dados) => ({
+            ...dados,
+            foto: leitor.result,
+        }));
+        leitor.readAsDataURL(arquivo);
     }
 
     function validarCampos() {
@@ -157,6 +184,35 @@ function EditarAluno() {
 
                     <form onSubmit={salvar}>
                         <div className="row g-3">
+
+                            <div className="col-12">
+                                <label className="form-label fw-semibold">Foto do aluno</label>
+                                <div className="d-flex align-items-center gap-3">
+                                    {aluno.foto ? (
+                                        <img
+                                            src={aluno.foto}
+                                            alt="Foto atual do aluno"
+                                            className="foto-aluno-preview"
+                                        />
+                                    ) : (
+                                        <div className="foto-aluno-preview foto-aluno-placeholder">
+                                            Sem foto
+                                        </div>
+                                    )}
+                                    <div>
+                                        <input
+                                            type="file"
+                                            className="form-control"
+                                            accept="image/*"
+                                            capture="user"
+                                            onChange={alterarFoto}
+                                        />
+                                        <small className="text-muted">Escolha uma nova imagem para substituir a foto atual. JPG, PNG ou WEBP, até 5 MB.</small>
+                                        <br />
+                                        <CapturaFotoCamera onCapture={(foto) => setAluno((dados) => ({ ...dados, foto }))} onError={showError} />
+                                    </div>
+                                </div>
+                            </div>
 
                             <div className="col-md-6">
                                 <label className="form-label fw-semibold">

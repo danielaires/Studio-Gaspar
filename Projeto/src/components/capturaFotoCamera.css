@@ -1,0 +1,4 @@
+.captura-camera-fundo { position: fixed; z-index: 1060; inset: 0; display: grid; place-items: center; padding: 20px; background: rgba(15, 23, 42, .72); }
+.captura-camera-modal { width: min(640px, 100%); padding: 24px; border-radius: 16px; background: #fff; box-shadow: 0 24px 60px rgba(0, 0, 0, .35); }
+.captura-camera-video { min-height: 260px; display: grid; place-items: center; overflow: hidden; border-radius: 12px; color: #fff; background: #111827; }
+.captura-camera-video video { display: block; width: 100%; max-height: 65vh; object-fit: cover; }
