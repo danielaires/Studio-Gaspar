@@ -4,6 +4,7 @@ import { buscarAvaliacaoPorId } from "../services/api.js";
 import { atualizarFotosAvaliacao } from "../services/avaliacaoService";
 import { showError, showSuccess, showWarning } from "../services/notificationService";
 import "./avaliacaoFotos.css";
+import CapturaFotoCamera from "../components/CapturaFotoCamera";
 
 const MAXIMO_FOTOS = 4;
 const TAMANHO_MAXIMO_FOTO = 4 * 1024 * 1024;
@@ -133,6 +134,14 @@ function DetalhesAvaliacao() {
   };
 
   const removerFoto = (indice) => salvarFotos(fotos.filter((_, fotoIndice) => fotoIndice !== indice));
+
+  const adicionarFotoCapturada = (foto) => {
+    if (fotos.length >= MAXIMO_FOTOS) {
+      showWarning("A avaliação pode ter no máximo 4 fotos.");
+      return;
+    }
+    salvarFotos([...fotos, foto]);
+  };
 
   useEffect(() => {
 
@@ -474,6 +483,9 @@ function DetalhesAvaliacao() {
             )}
           </div>
           <small className="text-muted d-block mt-3">{fotos.length} de {MAXIMO_FOTOS} fotos salvas</small>
+          {fotos.length < MAXIMO_FOTOS && !salvandoFotos && (
+            <CapturaFotoCamera onCapture={adicionarFotoCapturada} onError={showError} />
+          )}
         </div>
       </div>
 
