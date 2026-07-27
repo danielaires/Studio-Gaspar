@@ -26,4 +26,14 @@ public class AvaliacaoController {
         return service.salvar(avaliacao);
     }
 
+    @GetMapping("/{id}")
+    public AvaliacaoFisica buscarPorId(@PathVariable Long id) {
+        return service.buscarPorId(id);
+    }
+
+    @PutMapping("/{id}/fotos")
+    public AvaliacaoFisica atualizarFotos(@PathVariable Long id, @RequestBody List<String> fotos) {
+        return service.atualizarFotos(id, fotos);
+    }
+
 }

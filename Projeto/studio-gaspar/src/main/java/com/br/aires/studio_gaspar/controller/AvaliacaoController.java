@@ -37,4 +37,9 @@ public class AvaliacaoController {
         return service.buscarPorId(id);
     }
 
+    @PutMapping("/{id}/fotos")
+    public AvaliacaoFisica atualizarFotos(@PathVariable Long id, @RequestBody List<String> fotos) {
+        return service.atualizarFotos(id, fotos);
+    }
+
 }

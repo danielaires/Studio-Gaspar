@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { buscarAvaliacaoPorId } from "../services/api.js";
+import { atualizarFotosAvaliacao } from "../services/avaliacaoService";
+import { showError, showSuccess, showWarning } from "../services/notificationService";
+import "./avaliacaoFotos.css";
+
+const MAXIMO_FOTOS = 4;
+const TAMANHO_MAXIMO_FOTO = 4 * 1024 * 1024;
 
 function DetalhesAvaliacao() {
 
@@ -9,6 +15,7 @@ function DetalhesAvaliacao() {
 
   const [avaliacao, setAvaliacao] = useState(null);
   const [carregando, setCarregando] = useState(true);
+  const [salvandoFotos, setSalvandoFotos] = useState(false);
 
 
   const formatarData = (dataStr) => {
@@ -82,6 +89,51 @@ function DetalhesAvaliacao() {
   };
 
   const statusIMC = classificarIMC();
+
+  const fotos = avaliacao?.fotos || [];
+
+  const lerArquivoComoDataUrl = (arquivo) => new Promise((resolve, reject) => {
+    const leitor = new FileReader();
+    leitor.onload = () => resolve(leitor.result);
+    leitor.onerror = () => reject(new Error("Não foi possível ler a foto."));
+    leitor.readAsDataURL(arquivo);
+  });
+
+  const salvarFotos = async (novasFotos) => {
+    setSalvandoFotos(true);
+    try {
+      const resposta = await atualizarFotosAvaliacao(id, novasFotos);
+      setAvaliacao(resposta.data);
+      showSuccess("Fotos da avaliação atualizadas.");
+    } catch (erro) {
+      console.error("Erro ao atualizar fotos:", erro);
+      showError("Não foi possível salvar as fotos.");
+    } finally {
+      setSalvandoFotos(false);
+    }
+  };
+
+  const adicionarFotos = async (e) => {
+    const arquivos = Array.from(e.target.files || []);
+    e.target.value = "";
+    const vagas = MAXIMO_FOTOS - fotos.length;
+    if (!vagas) {
+      showWarning("A avaliação pode ter no máximo 4 fotos.");
+      return;
+    }
+    const arquivosValidos = arquivos.slice(0, vagas).filter((arquivo) => arquivo.type.startsWith("image/") && arquivo.size <= TAMANHO_MAXIMO_FOTO);
+    if (arquivosValidos.length !== arquivos.length) showWarning("Use imagens de até 4 MB. O limite é de 4 fotos.");
+    try {
+      const novasFotos = await Promise.all(arquivosValidos.map(lerArquivoComoDataUrl));
+      if (novasFotos.length) await salvarFotos([...fotos, ...novasFotos]);
+    } catch (erro) {
+      console.error(erro);
+      showError("Não foi possível adicionar uma das fotos.");
+    }
+  };
+
+  const removerFoto = (indice) => salvarFotos(fotos.filter((_, fotoIndice) => fotoIndice !== indice));
+
   useEffect(() => {
 
     buscarAvaliacaoPorId(id)
@@ -398,6 +450,31 @@ function DetalhesAvaliacao() {
 
         </div>
 
+      </div>
+
+      <div className="card shadow border-0 mb-4">
+        <div className="card-header text-white fw-bold py-3" style={{ background: "linear-gradient(135deg,#667eea,#764ba2)" }}>
+          📷 Fotos da avaliação
+        </div>
+        <div className="card-body">
+          <p className="text-muted mb-3">Registre até 4 fotos da evolução do aluno.</p>
+          <div className="avaliacao-fotos-grade">
+            {fotos.map((foto, indice) => (
+              <div className="avaliacao-foto" key={foto}>
+                <img src={foto} alt={`Foto ${indice + 1} da avaliação`} />
+                <button type="button" className="btn btn-danger btn-sm avaliacao-foto-remover" disabled={salvandoFotos} onClick={() => removerFoto(indice)} aria-label={`Remover foto ${indice + 1}`}>×</button>
+              </div>
+            ))}
+            {fotos.length < MAXIMO_FOTOS && (
+              <label className={`avaliacao-foto-adicionar ${salvandoFotos ? "disabled" : ""}`}>
+                <span className="fs-3">＋</span>
+                <span>{salvandoFotos ? "Salvando..." : "Adicionar foto"}</span>
+                <input type="file" accept="image/*" multiple disabled={salvandoFotos} onChange={adicionarFotos} />
+              </label>
+            )}
+          </div>
+          <small className="text-muted d-block mt-3">{fotos.length} de {MAXIMO_FOTOS} fotos salvas</small>
+        </div>
       </div>
 
       <div className="card shadow border-0">

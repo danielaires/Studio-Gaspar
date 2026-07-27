@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Setter
@@ -51,6 +53,11 @@ public class AvaliacaoFisica {
 
     @Column(length = 1000)
     private String observacao;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "avaliacao_fisica_fotos", joinColumns = @JoinColumn(name = "avaliacao_id"))
+    @Column(name = "foto", columnDefinition = "LONGTEXT")
+    private List<String> fotos = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "aluno_id")

@@ -5,12 +5,17 @@ import Navbar from "../components/Navbar";
 import api from "../services/api";
 import { salvarAvaliacao } from "../services/avaliacaoService";
 import { showSuccess, showError, showWarning } from "../services/notificationService";
+import "./avaliacaoFotos.css";
+
+const MAXIMO_FOTOS = 4;
+const TAMANHO_MAXIMO_FOTO = 4 * 1024 * 1024;
 
 function CadastroAvaliacao() {
 
     const navigate = useNavigate();
 
     const [alunos, setAlunos] = useState([]);
+    const [fotos, setFotos] = useState([]);
 
     const [avaliacao, setAvaliacao] = useState({
         alunoId: "",
@@ -114,6 +119,51 @@ function CadastroAvaliacao() {
 
     }
 
+    function lerArquivoComoDataUrl(arquivo) {
+        return new Promise((resolve, reject) => {
+            const leitor = new FileReader();
+            leitor.onload = () => resolve(leitor.result);
+            leitor.onerror = () => reject(new Error("Não foi possível ler a foto."));
+            leitor.readAsDataURL(arquivo);
+        });
+    }
+
+    async function adicionarFotos(e) {
+        const arquivos = Array.from(e.target.files || []);
+        e.target.value = "";
+
+        const vagas = MAXIMO_FOTOS - fotos.length;
+        if (!vagas) {
+            showWarning("A avaliação pode ter no máximo 4 fotos.");
+            return;
+        }
+
+        const arquivosValidos = arquivos.slice(0, vagas).filter((arquivo) => {
+            if (!arquivo.type.startsWith("image/")) {
+                showWarning("Selecione apenas arquivos de imagem.");
+                return false;
+            }
+            if (arquivo.size > TAMANHO_MAXIMO_FOTO) {
+                showWarning("Cada foto deve ter no máximo 4 MB.");
+                return false;
+            }
+            return true;
+        });
+
+        try {
+            const novasFotos = await Promise.all(arquivosValidos.map(lerArquivoComoDataUrl));
+            setFotos((fotosAtuais) => [...fotosAtuais, ...novasFotos]);
+            if (arquivos.length > vagas) showWarning("Foram adicionadas somente as fotos que cabem no limite de 4.");
+        } catch (erro) {
+            console.error(erro);
+            showError("Não foi possível adicionar uma das fotos.");
+        }
+    }
+
+    function removerFoto(indice) {
+        setFotos((fotosAtuais) => fotosAtuais.filter((_, fotoIndice) => fotoIndice !== indice));
+    }
+
     function salvar(e) {
 
         e.preventDefault();
@@ -127,6 +177,7 @@ function CadastroAvaliacao() {
 
         const payload = {
             ...avaliacao,
+            fotos,
             imc: calcularIMC(), // opcional (caso exista no backend)
             aluno: {
                 id: Number(avaliacao.alunoId)
@@ -291,6 +342,35 @@ function CadastroAvaliacao() {
                             )}
                         </div>
 
+                    </div>
+
+                    <div className="card shadow-sm mb-4 border-0">
+                        <div
+                            className="card-header text-white fw-bold p-3"
+                            style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}
+                        >
+                            📷 Fotos da avaliação
+                        </div>
+
+                        <div className="card-body">
+                            <p className="text-muted mb-3">Adicione até 4 fotos (frente, costas e laterais). Cada arquivo pode ter até 4 MB.</p>
+                            <div className="avaliacao-fotos-grade">
+                                {fotos.map((foto, indice) => (
+                                    <div className="avaliacao-foto" key={foto}>
+                                        <img src={foto} alt={`Foto ${indice + 1} da avaliação`} />
+                                        <button type="button" className="btn btn-danger btn-sm avaliacao-foto-remover" onClick={() => removerFoto(indice)} aria-label={`Remover foto ${indice + 1}`}>×</button>
+                                    </div>
+                                ))}
+                                {fotos.length < MAXIMO_FOTOS && (
+                                    <label className="avaliacao-foto-adicionar">
+                                        <span className="fs-3">＋</span>
+                                        <span>Adicionar foto</span>
+                                        <input type="file" accept="image/*" multiple onChange={adicionarFotos} />
+                                    </label>
+                                )}
+                            </div>
+                            <small className="text-muted d-block mt-3">{fotos.length} de {MAXIMO_FOTOS} fotos adicionadas</small>
+                        </div>
                     </div>
 
                     <div className="card shadow-sm mb-4 border-0">

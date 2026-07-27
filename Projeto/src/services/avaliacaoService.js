@@ -17,3 +17,7 @@ export function buscarAvaliacaoPorId(id) {
 export function excluirAvaliacao(id) {
     return api.delete(`/avaliacoes/${id}`);
 }
+
+export function atualizarFotosAvaliacao(id, fotos) {
+    return api.put(`/avaliacoes/${id}/fotos`, fotos);
+}
