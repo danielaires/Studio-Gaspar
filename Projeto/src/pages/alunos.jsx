@@ -136,7 +136,7 @@ function Alunos() {
     try {
 
       const response = await fetch(
-        `http://localhost:8080/api/whatsapp/enviar/${alunoWhatsapp.id}?mensagem=${encodeURIComponent(mensagemWhatsapp)}`,
+        `${import.meta.env.VITE_API_URL || "http://localhost:8080"}/api/whatsapp/enviar/${alunoWhatsapp.id}?mensagem=${encodeURIComponent(mensagemWhatsapp)}`,
         {
           method: "POST",
         }

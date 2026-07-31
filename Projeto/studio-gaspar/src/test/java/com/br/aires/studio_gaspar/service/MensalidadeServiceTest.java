@@ -190,9 +190,6 @@ class MensalidadeServiceTest {
 
         Mensalidade mensalidade = new Mensalidade();
 
-        when(repository.findAll())
-                .thenReturn(List.of());
-
         when(repository.findByAlunoId(1L))
                 .thenReturn(List.of(mensalidade));
 

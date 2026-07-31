@@ -155,18 +155,18 @@ function Login() {
         />
 
         <div className="login-slogan">
-          <strong>SUPERE SEUS LIMITES.</strong>
-          <span>{"SEJA SUA MELHOR VERS\u00c3O."}</span>
+          <strong>Transformando seu Esforço em Resultados.</strong>
+          <span>{"SEJA SUA MELHOR VERSãO."}</span>
         </div>
 
         <p>
-          {"Sistema completo para gest\u00e3o de alunos, treinos, avalia\u00e7\u00f5es e muito mais."}
+          {"Sistema completo para gestão de alunos, treinos, avaliações e muito mais."}
         </p>
 
         <div className="login-features">
           <div>
             <Icon name="users" />
-            <span>{"Gest\u00e3o de alunos"}</span>
+            <span>{"Gestão de alunos"}</span>
           </div>
           <div>
             <Icon name="activity" />
@@ -174,11 +174,11 @@ function Login() {
           </div>
           <div>
             <Icon name="check" />
-            <span>{"Avalia\u00e7\u00f5es"}</span>
+            <span>{"Avaliações"}</span>
           </div>
           <div>
             <Icon name="file" />
-            <span>{"Relat\u00f3rios"}</span>
+            <span>{"Relatórios"}</span>
           </div>
         </div>
       </section>
@@ -191,7 +191,7 @@ function Login() {
         />
 
         <h1 id="login-title">Bem-vindo</h1>
-        <p>{"Fa\u00e7a login para continuar"}</p>
+        <p>{"Faça login para continuar"}</p>
 
         <form onSubmit={realizarLogin} className="login-form">
           <label className="login-field" aria-label="E-mail">
@@ -250,13 +250,13 @@ function Login() {
         <div className="login-secure">
           <span />
           <Icon name="shield" />
-          <p>{"Seus dados est\u00e3o protegidos com seguran\u00e7a"}</p>
+          <p>{"Seus dados estão protegidos com segurança"}</p>
           <span />
         </div>
       </section>
 
       <footer className="login-footer">
-        {"\u00a9 2025 "}
+        {"\u00a9 2026 "}
         <strong>Gaspar Fitness.</strong>
         {" Todos os direitos reservados."}
       </footer>
